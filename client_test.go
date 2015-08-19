@@ -1,0 +1,14 @@
+package api
+
+import (
+	"testing"
+	. "github.com/smartystreets/goconvey/convey"
+)
+
+func TestCreateNewRPCClient(t *testing.T) {
+	Convey("CreateNewRPCClient", t, func() {
+		endpoint := "http://localhost:2633/RPC2"
+		_, err := RPCClient(endpoint)
+		So(err, ShouldBeNil)
+	})
+}
