@@ -1,5 +1,10 @@
 package compute
 
+import (
+	"github.com/megamsys/opennebula-go/api"
+
+)
+
 type VirtualMachine struct {
 	id           string
 	template_str string
@@ -28,7 +33,7 @@ type Creds struct {
 func (vm *VirtualMachine) CreateVM(creds *Creds) {
 
 	secretKey := creds.Username + ":" + creds.Password
-	client := api.RPCclient(creds.Endpoint)
+	client := api.RPCClient(creds.Endpoint)
 	api.Call(client, "one.vm.allocate")
 
 }

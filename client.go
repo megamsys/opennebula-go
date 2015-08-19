@@ -25,7 +25,8 @@ func RPCClient(endpoint string) (*xmlrpc.Client, error) {
  */
 
 func Call(RPC *xmlrpc.Client, command string, secretKey string) {
-
+	//Need to include args
+	args := "VM:INFO"
 	RPC.Call(command, secretKey, args)
 
 }
