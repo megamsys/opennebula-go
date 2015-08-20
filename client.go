@@ -2,7 +2,7 @@ package api
 
 import (
 	"fmt"
-
+	//"bytes"
 	"github.com/kolo/xmlrpc"
 )
 
@@ -24,9 +24,14 @@ func RPCClient(endpoint string) (*xmlrpc.Client, error) {
 *
  */
 
-func Call(RPC *xmlrpc.Client, command string, secretKey string) {
-	//Need to include args
-	args := "VM:INFO"
-	RPC.Call(command, secretKey, args)
-
+func Call(RPC *xmlrpc.Client, command string, args []interface{}) error {
+	//result := make([]byte, 10)
+	result := []interface{}{}
+	res := RPC.Call(command, args, &result)
+	fmt.Println(&result)
+	fmt.Println(res)
+	if res != nil {
+		return res
+	}
+	return nil
 }
