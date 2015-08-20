@@ -21,8 +21,8 @@ func TestRPCCall(t *testing.T) {
 		endpoint := "http://localhost:2633/RPC2"
 		client, _ := RPCClient(endpoint)
 		key := "oneadmin:RaifZuewjoc4"
-		args := []interface{}{key, -2, 0, 0}
-		error := Call(client, "one.templatepool.info", args)
+		args := []interface{}{key, -2, 3, 3}
+		_, error := Call(client, "one.templatepool.info", args)
 		fmt.Println(error)
 		So(error, ShouldBeNil)
 	})
