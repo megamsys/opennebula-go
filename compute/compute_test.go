@@ -8,7 +8,7 @@ import (
 
 func TestCreateVM(t *testing.T) {
 	Convey("CreateVM", t, func() {
-		vmObj := VirtualMachine{OpenNebulaTemplateId: 2}
+		vmObj := VirtualMachine{OpenNebulaTemplateName: "supertest"}
 		creds := Credentials{Username: "oneadmin", Password: "RaifZuewjoc4", Endpoint: "http://localhost:2633/RPC2"}
 
 		vmObj.CreateVM(&creds)

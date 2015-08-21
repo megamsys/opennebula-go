@@ -1,17 +1,17 @@
 package compute
 
 import (
-	"bytes"
-	"encoding/gob"
 	"encoding/xml"
+	"reflect"
 	"fmt"
-
+"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/flavor"
+"github.com/megamsys/opennebula-go/xmlUtil"
 )
 
 type VirtualMachine struct {
-	OpenNebulaTemplate   string
-	OpenNebulaTemplateId int
+	OpenNebulaTemplateName   string
+	OpenNebulaTemplateId   int
 	Bootstrap            string
 	SSHUser              string
 	SSHPort              string
@@ -23,40 +23,7 @@ type VirtualMachine struct {
 	VMName               string
 }
 
-type XMLStructure struct {
-	VmTemplatePool xml.Name    `xml:"VMTEMPLATE_POOL"`
-	VmTemplate     *VMTemplate `xml:"VMTEMPLATE"`
-}
 
-type VMTemplate struct {
-	Id          string       `xml:"ID"`
-	Uid         string       `xml:"UID"`
-	Gid         string       `xml:"GID"`
-	Uname       string       `xml:"UNAME"`
-	Gname       string       `xml:"GNAME"`
-	Name        string       `xml:"NAME"`
-	Permissions *Permissions `xml:"PERMISSIONS"`
-	Template    *Template    `xml:"TEMPLATE"`
-	RegTime     string       `xml:"REGTIME"`
-}
-
-type Template struct {
-	Vcpu   string `xml:"VCPU"`
-	Cpu    string `xml:"CPU"`
-	Memory string `xml:"MEMORY"`
-}
-
-type Permissions struct {
-	Owner_U int `xml:"OWNER_U"`
-	Owner_M int `xml:"OWNER_M"`
-	Owner_A int `xml:"OWNER_A"`
-	Group_U int `xml:"GROUP_U"`
-	Group_M int `xml:"GROUP_M"`
-	Group_A int `xml:"GROUP_A"`
-	Other_U int `xml:"OTHER_U"`
-	Other_M int `xml:"OTHER_M"`
-	Other_A int `xml:"OTHER_A"`
-}
 
 type Credentials struct {
 	Username string
@@ -64,33 +31,55 @@ type Credentials struct {
 	Endpoint string
 }
 
-func (vm *VirtualMachine) CreateVM(creds *Credentials) {
+func (VM *VirtualMachine) CreateVM(creds *Credentials) {
 
 	secretKey := creds.Username + ":" + creds.Password
 
-	flavorObj := flavor.FlavorOpts{TemplateId: vm.OpenNebulaTemplateId}
-	fmt.Println("calling----------get template")
-	finalFlavorXML, ferr := flavorObj.GetTemplate(creds.Endpoint, secretKey)
+flavorObj := flavor.FlavorOpts{TemplateName: VM.OpenNebulaTemplateName}
+
+	/*
+	 * get a particular template to configure it
+	 */
+	template, ferr := flavorObj.GetTemplateByName(creds.Endpoint, secretKey)
 	if ferr != nil {
 		fmt.Println(ferr)
 	}
-	fmt.Println(finalFlavorXML)
-	/*-------
-	fmt.Println("------------------------------")
-	fmt.Println(finalFlavorXML)
-	data := `<VMTEMPLATE_POOL><VMTEMPLATE><ID>0</ID><UID>0</UID><GID>0</GID><UNAME>oneadmin</UNAME><GNAME>oneadmin</GNAME><NAME>ubuntu</NAME><PERMISSIONS><OWNER_U>1</OWNER_U><OWNER_M>1</OWNER_M><OWNER_A>0</OWNER_A><GROUP_U>0</GROUP_U><GROUP_M>0</GROUP_M><GROUP_A>0</GROUP_A><OTHER_U>0</OTHER_U><OTHER_M>0</OTHER_M><OTHER_A>0</OTHER_A></PERMISSIONS><REGTIME>1440059694</REGTIME><TEMPLATE><CONTEXT><NETWORK><![CDATA[YES]]></NETWORK><SSH_PUBLIC_KEY><![CDATA[$USER[SSH_PUBLIC_KEY]]]></SSH_PUBLIC_KEY></CONTEXT><CPU><![CDATA[1]]></CPU><CPU_COST><![CDATA[10]]></CPU_COST><DESCRIPTION><![CDATA[testtemplate...]]></DESCRIPTION><HYPERVISOR><![CDATA[kvm]]></HYPERVISOR><LOGO><![CDATA[images/logos/ubuntu.png]]></LOGO><MEMORY><![CDATA[512]]></MEMORY><MEMORY_COST><![CDATA[10]]></MEMORY_COST><SUNSTONE_CAPACITY_SELECT><![CDATA[YES]]></SUNSTONE_CAPACITY_SELECT><SUNSTONE_NETWORK_SELECT><![CDATA[YES]]></SUNSTONE_NETWORK_SELECT></TEMPLATE></VMTEMPLATE></VMTEMPLATE_POOL>`
-	//	data := `<VMTEMPLATE_POOL><VMTEMPLATE><ID>0</ID><UID>0</UID></VMTEMPLATE></VMTEMPLATE_POOL>`
-	//data := finalFlavorXML[1]
-	//data, _ := xml.Marshal(finalFlavorXML[1])
-	//data := GetBytes(finalFlavorXML[1])
-	//datum := string(data)
-	fmt.Println(reflect.TypeOf(finalFlavorXML))
 
-	t := XMLStructure{}
-	x := xml.Unmarshal([]byte(data), &t)
-	fmt.Println(x)
-	fmt.Println("---------------------------------------")
-	fmt.Println(t.VmTemplate.Id)
+/*
+ * Assign Values
+ */
+fmt.Println("90909090909900000000000000")
+fmt.Println(template[0].Id)
+
+	template[0].Template.Cpu = VM.Cpu
+	template[0].Template.Vcpu = VM.VCpu
+	template[0].Template.Memory = VM.Memory
+
+finalXML := xmlUtil.XMLStructure{}
+finalXML.VmTemplate = template
+fmt.Println("===================")
+fmt.Println(finalXML.VmTemplate[0].Id)
+
+finalData, _ := xml.Marshal(finalXML)
+
+
+
+//fmt.Println(finalData)
+fmt.Println(reflect.TypeOf(finalData))
+
+/*
+ * Updating templates
+ */
+data := `<VMTEMPLATE><ID>6</ID><UID>0</UID><GID>3</GID><UNAME>osradmin</UNAME><GNAME>yeshwanthsdeadmin</GNAME><NAME>supertest</NAME><PERMISSIONS><OWNER_U>1</OWNER_U><OWNER_M>1</OWNER_M><OWNER_A>0</OWNER_A><GROUP_U>0</GROUP_U><GROUP_M>0</GROUP_M><GROUP_A>0</GROUP_A><OTHER_U>0</OTHER_U><OTHER_M>0</OTHER_M><OTHER_A>0</OTHER_A></PERMISSIONS><REGTIME>1440059694</REGTIME><TEMPLATE><CONTEXT><NETWORK><![CDATA[YES]]></NETWORK><SSH_PUBLIC_KEY><![CDATA[$USER[SSH_PUBLIC_KEY]]]></SSH_PUBLIC_KEY></CONTEXT><CPU><![CDATA[1]]></CPU><CPU_COST><![CDATA[10]]></CPU_COST><DESCRIPTION><![CDATA[testtemplate...]]></DESCRIPTION><HYPERVISOR><![CDATA[kvm]]></HYPERVISOR><LOGO><![CDATA[images/logos/ubuntu.png]]></LOGO><MEMORY><![CDATA[512]]></MEMORY><MEMORY_COST><![CDATA[10]]></MEMORY_COST><SUNSTONE_CAPACITY_SELECT><![CDATA[YES]]></SUNSTONE_CAPACITY_SELECT><SUNSTONE_NETWORK_SELECT><![CDATA[YES]]></SUNSTONE_NETWORK_SELECT></TEMPLATE></VMTEMPLATE>`
+
+
+flavUpd := flavor.FlavorOpts{TemplateId: finalXML.VmTemplate[0].Id, TemplateData: data}
+flavUpd.UpdateTemplate(creds.Endpoint, secretKey)
+
+
+/*
+ * Allocate VM with ID
+ */
 
 	args := []interface{}{secretKey, 1}
 	client, err := api.RPCClient(creds.Endpoint)
@@ -100,17 +89,8 @@ func (vm *VirtualMachine) CreateVM(creds *Credentials) {
 	_, cerr := api.Call(client, "one.vm.allocate", args)
 	if cerr != nil {
 		fmt.Println(cerr)
-	} */
+	}
 }
 
-func GetBytes(key interface{}) []byte {
-	var buf bytes.Buffer
-	enc := gob.NewEncoder(&buf)
-	err := enc.Encode(key)
-	if err != nil {
-		return nil
-	}
-	return buf.Bytes()
-}
 
 func (vm *VirtualMachine) DestroyVM() {}
