@@ -32,6 +32,9 @@ func (flavor *FlavorOpts) GetTemplate(endpoint string, key string) ([]interface{
 	return res, nil
 }
 
+
+
+
 func (flavor *FlavorOpts) GetTemplateByName(endpoint string, key string) ([]*xmlUtil.VMTemplate, error) {
 
 	client, err := api.RPCClient(endpoint)
@@ -43,13 +46,14 @@ func (flavor *FlavorOpts) GetTemplateByName(endpoint string, key string) ([]*xml
 	templatePool, err := api.Call(client, "one.templatepool.info", args)
 
 //iterate the pool to getbyname
+fmt.Println(templatePool)
 xmlStrt := xmlUtil.UnmarshallXml(templatePool[1])
-fmt.Println(templatePool[1])
-//var matchedTemplate *xmlUtil.VMTemplate
+//fmt.Println(xmlStrt.VmTemplate[1])
 var matchedTemplate = make([]*xmlUtil.VMTemplate, len(xmlStrt.VmTemplate))
 
 		for _, v := range xmlStrt.VmTemplate {
      if v.Name == flavor.TemplateName {
+			fmt.Println(v)
          matchedTemplate[0] = v
 			}
 		}

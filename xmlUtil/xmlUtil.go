@@ -5,21 +5,21 @@ import (
 	"encoding/xml"
 
 )
-type XMLStructure struct {
-	VmTemplatePool xml.Name    `xml:"VMTEMPLATE_POOL"`
+type VMTEMPLATE_POOL struct {
+	//VmTemplatePool xml.Name    `xml:"VMTEMPLATE_POOL"`
 	VmTemplate     []*VMTemplate `xml:"VMTEMPLATE"`
 }
 
 type VMTemplate struct {
-	Id          string      `xml:"ID"`
-	Uid         string       `xml:"UID"`
-	Gid         string       `xml:"GID"`
+	Id          int       `xml:"ID"`
+	Uid         int       `xml:"UID"`
+	Gid         int       `xml:"GID"`
 	Uname       string       `xml:"UNAME"`
 	Gname       string       `xml:"GNAME"`
 	Name        string       `xml:"NAME"`
 	Permissions *Permissions `xml:"PERMISSIONS"`
 	Template    *Template    `xml:"TEMPLATE"`
-	RegTime     string       `xml:"REGTIME"`
+	RegTime     int       `xml:"REGTIME"`
 }
 
 type Template struct {
@@ -30,7 +30,7 @@ type Template struct {
 }
 
 type Disk struct {
-	Size string  `xml:"SIZE"`
+	Size int  `xml:"SIZE"`
 	Type string   `xml:"TYPE"`
 }
 
@@ -46,9 +46,9 @@ type Permissions struct {
 	Other_A int `xml:"OTHER_A"`
 }
 
-func UnmarshallXml(xmlData interface{}) XMLStructure {
+func UnmarshallXml(xmlData interface{}) VMTEMPLATE_POOL {
 
-	xmlStrt := XMLStructure{}
+	xmlStrt := VMTEMPLATE_POOL{}
 	assert := xmlData.(string)
 	_ = xml.Unmarshal([]byte(assert), &xmlStrt)
 	return xmlStrt

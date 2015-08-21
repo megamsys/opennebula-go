@@ -3,6 +3,7 @@ package flavor
 import (
 	"testing"
 	. "github.com/smartystreets/goconvey/convey"
+
 )
 /*
 func TestGetTemplate(t *testing.T) {
@@ -15,20 +16,22 @@ func TestGetTemplate(t *testing.T) {
 	})
 }
 
+*/
 
 func TestGetTemplateByName(t *testing.T) {
 	Convey("GetTemplateByName", t, func() {
 
 		endpoint := "http://localhost:2633/RPC2"
 		key := "oneadmin:RaifZuewjoc4"
-		flav := FlavorOpts{TemplateName: "ubuntu"}
+		flav := FlavorOpts{TemplateName: "newtest11"}
 		_, error := flav.GetTemplateByName(endpoint, key)
 		So(error, ShouldBeNil)
 
 	})
 }
-*/
 
+
+/*
 
 func TestUpdateTemplate(t *testing.T) {
 
@@ -45,3 +48,4 @@ func TestUpdateTemplate(t *testing.T) {
 
 	})
 }
+*/
