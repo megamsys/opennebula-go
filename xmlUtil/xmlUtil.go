@@ -5,11 +5,17 @@ import (
 	"encoding/xml"
 
 )
+
+/*
+This has to go into a file called templates.go
+Rename this to UserTemplates (if this contains all the templates of an user)
+*/
 type VMTEMPLATE_POOL struct {
 	//VmTemplatePool xml.Name    `xml:"VMTEMPLATE_POOL"`
 	VmTemplate     []*VMTemplate `xml:"VMTEMPLATE"`
 }
 
+//Rename this file to UserTemplate  (if this contains a template information of an user.
 type VMTemplate struct {
 	Id          int       `xml:"ID"`
 	Uid         int       `xml:"UID"`
@@ -46,6 +52,12 @@ type Permissions struct {
 	Other_A int `xml:"OTHER_A"`
 }
 
+
+/*Remove this and move to a common interface called XMLMapper
+- Marshall()
+- UnMarshall()
+Every API shall implement this interface. This interface shall reside in a file in the core/ directory.
+*/
 func UnmarshallXml(xmlData interface{}) VMTEMPLATE_POOL {
 
 	xmlStrt := VMTEMPLATE_POOL{}
