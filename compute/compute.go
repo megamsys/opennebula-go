@@ -48,7 +48,7 @@ func (VM *VirtualMachine) CreateVM(creds *Credentials) {
 	 */
 
 	template[0].Template.Cpu = VM.Cpu
-	template[0].Template.Vcpu = VM.VCpu
+	template[0].Template.VCpu = VM.VCpu
 	template[0].Template.Memory = VM.Memory
 
 	finalXML := xmlUtil.VMTEMPLATE_POOL{}
@@ -58,22 +58,15 @@ func (VM *VirtualMachine) CreateVM(creds *Credentials) {
 	data := string(finalData)
 
 	/*
-	 * Updating templates
+	 * Instantiate a template
 	 */
 
-	flavUpd := flavor.FlavorOpts{TemplateId: finalXML.VmTemplate[0].Id, TemplateData: data}
-	flavUpd.UpdateTemplate(creds.Endpoint, secretKey)
-
-	/*
-	 * Allocate VM with ID
-	 */
-
-	args := []interface{}{secretKey, finalXML.VmTemplate[0].Id}
+	args := []interface{}{secretKey, finalXML.VmTemplate[0].Id, finalXML.VmTemplate[0].Name, false, data}
 	client, err := api.RPCClient(creds.Endpoint)
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, cerr := api.Call(client, "one.vm.allocate", args)
+	_, cerr := api.Call(client, "one.template.instantiate", args)
 	if cerr != nil {
 		fmt.Println(cerr)
 	}

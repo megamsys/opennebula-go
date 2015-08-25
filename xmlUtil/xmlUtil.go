@@ -37,8 +37,21 @@ type Template struct {
 	Memory_cost              string   `xml:"MEMORY_COST"`
 	Sunstone_capacity_select string   `xml:"SUNSTONE_CAPACITY_SELECT"`
 	Sunstone_Network_select  string   `xml:"SUNSTONE_NETWORK_SELECT"`
-	Vcpu                     string   `xml:"VCPU"`
+	VCpu                     string   `xml:"VCPU"`
 	Disk                     *Disk    `xml:"DISK"`
+	From_app                 string   `xml:"FROM_APP"`
+	From_app_name            string   `xml:"FROM_APP_NAME"`
+	Nic                      *NIC     `xml:"NIC"`
+	Os                       *OS      `xml:"OS"`
+}
+
+type OS struct {
+	Arch string `xml:"ARCH"`
+}
+
+type NIC struct {
+	Network       string `xml:"NETWORK"`
+	Network_uname string `xml:"NETWORK_UNAME"`
 }
 
 type Context struct {
@@ -47,8 +60,9 @@ type Context struct {
 }
 
 type Disk struct {
-	Size int    `xml:"SIZE"`
-	Type string `xml:"TYPE"`
+	Driver      string `xml:"DRIVER"`
+	Image       string `xml:"IMAGE"`
+	Image_Uname string `xml:"IMAGE_UNAME"`
 }
 
 type Permissions struct {
