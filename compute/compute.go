@@ -6,10 +6,13 @@ import (
 
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
+	"github.com/megamsys/opennebula-go/virtualmachine"
 )
 
 const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
+	ONE_VM_ACTION        = "one.vm.action"
+	DELETE               = "delete"
 )
 
 type VirtualMachine struct {
@@ -61,4 +64,23 @@ func (VM *VirtualMachine) Create() []interface{} {
 		log.Fatal(cerr)
 	}
 	return res
+}
+
+func (VM *VirtualMachine) Delete() interface{} {
+
+	vmObj := virtualmachine.VirtualMachineReqs{VMName: VM.Name, Client: VM.Client}
+
+	SingleVM, ferr := vmObj.GetVirtualMachineByName()
+	if ferr != nil {
+		log.Fatal(ferr)
+	}
+
+	args := []interface{}{VM.Client.Key, DELETE, SingleVM[0].Id}
+	res, cerr := VM.Client.Call(VM.Client.RPCClient, ONE_VM_ACTION, args)
+	if cerr != nil {
+		log.Fatal(cerr)
+	}
+
+	return res[1]
+
 }
