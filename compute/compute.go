@@ -25,11 +25,12 @@ type VirtualMachine struct {
 	Client       *api.Rpc
 }
 
-/*
+/**
+ *
  * Creates a new VirtualMachine
  *
- */
-func (VM *VirtualMachine) Create() []interface{} {
+ **/
+func (VM *VirtualMachine) Create() ([]interface{}, error) {
 
 	templateObj := template.TemplateReqs{TemplateName: VM.TemplateName, Client: VM.Client}
 
@@ -63,10 +64,15 @@ func (VM *VirtualMachine) Create() []interface{} {
 	if cerr != nil {
 		log.Fatal(cerr)
 	}
-	return res
+	return res, nil
 }
 
-func (VM *VirtualMachine) Delete() interface{} {
+/**
+ *
+ * Deletes a new virtualMachine
+ *
+ **/
+func (VM *VirtualMachine) Delete() ([]interface{}, error) {
 
 	vmObj := virtualmachine.VirtualMachineReqs{VMName: VM.Name, Client: VM.Client}
 
@@ -79,8 +85,9 @@ func (VM *VirtualMachine) Delete() interface{} {
 	res, cerr := VM.Client.Call(VM.Client.RPCClient, ONE_VM_ACTION, args)
 	if cerr != nil {
 		log.Fatal(cerr)
+		return nil, cerr
 	}
 
-	return res[1]
+	return res, nil
 
 }

@@ -14,7 +14,6 @@ const (
 )
 
 type UserTemplates struct {
-	//VmTemplatePool xml.Name    `xml:"VMTEMPLATE_POOL"`
 	UserTemplate []*UserTemplate `xml:"VMTEMPLATE"`
 }
 
@@ -88,10 +87,11 @@ type TemplateReqs struct {
 	Client       *api.Rpc
 }
 
-/*
+/**
+ *
  * Given a templateId it would return the XML of that particular template
  *
- */
+ **/
 func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
 
 	args := []interface{}{t.Client.Key, -2, t.TemplateId, t.TemplateId}
@@ -103,10 +103,11 @@ func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
 	return res, nil
 }
 
-/*
+/**
+ *
  * Gets a particular template with a template name given
  *
- */
+ **/
 func (t *TemplateReqs) GetTemplateByName() ([]*UserTemplate, error) {
 	args := []interface{}{t.Client.Key, -2, -1, -1}
 	templatePool, _ := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
@@ -125,10 +126,11 @@ func (t *TemplateReqs) GetTemplateByName() ([]*UserTemplate, error) {
 	return matchedTemplate, nil
 }
 
-/*
+/**
+ *
  * Update a template in OpenNebula
  *
- */
+ **/
 func (t *TemplateReqs) UpdateTemplate() error {
 
 	args := []interface{}{t.Client.Key, t.TemplateId, t.TemplateData, 0}

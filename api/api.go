@@ -15,10 +15,11 @@ type Rpc struct {
 	Key       string
 }
 
-/*
-* Creates an RPCClient with endpoint and returns it
-*
- */
+/**
+ *
+ * Creates an RPCClient with endpoint and returns it
+ *
+ **/
 func NewRPCClient(endpoint string, username string, password string) (Rpc, error) {
 	RPCclient, err := xmlrpc.NewClient(endpoint, nil)
 	if err != nil {
@@ -29,10 +30,11 @@ func NewRPCClient(endpoint string, username string, password string) (Rpc, error
 	return RpcObj, nil
 }
 
-/*
+/**
+ *
  * Do an RPC Call
  *
- */
+ **/
 func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]interface{}, error) {
 
 	result := []interface{}{}

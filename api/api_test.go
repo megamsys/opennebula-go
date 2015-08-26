@@ -3,30 +3,27 @@ package api
 import (
 	"testing"
 
-	//	"github.com/megamsys/opennebula-go/api"
-	. "github.com/smartystreets/goconvey/convey"
+	"gopkg.in/check.v1"
 )
 
-func TestCreateNewRPCClient(t *testing.T) {
-	Convey("CreateNewRPCClient", t, func() {
-		endpoint := "http://localhost:2633/RPC2"
-		//	key := "oneadmin:RaifZuewjoc4"
-
-		_, err := NewRPCClient(endpoint, "oneadmin", "RaifZuewjoc4")
-		So(err, ShouldBeNil)
-	})
+func Test(t *testing.T) {
+	check.TestingT(t)
 }
 
-/*
-func TestRPCCall(t *testing.T) {
-	Convey("RPCCall", t, func() {
-		endpoint := "http://localhost:2633/RPC2"
-		client, _ := RPCClient(endpoint)
-		key := "oneadmin:RaifZuewjoc4"
-		args := []interface{}{key, -2, 3, 3}
-		_, error := Call(client, "one.templatepool.info", args)
-		fmt.Println(error)
-		So(error, ShouldBeNil)
-	})
+type S struct{}
+
+var _ = check.Suite(&S{})
+
+func (s *S) TestCreateNewRPCClient(c *check.C) {
+	_, error := NewRPCClient("http://localhost:2633/RPC2", "oneadmin", "RaifZuewjoc4")
+	c.Assert(error, check.IsNil)
 }
-*/
+
+func (s *S) TestRPCCall(c *check.C) {
+	client, clientErr := NewRPCClient("http://localhost:2633/RPC2", "oneadmin", "RaifZuewjoc4")
+	args := []interface{}{client.Key, -2, 3, 3}
+	_, callErr := client.Call(client.RPCClient, "one.templatepool.info", args)
+	c.Assert(clientErr, check.IsNil)
+	c.Assert(callErr, check.IsNil)
+
+}

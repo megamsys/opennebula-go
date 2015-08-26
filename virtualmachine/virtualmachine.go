@@ -22,6 +22,11 @@ type UserVM struct {
 	Name string `xml:"NAME"`
 }
 
+/**
+ *
+ * Given a name, this function will return the VM
+ *
+ **/
 func (VM *VirtualMachineReqs) GetVirtualMachineByName() ([]*UserVM, error) {
 
 	args := []interface{}{VM.Client.Key, -2, -1, -1, -1}
