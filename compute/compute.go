@@ -2,72 +2,63 @@ package compute
 
 import (
 	"encoding/xml"
-	"fmt"
+	"log"
 
 	"github.com/megamsys/opennebula-go/api"
-	"github.com/megamsys/opennebula-go/flavor"
-	"github.com/megamsys/opennebula-go/xmlUtil"
+	"github.com/megamsys/opennebula-go/template"
+)
+
+const (
+	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 )
 
 type VirtualMachine struct {
-	OpenNebulaTemplateName string
-	OpenNebulaTemplateId   int
-	Bootstrap              string
-	SSHUser                string
-	SSHPort                string
-	Cpu                    string
-	VCpu                   string
-	Memory                 string
-	RunList                string
-	Distro                 string
-	VMName                 string
+	Name         string
+	TemplateName string
+	TemplateId   int
+	Cpu          string
+	VCpu         string
+	Memory       string
+	Client       *api.Rpc
 }
 
-type Credentials struct {
-	Username string
-	Password string
-	Endpoint string
-}
+/*
+ * Creates a new VirtualMachine
+ *
+ */
+func (VM *VirtualMachine) Create() []interface{} {
 
-func (VM *VirtualMachine) CreateVM(creds *Credentials) {
-
-	secretKey := creds.Username + ":" + creds.Password
-
-	flavorObj := flavor.FlavorOpts{TemplateName: VM.OpenNebulaTemplateName}
+	templateObj := template.TemplateReqs{TemplateName: VM.TemplateName, Client: VM.Client}
 
 	/*
 	 * get a particular template to configure it
 	 */
-	template, ferr := flavorObj.GetTemplateByName(creds.Endpoint, secretKey)
+	XMLtemplate, ferr := templateObj.GetTemplateByName()
 	if ferr != nil {
-		fmt.Println(ferr)
+		log.Fatal(ferr)
 	}
 
 	/*
 	 * Assign Values
 	 */
 
-	template[0].Template.Cpu = VM.Cpu
-	template[0].Template.VCpu = VM.VCpu
-	template[0].Template.Memory = VM.Memory
+	XMLtemplate[0].Template.Cpu = VM.Cpu
+	XMLtemplate[0].Template.VCpu = VM.VCpu
+	XMLtemplate[0].Template.Memory = VM.Memory
 
-	finalXML := xmlUtil.VMTEMPLATE_POOL{}
-	finalXML.VmTemplate = template
+	finalXML := template.UserTemplates{}
+	finalXML.UserTemplate = XMLtemplate
 
-	finalData, _ := xml.Marshal(finalXML.VmTemplate[0].Template)
+	finalData, _ := xml.Marshal(finalXML.UserTemplate[0].Template)
 	data := string(finalData)
 
 	/*
 	 * Instantiate a template
 	 */
-
-	args := []interface{}{secretKey, finalXML.VmTemplate[0].Id, finalXML.VmTemplate[0].Name, false, data}
-	client, err := api.RPCClient(creds.Endpoint)
-	if err != nil {
-		fmt.Println(err)
-	}
-	_, cerr := api.Call(client, "one.template.instantiate", args)
+	args := []interface{}{VM.Client.Key, finalXML.UserTemplate[0].Id, VM.Name, false, data}
+	res, cerr := VM.Client.Call(VM.Client.RPCClient, TEMPLATE_INSTANTIATE, args)
 	if cerr != nil {
-		fmt.Println(cerr)
+		log.Fatal(cerr)
 	}
+	return res
 }

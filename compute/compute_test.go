@@ -1,18 +1,21 @@
 package compute
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/megamsys/opennebula-go/api"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestCreateVM(t *testing.T) {
-	Convey("CreateVM", t, func() {
-		vmObj := VirtualMachine{OpenNebulaTemplateName: "yeshdeb", Cpu: "1", VCpu: "1", Memory: "400"} //memory interms of MB! duh!
-		//creds := Credentials{Username: "oneadmin", Password: "RaifZuewjoc4", Endpoint: "http://localhost:2633/RPC2"}
-		creds := Credentials{Username: "oneadmin", Password: "yib4OquafUp1", Endpoint: "http://192.168.1.100:2633/RPC2"}
+func TestCreate(t *testing.T) {
+	Convey("Create", t, func() {
 
-		vmObj.CreateVM(&creds)
+		client, _ := api.NewRPCClient("http://localhost:2633/RPC2", "oneadmin", "RaifZuewjoc4")
+		vmObj := VirtualMachine{Name: "yeshapp", TemplateName: "fullfledged", Cpu: "1", VCpu: "1", Memory: "4500", Client: &client} //memory in terms of MB! duh!
+
+		res := vmObj.Create()
+		fmt.Println(res)
 		//	So(err, ShouldBeNil)
 	})
 }

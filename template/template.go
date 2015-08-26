@@ -1,20 +1,24 @@
-package xmlUtil
+package template
 
 import (
 	"encoding/xml"
+	"fmt"
+	"log"
+
+	"github.com/megamsys/opennebula-go/api"
 )
 
-/*
-This has to go into a file called templates.go
-Rename this to UserTemplates (if this contains all the templates of an user)
-*/
-type VMTEMPLATE_POOL struct {
+const (
+	TEMPLATEPOOL_INFO = "one.templatepool.info"
+	TEMPLATE_UPDATE   = "one.template.update"
+)
+
+type UserTemplates struct {
 	//VmTemplatePool xml.Name    `xml:"VMTEMPLATE_POOL"`
-	VmTemplate []*VMTemplate `xml:"VMTEMPLATE"`
+	UserTemplate []*UserTemplate `xml:"VMTEMPLATE"`
 }
 
-//Rename this file to UserTemplate  (if this contains a template information of an user.
-type VMTemplate struct {
+type UserTemplate struct {
 	Id          int          `xml:"ID"`
 	Uid         int          `xml:"UID"`
 	Gid         int          `xml:"GID"`
@@ -77,15 +81,62 @@ type Permissions struct {
 	Other_A int `xml:"OTHER_A"`
 }
 
-/*Remove this and move to a common interface called XMLMapper
-- Marshall()
-- UnMarshall()
-Every API shall implement this interface. This interface shall reside in a file in the core/ directory.
-*/
-func UnmarshallXml(xmlData interface{}) VMTEMPLATE_POOL {
+type TemplateReqs struct {
+	TemplateName string
+	TemplateId   int
+	TemplateData string
+	Client       *api.Rpc
+}
 
-	xmlStrt := VMTEMPLATE_POOL{}
-	assert := xmlData.(string)
+/*
+ * Given a templateId it would return the XML of that particular template
+ *
+ */
+func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
+
+	args := []interface{}{t.Client.Key, -2, t.TemplateId, t.TemplateId}
+	res, err := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return res, nil
+}
+
+/*
+ * Gets a particular template with a template name given
+ *
+ */
+func (t *TemplateReqs) GetTemplateByName() ([]*UserTemplate, error) {
+	args := []interface{}{t.Client.Key, -2, -1, -1}
+	templatePool, _ := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
+
+	xmlStrt := UserTemplates{}
+	assert := templatePool[1].(string)
 	_ = xml.Unmarshal([]byte(assert), &xmlStrt)
-	return xmlStrt
+
+	var matchedTemplate = make([]*UserTemplate, len(xmlStrt.UserTemplate))
+
+	for _, v := range xmlStrt.UserTemplate {
+		if v.Name == t.TemplateName {
+			matchedTemplate[0] = v
+		}
+	}
+	return matchedTemplate, nil
+}
+
+/*
+ * Update a template in OpenNebula
+ *
+ */
+func (t *TemplateReqs) UpdateTemplate() error {
+
+	args := []interface{}{t.Client.Key, t.TemplateId, t.TemplateData, 0}
+	templatePool, err := t.Client.Call(t.Client.RPCClient, TEMPLATE_UPDATE, args)
+	log.Print("[x] ", templatePool)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return nil
+
 }

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"testing"
 
 	//	"github.com/megamsys/opennebula-go/api"
@@ -11,11 +10,14 @@ import (
 func TestCreateNewRPCClient(t *testing.T) {
 	Convey("CreateNewRPCClient", t, func() {
 		endpoint := "http://localhost:2633/RPC2"
-		_, err := RPCClient(endpoint)
+		//	key := "oneadmin:RaifZuewjoc4"
+
+		_, err := NewRPCClient(endpoint, "oneadmin", "RaifZuewjoc4")
 		So(err, ShouldBeNil)
 	})
 }
 
+/*
 func TestRPCCall(t *testing.T) {
 	Convey("RPCCall", t, func() {
 		endpoint := "http://localhost:2633/RPC2"
@@ -27,3 +29,4 @@ func TestRPCCall(t *testing.T) {
 		So(error, ShouldBeNil)
 	})
 }
+*/
