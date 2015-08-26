@@ -2,30 +2,40 @@ package api
 
 import (
 	"fmt"
-	//"bytes"
+	"log"
+
 	"github.com/kolo/xmlrpc"
-//	"github.com/megamsys/opennebula-go/compute"
 )
 
-
 /*
-* Creates an RPCClient with endpoint and returns it
-*
+ * RPC Client and secret key
  */
-func RPCClient(endpoint string) (*xmlrpc.Client, error) {
-	RPCclient, err := xmlrpc.NewClient(endpoint, nil)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println(RPCclient)
-	return RPCclient, nil
+type Rpc struct {
+	RPCClient xmlrpc.Client
+	Key       string
 }
 
-/*
+/**
+ *
+ * Creates an RPCClient with endpoint and returns it
+ *
+ **/
+func NewRPCClient(endpoint string, username string, password string) (Rpc, error) {
+	RPCclient, err := xmlrpc.NewClient(endpoint, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	RpcObj := Rpc{RPCClient: *RPCclient, Key: username + ":" + password}
+	fmt.Println(RpcObj.Key)
+	return RpcObj, nil
+}
+
+/**
+ *
  * Do an RPC Call
  *
- */
-func Call(RPC *xmlrpc.Client, command string, args []interface{}) ([]interface{}, error) {
+ **/
+func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]interface{}, error) {
 
 	result := []interface{}{}
 	cerr := RPC.Call(command, args, &result)
