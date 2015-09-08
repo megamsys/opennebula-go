@@ -20,7 +20,7 @@ var _ = check.Suite(&S{})
 
 func (s *S) TestGetTemplateByName(c *check.C) {
 	client, _ := api.NewRPCClient("http://localhost:2633/RPC2", "oneadmin", "RaifZuewjoc4")
-	flav := TemplateReqs{TemplateName: "test13", Client: &client}
+	flav := TemplateReqs{TemplateName: "newone", Client: &client}
 	res, error := flav.GetTemplateByName()
 	fmt.Println(res[0].Id)
 	c.Assert(error, check.IsNil)

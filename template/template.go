@@ -30,22 +30,30 @@ type UserTemplate struct {
 }
 
 type Template struct {
-	Context                  *Context `xml:"CONTEXT"`
-	Cpu                      string   `xml:"CPU"`
-	Cpu_cost                 string   `xml:"CPU_COST"`
-	Description              string   `xml:"DESCRIPTION"`
-	Hypervisor               string   `xml:"HYPERVISOR"`
-	Logo                     string   `xml:"LOGO"`
-	Memory                   string   `xml:"MEMORY"`
-	Memory_cost              string   `xml:"MEMORY_COST"`
-	Sunstone_capacity_select string   `xml:"SUNSTONE_CAPACITY_SELECT"`
-	Sunstone_Network_select  string   `xml:"SUNSTONE_NETWORK_SELECT"`
-	VCpu                     string   `xml:"VCPU"`
-	Disk                     *Disk    `xml:"DISK"`
-	From_app                 string   `xml:"FROM_APP"`
-	From_app_name            string   `xml:"FROM_APP_NAME"`
-	Nic                      *NIC     `xml:"NIC"`
-	Os                       *OS      `xml:"OS"`
+	Context                  *Context  `xml:"CONTEXT"`
+	Cpu                      string    `xml:"CPU"`
+	Cpu_cost                 string    `xml:"CPU_COST"`
+	Description              string    `xml:"DESCRIPTION"`
+	Hypervisor               string    `xml:"HYPERVISOR"`
+	Logo                     string    `xml:"LOGO"`
+	Memory                   string    `xml:"MEMORY"`
+	Memory_cost              string    `xml:"MEMORY_COST"`
+	Sunstone_capacity_select string    `xml:"SUNSTONE_CAPACITY_SELECT"`
+	Sunstone_Network_select  string    `xml:"SUNSTONE_NETWORK_SELECT"`
+	VCpu                     string    `xml:"VCPU"`
+	Graphics                 *Graphics `xml:"GRAPHICS"`
+	Disk                     *Disk     `xml:"DISK"`
+	From_app                 string    `xml:"FROM_APP"`
+	From_app_name            string    `xml:"FROM_APP_NAME"`
+	Nic                      *NIC      `xml:"NIC"`
+	Os                       *OS       `xml:"OS"`
+}
+
+type Graphics struct {
+	Listen       string `xml:"LISTEN"`
+	Port         string `xml:"PORT"`
+	Type         string `xml:"TYPE"`
+	RandomPassWD string `xml:"RANDOM_PASSWD"`
 }
 
 type OS struct {
@@ -59,7 +67,11 @@ type NIC struct {
 
 type Context struct {
 	Network        string `xml:"NETWORK"`
+	Files          string `xml:"FILES"`
 	SSH_Public_key string `xml:"SSH_PUBLIC_KEY"`
+	Set_Hostname   string `xml:"SET_HOSTNAME"`
+	Node_Name      string `xml:"NODE_NAME"`
+	Assembly_id    string `xml:"ASSEMBLY_ID"`
 }
 
 type Disk struct {
@@ -111,7 +123,6 @@ func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
 func (t *TemplateReqs) GetTemplateByName() ([]*UserTemplate, error) {
 	args := []interface{}{t.Client.Key, -2, -1, -1}
 	templatePool, _ := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
-
 	xmlStrt := UserTemplates{}
 	assert := templatePool[1].(string)
 	_ = xml.Unmarshal([]byte(assert), &xmlStrt)
