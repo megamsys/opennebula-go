@@ -2,9 +2,7 @@ package template
 
 import (
 	"encoding/xml"
-	"fmt"
-	"log"
-
+  "fmt"
 	"github.com/megamsys/opennebula-go/api"
 )
 
@@ -105,11 +103,9 @@ type TemplateReqs struct {
  *
  **/
 func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
-
 	args := []interface{}{t.Client.Key, -2, t.TemplateId, t.TemplateId}
 	res, err := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 	return res, nil
@@ -122,10 +118,19 @@ func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
  **/
 func (t *TemplateReqs) GetTemplateByName() ([]*UserTemplate, error) {
 	args := []interface{}{t.Client.Key, -2, -1, -1}
-	templatePool, _ := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
+	templatePool, err := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
+
+	if err != nil {
+		return nil, fmt.Errorf("unable to get templates by name:%s", err)
+	}
+
 	xmlStrt := UserTemplates{}
+
 	assert := templatePool[1].(string)
-	_ = xml.Unmarshal([]byte(assert), &xmlStrt)
+
+	if err = xml.Unmarshal([]byte(assert), &xmlStrt); err != nil {
+		return nil, fmt.Errorf("unable to unmarshall the xml templates:%s", err)
+	}
 
 	var matchedTemplate = make([]*UserTemplate, len(xmlStrt.UserTemplate))
 
@@ -143,13 +148,9 @@ func (t *TemplateReqs) GetTemplateByName() ([]*UserTemplate, error) {
  *
  **/
 func (t *TemplateReqs) UpdateTemplate() error {
-
 	args := []interface{}{t.Client.Key, t.TemplateId, t.TemplateData, 0}
-	templatePool, err := t.Client.Call(t.Client.RPCClient, TEMPLATE_UPDATE, args)
-	log.Print("[x] ", templatePool)
-	if err != nil {
-		log.Fatal(err)
+	if _, err := t.Client.Call(t.Client.RPCClient, TEMPLATE_UPDATE, args); err != nil {
+		return fmt.Errorf("unable to update template:%s", err)
 	}
 	return nil
-
 }
