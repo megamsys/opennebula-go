@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	log "github.com/Sirupsen/logrus"
 
 	"github.com/kolo/xmlrpc"
