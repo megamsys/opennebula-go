@@ -1,7 +1,6 @@
 package virtualmachine
 
 import (
-	"fmt"
 	"encoding/xml"
 
 	"github.com/megamsys/opennebula-go/api"
@@ -32,13 +31,13 @@ func (v *VirtualMachineReqs) GetVirtualMachineByName() ([]*UserVM, error) {
 	args := []interface{}{v.Client.Key, -2, -1, -1, -1}
 	VMPool, err := v.Client.Call(v.Client.RPCClient, "one.vmpool.info", args)
 	if err != nil {
-		return nil, fmt.Errorf("unable to get the vm by name:%s", err)
+		return nil, err
 	}
 
 	xmlVM := UserVMs{}
 	assert, _ := VMPool[1].(string)
 	if err = xml.Unmarshal([]byte(assert), &xmlVM); err != nil {
-		return nil, fmt.Errorf("unable to unmarshall the xml vm pool:%s", err)
+		return nil, err
 	}
 
 	var matchedVM = make([]*UserVM, len(xmlVM.UserVM))
