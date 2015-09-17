@@ -26,7 +26,7 @@ func NewRPCClient(endpoint string, username string, password string) (*Rpc, erro
 	if err != nil {
 		return nil, fmt.Errorf("unable to connect with one %q: %s", endpoint, err)
 	}
-	log.Debugf("[one-go] -- client --- \ncommand: %s\nconnected: %s\n[one-go] --- client --- \n", endpoint)
+	log.Debugf("[one-go] -- client --- \nconnected: %s\n[one-go] --- client --- \n", endpoint)
 
 	return &Rpc{
 		RPCClient: *RPCclient,
