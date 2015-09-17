@@ -1,8 +1,8 @@
 package virtualmachine
 
 import (
+	"fmt"
 	"encoding/xml"
-	"log"
 
 	"github.com/megamsys/opennebula-go/api"
 )
@@ -27,23 +27,25 @@ type UserVM struct {
  * Given a name, this function will return the VM
  *
  **/
-func (VM *VirtualMachineReqs) GetVirtualMachineByName() ([]*UserVM, error) {
+func (v *VirtualMachineReqs) GetVirtualMachineByName() ([]*UserVM, error) {
 
-	args := []interface{}{VM.Client.Key, -2, -1, -1, -1}
-	VMPool, cerr := VM.Client.Call(VM.Client.RPCClient, "one.vmpool.info", args)
-	if cerr != nil {
-		log.Fatal(cerr)
+	args := []interface{}{v.Client.Key, -2, -1, -1, -1}
+	VMPool, err := v.Client.Call(v.Client.RPCClient, "one.vmpool.info", args)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get the vm by name:%s", err)
 	}
 
 	xmlVM := UserVMs{}
 	assert, _ := VMPool[1].(string)
-	_ = xml.Unmarshal([]byte(assert), &xmlVM)
+	if err = xml.Unmarshal([]byte(assert), &xmlVM); err != nil {
+		return nil, fmt.Errorf("unable to unmarshall the xml vm pool:%s", err)
+	}
 
 	var matchedVM = make([]*UserVM, len(xmlVM.UserVM))
 
-	for _, v := range xmlVM.UserVM {
-		if v.Name == VM.VMName {
-			matchedVM[0] = v
+	for _, u := range xmlVM.UserVM {
+		if u.Name == v.VMName {
+			matchedVM[0] = u
 		}
 	}
 
