@@ -2,9 +2,7 @@ package compute
 
 import (
 	"encoding/xml"
-	"fmt"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"
@@ -33,7 +31,6 @@ type VirtualMachine struct {
  *
  **/
 func (v *VirtualMachine) Create() ([]interface{}, error) {
-  log.Debugf("[one-go] create")
 	templateObj := template.TemplateReqs{TemplateName: v.TemplateName, Client: v.Client}
 
 	/*
@@ -41,7 +38,7 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	 */
 	XMLtemplate, err := templateObj.GetTemplateByName()
 	if err != nil {
-		return nil, fmt.Errorf("one template list %q failure: %s", v.TemplateName, err)
+		return nil, err
 	}
 
 	/*
@@ -66,7 +63,7 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	args := []interface{}{v.Client.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
 	res, err := v.Client.Call(v.Client.RPCClient, TEMPLATE_INSTANTIATE, args)
 	if err != nil {
-		return nil, fmt.Errorf("one vmcreate failure: %s", err)
+		return nil, err
 	}
 	return res, nil
 }
@@ -77,19 +74,18 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
  *
  **/
 func (v *VirtualMachine) Delete() ([]interface{}, error) {
-	log.Debugf("[one-go] delete")
 
 	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
 
 	SingleVM, err := vmObj.GetVirtualMachineByName()
 	if err != nil {
-		return nil, fmt.Errorf("one vmlist %q failure: %s", v.Name, err)
+		return nil, err
 	}
 
 	args := []interface{}{v.Client.Key, DELETE, SingleVM[0].Id}
 	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
 	if err != nil {
-		return nil, fmt.Errorf("one vmdelete %q failure: %s", v.Name, err)
+		return nil, err
 	}
 
 	return res, nil
