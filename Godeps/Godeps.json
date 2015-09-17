@@ -6,12 +6,13 @@
 	],
 	"Deps": [
 		{
-			"ImportPath": "github.com/kolo/xmlrpc",
-			"Rev": "0826b98aaa29c0766956cb40d45cf7482a597671"
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.8.7",
+			"Rev": "418b41d23a1bf978c06faea5313ba194650ac088"
 		},
 		{
-			"ImportPath": "gopkg.in/check.v1",
-			"Rev": "11d3bc7aa68e238947792f30573146a3231fc0f1"
+			"ImportPath": "github.com/kolo/xmlrpc",
+			"Rev": "0826b98aaa29c0766956cb40d45cf7482a597671"
 		}
 	]
 }

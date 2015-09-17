@@ -19,7 +19,7 @@ var _ = check.Suite(&S{})
 func (s *S) TestCreate(c *check.C) {
 	//oneadmin:yib4OquafUp1
 	client, _ := api.NewRPCClient("http://192.168.1.100:2633/RPC2", "oneadmin", "yib4OquafUp1")
-	vmObj := VirtualMachine{Name: "yeshapp_new_files", TemplateName: "yesh_trusty", Cpu: "1", Memory: "1024", Assembly_id: "ASM007", Client: &client} //memory in terms of MB! duh!
+	vmObj := VirtualMachine{Name: "yeshapp_new_files", TemplateName: "yesh_trusty", Cpu: "1", Memory: "1024", Assembly_id: "ASM007", Client: client} //memory in terms of MB! duh!
 
 	_, error := vmObj.Create()
 	c.Assert(error, check.IsNil)
