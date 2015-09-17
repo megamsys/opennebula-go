@@ -19,7 +19,7 @@ var _ = check.Suite(&S{})
 
 func (s *S) TestGetVirtualMachineByName(c *check.C) {
 	client, _ := api.NewRPCClient("http://localhost:2633/RPC2", "oneadmin", "RaifZuewjoc4")
-	vm := VirtualMachineReqs{VMName: "yeshapp", Client: &client}
+	vm := VirtualMachineReqs{VMName: "yeshapp", Client: client}
 	res, error := vm.GetVirtualMachineByName()
 	fmt.Println(res[0].Id)
 	c.Assert(error, check.IsNil)

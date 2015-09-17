@@ -2,8 +2,9 @@ package compute
 
 import (
 	"encoding/xml"
-	"log"
+	"fmt"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"
@@ -31,27 +32,27 @@ type VirtualMachine struct {
  * Creates a new VirtualMachine
  *
  **/
-func (VM *VirtualMachine) Create() ([]interface{}, error) {
-
-	templateObj := template.TemplateReqs{TemplateName: VM.TemplateName, Client: VM.Client}
+func (v *VirtualMachine) Create() ([]interface{}, error) {
+  log.Debugf("[one-go] create")
+	templateObj := template.TemplateReqs{TemplateName: v.TemplateName, Client: v.Client}
 
 	/*
 	 * get a particular template to configure it
 	 */
-	XMLtemplate, ferr := templateObj.GetTemplateByName()
-	if ferr != nil {
-		log.Fatal(ferr)
+	XMLtemplate, err := templateObj.GetTemplateByName()
+	if err != nil {
+		return nil, fmt.Errorf("one template list %q failure: %s", v.TemplateName, err)
 	}
 
 	/*
 	 * Assign Values
 	 */
 
-	XMLtemplate[0].Template.Cpu = VM.Cpu
-	XMLtemplate[0].Template.VCpu = VM.VCpu
-	XMLtemplate[0].Template.Memory = VM.Memory
+	XMLtemplate[0].Template.Cpu = v.Cpu
+	XMLtemplate[0].Template.VCpu = v.VCpu
+	XMLtemplate[0].Template.Memory = v.Memory
 
-	XMLtemplate[0].Template.Context.Assembly_id = VM.Assembly_id
+	XMLtemplate[0].Template.Context.Assembly_id = v.Assembly_id
 
 	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate
@@ -62,10 +63,10 @@ func (VM *VirtualMachine) Create() ([]interface{}, error) {
 	/*
 	 * Instantiate a template
 	 */
-	args := []interface{}{VM.Client.Key, finalXML.UserTemplate[0].Id, VM.Name, false, data}
-	res, cerr := VM.Client.Call(VM.Client.RPCClient, TEMPLATE_INSTANTIATE, args)
-	if cerr != nil {
-		log.Fatal(cerr)
+	args := []interface{}{v.Client.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
+	res, err := v.Client.Call(v.Client.RPCClient, TEMPLATE_INSTANTIATE, args)
+	if err != nil {
+		return nil, fmt.Errorf("one vmcreate failure: %s", err)
 	}
 	return res, nil
 }
@@ -75,20 +76,20 @@ func (VM *VirtualMachine) Create() ([]interface{}, error) {
  * Deletes a new virtualMachine
  *
  **/
-func (VM *VirtualMachine) Delete() ([]interface{}, error) {
+func (v *VirtualMachine) Delete() ([]interface{}, error) {
+	log.Debugf("[one-go] delete")
 
-	vmObj := virtualmachine.VirtualMachineReqs{VMName: VM.Name, Client: VM.Client}
+	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
 
-	SingleVM, ferr := vmObj.GetVirtualMachineByName()
-	if ferr != nil {
-		log.Fatal(ferr)
+	SingleVM, err := vmObj.GetVirtualMachineByName()
+	if err != nil {
+		return nil, fmt.Errorf("one vmlist %q failure: %s", v.Name, err)
 	}
 
-	args := []interface{}{VM.Client.Key, DELETE, SingleVM[0].Id}
-	res, cerr := VM.Client.Call(VM.Client.RPCClient, ONE_VM_ACTION, args)
-	if cerr != nil {
-		log.Fatal(cerr)
-		return nil, cerr
+	args := []interface{}{v.Client.Key, DELETE, SingleVM[0].Id}
+	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
+	if err != nil {
+		return nil, fmt.Errorf("one vmdelete %q failure: %s", v.Name, err)
 	}
 
 	return res, nil
