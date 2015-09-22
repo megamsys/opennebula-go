@@ -12,6 +12,8 @@ const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"
 	DELETE               = "delete"
+	ASSEMBLY_ID          = "assembly_id"
+	ASSEMBLIES_ID        = "assemblies_id"
 )
 
 type VirtualMachine struct {
@@ -50,8 +52,8 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.VCpu = v.VCpu
 	XMLtemplate[0].Template.Memory = v.Memory
 
-	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap["ASSEMBLYID"]
-	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap["ASSEMBLIESID"]
+	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
+	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
 
 	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate
