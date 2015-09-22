@@ -18,6 +18,7 @@ type VirtualMachine struct {
 	Name         string
 	TemplateName string
 	TemplateId   int
+	ContextMap   map[string]string
 	Assembly_id  string
 	Cpu          string
 	VCpu         string
@@ -49,7 +50,8 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.VCpu = v.VCpu
 	XMLtemplate[0].Template.Memory = v.Memory
 
-	XMLtemplate[0].Template.Context.Assembly_id = v.Assembly_id
+	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap["ASSEMBLYID"]
+	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap["ASSEMBLIESID"]
 
 	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate

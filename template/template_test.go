@@ -26,9 +26,11 @@ func (s *S) TestGetTemplateByName(c *check.C) {
 	c.Assert(error, check.IsNil)
 }
 
+/*
 func (s *S) TestGetTemplate(c *check.C) {
 	client, _ := api.NewRPCClient("http://localhost:2633/RPC2", "oneadmin", "RaifZuewjoc4")
 	flav := TemplateReqs{TemplateId: 33, Client: client}
 	_, error := flav.GetTemplate()
 	c.Assert(error, check.IsNil)
 }
+*/

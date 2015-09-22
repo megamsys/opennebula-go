@@ -2,6 +2,7 @@ package template
 
 import (
 	"encoding/xml"
+
 	"github.com/megamsys/opennebula-go/api"
 )
 
@@ -69,6 +70,7 @@ type Context struct {
 	Set_Hostname   string `xml:"SET_HOSTNAME"`
 	Node_Name      string `xml:"NODE_NAME"`
 	Assembly_id    string `xml:"ASSEMBLY_ID"`
+	Assemblies_id  string `xml:"ASSEMBLIES_ID"`
 }
 
 type Disk struct {
