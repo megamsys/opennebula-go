@@ -1,18 +1,22 @@
 package api
 
 import (
-	log "github.com/Sirupsen/logrus"
+	"errors"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/kolo/xmlrpc"
 	"github.com/megamsys/libgo/cmd"
 )
 
 const (
-	ENDPOINT = "endpoint"
-	USERID   = "userid"
-	TEMPLATE = "template"
-	PASSWORD = "password"
+	ENDPOINT       = "endpoint"
+	USERID         = "userid"
+	TEMPLATE       = "template"
+	PASSWORD       = "password"
 )
+
+var ErrConnRefused = errors.New("connection refused")
+
 
 /*
  * RPC Client and secret key
@@ -33,6 +37,7 @@ func NewRPCClient(endpoint string, username string, password string) (*Rpc, erro
 	RPCclient, err := xmlrpc.NewClient(endpoint, nil)
 
 	if err != nil {
+		//TO-DO: trap and send connRefused error.
 		return nil, err
 	}
 	log.Debugf(cmd.Colorfy("\n> connected", "purple", "", "bold")+" %s\n", endpoint)
