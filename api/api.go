@@ -7,6 +7,13 @@ import (
 	"github.com/megamsys/libgo/cmd"
 )
 
+const (
+	ENDPOINT = "endpoint"
+	USERID   = "userid"
+	TEMPLATE = "template"
+	PASSWORD = "password"
+)
+
 /*
  * RPC Client and secret key
  */
