@@ -13,6 +13,7 @@ const (
 	USERID         = "userid"
 	TEMPLATE       = "template"
 	PASSWORD       = "password"
+	IMAGE          = "image"
 )
 
 var ErrConnRefused = errors.New("connection refused")
@@ -61,7 +62,7 @@ func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]int
 	if err != nil {
 		return nil, err
 	}
-	log.Debugf(cmd.Colorfy("\n> response ", "cyan", "", "bold")+" %v", result)
+	//log.Debugf(cmd.Colorfy("\n> response ", "cyan", "", "bold")+" %v", result)
 
 	return result, nil
 }
