@@ -13,6 +13,7 @@ const (
 	USERID         = "userid"
 	TEMPLATE       = "template"
 	PASSWORD       = "password"
+	IMAGE          = "image"
 )
 
 var ErrConnRefused = errors.New("connection refused")
