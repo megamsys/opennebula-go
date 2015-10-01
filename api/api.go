@@ -54,8 +54,8 @@ func NewRPCClient(endpoint string, username string, password string) (*Rpc, erro
  *
  **/
 func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]interface{}, error) {
-	log.Debugf(cmd.Colorfy("\n> request", "blue", "", "bold")+" %s", command)
-	log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)
+	log.Debugf(cmd.Colorfy("  > request", "blue", "", "bold")+" %s", command)
+	//log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)
 
 	result := []interface{}{}
 	err := RPC.Call(command, args, &result)
@@ -63,6 +63,6 @@ func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]int
 		return nil, err
 	}
 	//log.Debugf(cmd.Colorfy("\n> response ", "cyan", "", "bold")+" %v", result)
-
+	log.Debugf(cmd.Colorfy("  > request SUCCESS", "blue", "", "bold")+" %s", command)
 	return result, nil
 }
