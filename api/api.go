@@ -33,7 +33,7 @@ type Rpc struct {
  *
  **/
 func NewRPCClient(endpoint string, username string, password string) (*Rpc, error) {
-	log.Debugf(cmd.Colorfy("\n> [one-go]", "white", "", "bold") + cmd.Colorfy(" client", "green", "", ""))
+	log.Debugf(cmd.Colorfy("  > [one-go] client", "blue", "", ""))
 
 	RPCclient, err := xmlrpc.NewClient(endpoint, nil)
 
@@ -41,7 +41,7 @@ func NewRPCClient(endpoint string, username string, password string) (*Rpc, erro
 		//TO-DO: trap and send connRefused error.
 		return nil, err
 	}
-	log.Debugf(cmd.Colorfy("\n> connected", "purple", "", "bold")+" %s\n", endpoint)
+	log.Debugf(cmd.Colorfy("  > connected", "blue", "", "bold")+" %s", endpoint)
 
 	return &Rpc{
 		RPCClient: *RPCclient,
@@ -54,8 +54,8 @@ func NewRPCClient(endpoint string, username string, password string) (*Rpc, erro
  *
  **/
 func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]interface{}, error) {
-	log.Debugf(cmd.Colorfy("\n> request", "blue", "", "bold")+" %s", command)
-	log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)
+	log.Debugf(cmd.Colorfy("  > request", "blue", "", "bold")+" %s", command)
+	//log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)
 
 	result := []interface{}{}
 	err := RPC.Call(command, args, &result)
@@ -63,6 +63,6 @@ func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]int
 		return nil, err
 	}
 	//log.Debugf(cmd.Colorfy("\n> response ", "cyan", "", "bold")+" %v", result)
-
+	log.Debugf(cmd.Colorfy("  > request SUCCESS", "blue", "", "bold")+" %s", command)
 	return result, nil
 }
