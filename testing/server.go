@@ -11,12 +11,14 @@ type OneServer struct {
 	listener net.Listener
 }
 
-type One int
+type One struct {
 
-type template struct {
 }
 
-func (t *One) template(args int) *template {
+type Template struct {
+}
+
+func (t *One) Template(args int) *Template {
 	fmt.Println(args)
 	return nil
 }
@@ -41,7 +43,7 @@ func NewServer(host string) (*OneServer, error) {
 	rpc.Register(on)
 	rpc.HandleHTTP()
 
-	l, err := net.Listen("tcp", host)
+	l, err := net.Listen("tcp", host + "/RPC2")
 
 	if err != nil {
 		return nil, err
