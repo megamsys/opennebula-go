@@ -14,7 +14,8 @@ type OneServer struct {
 type One struct {
 }
 
-func (t *One) Template(args int) error {
+func (t *One) Template(args int, reply *int) error {
+	reply = &args
 	fmt.Println(args)
 	return nil
 }
@@ -39,7 +40,7 @@ func NewServer(host string) (*OneServer, error) {
 	rpc.Register(on)
 	rpc.HandleHTTP()
 
-	l, err := net.Listen("tcp", host + "/RPC2")
+	l, err := net.Listen("tcp", host)
 
 	if err != nil {
 		return nil, err
