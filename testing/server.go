@@ -12,13 +12,9 @@ type OneServer struct {
 }
 
 type One struct {
-
 }
 
-type Template struct {
-}
-
-func (t *One) Template(args int) *Template {
+func (t *One) Template(args int) error {
 	fmt.Println(args)
 	return nil
 }
