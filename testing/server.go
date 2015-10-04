@@ -21,9 +21,24 @@ func (t *one) template(args int) *template {
 	return nil
 }
 
+// Stop stops the server.
+func (s *OneServer) Stop() {
+	if s.listener != nil {
+		s.listener.Close()
+	}
+}
+
+// URL returns the HTTP URL of the server.
+func (s *OneServer) URL() string {
+	if s.listener == nil {
+		return ""
+	}
+	return "http://" + s.listener.Addr().String() + "/"
+}
+
 func NewServer(host string) (*OneServer, error) {
-	one := new(one)
-	rpc.Register(one)
+	on := new(one)
+	rpc.Register(on)
 	rpc.HandleHTTP()
 
 	l, err := net.Listen("tcp", host)
