@@ -9,15 +9,14 @@ import (
 )
 
 const (
-	ENDPOINT       = "endpoint"
-	USERID         = "userid"
-	TEMPLATE       = "template"
-	PASSWORD       = "password"
-	IMAGE          = "image"
+	ENDPOINT = "endpoint"
+	USERID   = "userid"
+	TEMPLATE = "template"
+	PASSWORD = "password"
+	IMAGE    = "image"
 )
 
 var ErrConnRefused = errors.New("connection refused")
-
 
 /*
  * RPC Client and secret key
@@ -59,6 +58,7 @@ func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]int
 
 	result := []interface{}{}
 	err := RPC.Call(command, args, &result)
+
 	if err != nil {
 		return nil, err
 	}
