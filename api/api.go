@@ -58,8 +58,7 @@ func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]int
 
 	result := []interface{}{}
 	err := RPC.Call(command, args, &result)
-	//close connection
-	defer RPC.Close()
+
 	if err != nil {
 		return nil, err
 	}

@@ -66,6 +66,8 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	 */
 	args := []interface{}{v.Client.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
 	res, err := v.Client.Call(v.Client.RPCClient, TEMPLATE_INSTANTIATE, args)
+	//close connection
+	defer v.Client.RPCClient.Close()
 
 	if err != nil {
 		return nil, err
@@ -89,7 +91,8 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
 
 	args := []interface{}{v.Client.Key, DELETE, SingleVM[0].Id}
 	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
-
+	//close connection
+	defer v.Client.RPCClient.Close()
 	if err != nil {
 		return nil, err
 	}
