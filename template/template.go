@@ -106,6 +106,7 @@ type TemplateReqs struct {
 func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
 	args := []interface{}{t.Client.Key, -2, t.TemplateId, t.TemplateId}
 	res, err := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
+
 	if err != nil {
 		return nil, err
 	}
