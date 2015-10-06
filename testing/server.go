@@ -23,6 +23,7 @@ func (t *One) Template(args int, reply *int) error {
 // Stop stops the server.
 func (s *OneServer) Stop() {
 	if s.listener != nil {
+		fmt.Println("---> Stopping oneserver")
 		s.listener.Close()
 	}
 }
