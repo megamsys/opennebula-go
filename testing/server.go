@@ -3,7 +3,6 @@ package testing
 import (
 	"fmt"
 	"net"
-	"net/http"
 	"net/rpc"
 )
 
@@ -23,6 +22,7 @@ func (t *One) Template(args int, reply *int) error {
 // Stop stops the server.
 func (s *OneServer) Stop() {
 	if s.listener != nil {
+		fmt.Println("---> Stopping oneserver")
 		s.listener.Close()
 	}
 }
@@ -35,20 +35,32 @@ func (s *OneServer) URL() string {
 	return "http://" + s.listener.Addr().String() + "/"
 }
 
-func NewServer(host string) (*OneServer, error) {
-	on := new(One)
-	rpc.Register(on)
-	rpc.HandleHTTP()
 
-	l, err := net.Listen("tcp", host)
+func NewServer(address string) (*OneServer, error) {
+	handler := rpc.NewServer()
+	tmp_one:= new(One)
+	handler.Register(tmp_one)
 
+	ln, err := net.Listen("tcp", address)
 	if err != nil {
+		fmt.Printf("listen(%q): %s\n", address, err)
 		return nil, err
 	}
 
+	fmt.Printf("Server listening on %s\n", ln.Addr())
+	go func() {
+		for {
+			cxn, err := ln.Accept()
+			if err != nil {
+				fmt.Printf("listen(%q): %s\n", address, err)
+				return 
+			}
+			fmt.Printf("Server ccepted connection to %s from %s\n", cxn.LocalAddr(), cxn.RemoteAddr())
+			go handler.ServeConn(cxn)
+		}
+	}()
 	server := OneServer{
-		listener: l,
+		listener: ln,
 	}
-	go http.Serve(l, nil)
 	return &server, nil
 }
