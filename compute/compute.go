@@ -12,6 +12,9 @@ const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"
 	DELETE               = "delete"
+        BOOT                 = "boot"
+        REBOOT               = "reboot"
+        POWEROFF             = "poweroff"
 	ASSEMBLY_ID          = "assembly_id"
 	ASSEMBLIES_ID        = "assemblies_id"
 )
@@ -90,6 +93,84 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
 	}
 
 	args := []interface{}{v.Client.Key, DELETE, SingleVM[0].Id}
+	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
+	//close connection
+	defer v.Client.RPCClient.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+
+}
+
+/**
+*
+* Boot a new virtualMachine
+*
+**/
+func (v *VirtualMachine) Boot() ([]interface{}, error) {
+
+	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
+
+	SingleVM, err := vmObj.GetVirtualMachineByName()
+	if err != nil {
+		return nil, err
+	}
+
+	args := []interface{}{v.Client.Key, BOOT, SingleVM[0].Id}
+	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
+	//close connection
+	defer v.Client.RPCClient.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+
+}
+
+/**
+*
+* REBoot a new virtualMachine
+*
+**/
+func (v *VirtualMachine) Reboot() ([]interface{}, error) {
+
+	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
+
+	SingleVM, err := vmObj.GetVirtualMachineByName()
+	if err != nil {
+		return nil, err
+	}
+
+	args := []interface{}{v.Client.Key, REBOOT, SingleVM[0].Id}
+	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
+	//close connection
+	defer v.Client.RPCClient.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+
+}
+
+/**
+*
+* POWEROFF a new virtualMachine
+*
+**/
+func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
+
+	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
+
+	SingleVM, err := vmObj.GetVirtualMachineByName()
+	if err != nil {
+		return nil, err
+	}
+
+	args := []interface{}{v.Client.Key, POWEROFF, SingleVM[0].Id}
 	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
 	//close connection
 	defer v.Client.RPCClient.Close()
