@@ -2,7 +2,7 @@ package compute
 
 import (
 	"testing"
-
+        
 	"github.com/megamsys/opennebula-go/api"
 
 	"gopkg.in/check.v1"
@@ -17,20 +17,45 @@ type S struct{}
 var _ = check.Suite(&S{})
 
 func (s *S) TestCreate(c *check.C) {
-	//oneadmin:yib4OquafUp1
-	client, _ := api.NewRPCClient("http://localhost:2633/RPC2", "oneadmin", "RaifZuewjoc4")
-	vmObj := VirtualMachine{Name: "test", TemplateName: "sass", Cpu: "1", Memory: "1024", Image: "", Client: client, ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007"}} //memory in terms of MB! duh!
+	//oneadmin:yourWuOtHij3
+	client, _ := api.NewRPCClient("http://103.56.92.4:2633/RPC2", "oneadmin", "yourWuOtHij3")
+     
+	vmObj := VirtualMachine{Name: "test", TemplateName: "ranjitha", Cpu: "1", Memory: "1024", Image: "megam", Client: client, ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007"}} //memory in terms of MB! duh!
 	_, error := vmObj.Create()
 	c.Assert(error, check.IsNil)
 }
 
-/*
+
 
 func (s *S) TestDelete(c *check.C) {
-	client, _ := api.NewRPCClient("http://loca	lhost:2633/RPC2", "oneadmin", "RaifZuewjoc4")
-	vmObj := VirtualMachine{Name: "yeshapp", Client: &client}
+	client, _ := api.NewRPCClient("http://103.56.92.4:2633/RPC2", "oneadmin", "yourWuOtHij3")
+	vmObj := VirtualMachine{Name: "test", Client: client}
 
 	_, error := vmObj.Delete()
 	c.Assert(error, check.IsNil)
 }
-*/
+
+func (s *S) TestBoot(c *check.C) {
+	client, _ := api.NewRPCClient("http://103.56.92.4:2633/RPC2", "oneadmin", "yourWuOtHij3")
+	vmObj := VirtualMachine{Name: "test", Client: client}
+
+	_, error := vmObj.Boot()
+	c.Assert(error, check.IsNil)
+}
+
+func (s *S) TestReboot(c *check.C) {
+	client, _ := api.NewRPCClient("http://103.56.92.4:2633/RPC2", "oneadmin", "yourWuOtHij3")
+	vmObj := VirtualMachine{Name: "test", Client: client}
+
+	_, error := vmObj.Reboot()
+	c.Assert(error, check.IsNil)
+}
+func (s *S) TestPoweroff(c *check.C) {
+	client, _ := api.NewRPCClient("http://103.56.92.4:2633/RPC2", "oneadmin", "yourWuOtHij3")
+	vmObj := VirtualMachine{Name: "test", Client: client}
+
+	_, error := vmObj.Poweroff()
+	c.Assert(error, check.IsNil)
+}
+
+

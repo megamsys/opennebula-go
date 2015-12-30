@@ -1,3 +1,4 @@
+
 package api
 
 import (
@@ -27,3 +28,4 @@ func (s *S) TestRPCCall(c *check.C) {
 	c.Assert(callErr, check.IsNil)
 
 }
+

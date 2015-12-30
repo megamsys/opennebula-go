@@ -1,3 +1,4 @@
+
 package virtualmachine
 
 import (
@@ -24,3 +25,4 @@ func (s *S) TestGetVirtualMachineByName(c *check.C) {
 	fmt.Println(res[0].Id)
 	c.Assert(error, check.IsNil)
 }
+
