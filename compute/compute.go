@@ -12,7 +12,7 @@ const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"
 	DELETE               = "delete"
-        BOOT                 = "boot"
+        RESUME               = "resume"
         REBOOT               = "reboot"
         POWEROFF             = "poweroff"
 	ASSEMBLY_ID          = "assembly_id"
@@ -106,10 +106,10 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
 
 /**
 *
-* Boot a new virtualMachine
+* Resume a new virtualMachine
 *
 **/
-func (v *VirtualMachine) Boot() ([]interface{}, error) {
+func (v *VirtualMachine) Resume() ([]interface{}, error) {
 
 	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
 
@@ -118,7 +118,7 @@ func (v *VirtualMachine) Boot() ([]interface{}, error) {
 		return nil, err
 	}
 
-	args := []interface{}{v.Client.Key, BOOT, SingleVM[0].Id}
+	args := []interface{}{v.Client.Key, RESUME, SingleVM[0].Id}
 	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
 	//close connection
 	defer v.Client.RPCClient.Close()

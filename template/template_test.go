@@ -35,3 +35,4 @@ func (s *S) TestGetTemplate(c *check.C) {
 	c.Assert(error, check.IsNil)
 }
 */
+
