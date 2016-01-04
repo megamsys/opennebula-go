@@ -15,7 +15,7 @@ func Test(t *testing.T) {
 type S struct{}
 
 var _ = check.Suite(&S{})
-
+/*
 func (s *S) TestCreate(c *check.C) {
 	//oneadmin:yourWuOtHij3
 	client, _ := api.NewRPCClient("http://103.56.92.4:2633/RPC2", "oneadmin", "yourWuOtHij3")
@@ -24,6 +24,8 @@ func (s *S) TestCreate(c *check.C) {
 	_, error := vmObj.Create()
 	c.Assert(error, check.IsNil)
 }
+
+
 
 func (s *S) TestDelete(c *check.C) {
 	client, _ := api.NewRPCClient("http://103.56.92.4:2633/RPC2", "oneadmin", "yourWuOtHij3")
