@@ -12,9 +12,9 @@ const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"
 	DELETE               = "delete"
-        RESUME               = "resume"
-        REBOOT               = "reboot"
-        POWEROFF             = "poweroff"
+	RESUME               = "resume"
+	REBOOT               = "reboot"
+	POWEROFF             = "poweroff"
 	ASSEMBLY_ID          = "assembly_id"
 	ASSEMBLIES_ID        = "assemblies_id"
 )
