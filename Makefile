@@ -65,6 +65,7 @@ bzr:
 	$(if $(shell bzr), , $(error $(BZR_ERROR)))
 
 get-code:
+	rm -rf ~/.go
 	go get $(GO_EXTRAFLAGS) -u -d -t -insecure ./...
 
 godep:
