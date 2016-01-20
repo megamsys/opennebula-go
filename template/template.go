@@ -69,6 +69,8 @@ type Context struct {
 	SSH_Public_key string `xml:"SSH_PUBLIC_KEY"`
 	Set_Hostname   string `xml:"SET_HOSTNAME"`
 	Node_Name      string `xml:"NODE_NAME"`
+	Accounts_id    string `xml:"ACCOUNTS_ID"`
+	Platform_id    string `xml:"PLATFORM_ID"`
 	Assembly_id    string `xml:"ASSEMBLY_ID"`
 	Assemblies_id  string `xml:"ASSEMBLIES_ID"`
 }

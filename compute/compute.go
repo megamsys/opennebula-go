@@ -2,11 +2,14 @@ package compute
 
 import (
 	"encoding/xml"
+	"errors"
 
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"
 )
+
+var ErrNoVM = errors.New("no vm found, Did you launch them ?")
 
 const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
@@ -15,8 +18,11 @@ const (
 	RESUME               = "resume"
 	REBOOT               = "reboot"
 	POWEROFF             = "poweroff"
-	ASSEMBLY_ID          = "assembly_id"
-	ASSEMBLIES_ID        = "assemblies_id"
+
+	ASSEMBLY_ID   = "assembly_id"
+	ASSEMBLIES_ID = "assemblies_id"
+	ACCOUNTS_ID   = "accounts_id"
+	PLATFORM_ID   = "platform_id"
 )
 
 type VirtualMachine struct {
@@ -55,6 +61,8 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.VCpu = v.VCpu
 	XMLtemplate[0].Template.Memory = v.Memory
 	XMLtemplate[0].Template.Disk.Image = v.Image
+	XMLtemplate[0].Template.Context.Accounts_id = v.ContextMap[ACCOUNTS_ID]
+	XMLtemplate[0].Template.Context.Platform_id = v.ContextMap[PLATFORM_ID]
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
 	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
 
@@ -84,15 +92,12 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
  *
  **/
 func (v *VirtualMachine) Delete() ([]interface{}, error) {
-
-	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
-
-	SingleVM, err := vmObj.GetVirtualMachineByName()
+	uvm, err := listByName(v.Name, v.Client)
 	if err != nil {
 		return nil, err
 	}
 
-	args := []interface{}{v.Client.Key, DELETE, SingleVM[0].Id}
+	args := []interface{}{v.Client.Key, DELETE, uvm.Id}
 	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
 	//close connection
 	defer v.Client.RPCClient.Close()
@@ -110,15 +115,12 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Resume() ([]interface{}, error) {
-
-	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
-
-	SingleVM, err := vmObj.GetVirtualMachineByName()
+	uvm, err := listByName(v.Name, v.Client)
 	if err != nil {
 		return nil, err
 	}
 
-	args := []interface{}{v.Client.Key, RESUME, SingleVM[0].Id}
+	args := []interface{}{v.Client.Key, RESUME, uvm.Id}
 	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
 	//close connection
 	defer v.Client.RPCClient.Close()
@@ -136,15 +138,12 @@ func (v *VirtualMachine) Resume() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Reboot() ([]interface{}, error) {
-
-	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
-
-	SingleVM, err := vmObj.GetVirtualMachineByName()
+	uvm, err := listByName(v.Name, v.Client)
 	if err != nil {
 		return nil, err
 	}
 
-	args := []interface{}{v.Client.Key, REBOOT, SingleVM[0].Id}
+	args := []interface{}{v.Client.Key, REBOOT, uvm.Id}
 	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
 	//close connection
 	defer v.Client.RPCClient.Close()
@@ -162,17 +161,12 @@ func (v *VirtualMachine) Reboot() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
-
-	vmObj := virtualmachine.VirtualMachineReqs{VMName: v.Name, Client: v.Client}
-
-	SingleVM, err := vmObj.GetVirtualMachineByName()
+	uvm, err := listByName(v.Name, v.Client)
 	if err != nil {
 		return nil, err
 	}
-
-	args := []interface{}{v.Client.Key, POWEROFF, SingleVM[0].Id}
+	args := []interface{}{v.Client.Key, POWEROFF, uvm.Id}
 	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
-	//close connection
 	defer v.Client.RPCClient.Close()
 	if err != nil {
 		return nil, err
@@ -180,4 +174,22 @@ func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
 
 	return res, nil
 
+}
+
+func listByName(name string, client *api.Rpc) (*virtualmachine.UserVM, error) {
+	vms := virtualmachine.VirtualMachineReqs{VMName: name, Client: client}
+
+	svm, err := vms.GetVirtualMachineByName()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(svm) <= 0 {
+		return nil, ErrNoVM
+	}
+
+	if svm[0] == nil {
+		return nil, ErrNoVM
+	}
+	return svm[0], nil
 }
