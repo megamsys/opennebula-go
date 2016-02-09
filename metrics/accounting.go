@@ -3,7 +3,6 @@ package metrics
 import (
 	"strconv"
 	"time"
-
 	"github.com/megamsys/opennebula-go/api"
 )
 

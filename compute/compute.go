@@ -15,14 +15,13 @@ const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"
 	DELETE               = "delete"
-	RESUME               = "resume"
 	REBOOT               = "reboot"
 	POWEROFF             = "poweroff"
 
-	ASSEMBLY_ID   = "assembly_id"
-	ASSEMBLIES_ID = "assemblies_id"
-	ACCOUNTS_ID   = "accounts_id"
-	PLATFORM_ID   = "platform_id"
+	ASSEMBLY_ID    = "assembly_id"
+	ASSEMBLIES_ID  = "assemblies_id"
+	ACCOUNTS_ID    = "accounts_id"
+	PLATFORM_ID    = "platform_id"
 	SSH_PUBLIC_KEY = "SSH_PUBLIC_KEY"
 )
 
@@ -56,7 +55,7 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.Context.Platform_id = v.ContextMap[PLATFORM_ID]
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
 	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
-  XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
+	XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
 
 	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate
@@ -66,57 +65,10 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 
 	args := []interface{}{v.T.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
 	res, err := v.T.Call(TEMPLATE_INSTANTIATE, args)
- if err != nil {
+	if err != nil {
 		return nil, err
 	}
-
 	return res, nil
-}
-
-/**
- *
- * Deletes a new virtualMachine
- *
- **/
-func (v *VirtualMachine) Delete() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.T)
-	if err != nil {
-		return nil, err
-	}
-
-	args := []interface{}{v.T.Key, DELETE, uvm.Id}
-	res, err := v.T.Call(ONE_VM_ACTION, args)
-	//close connection
-	defer v.T.Client.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
-
-}
-
-/**
-*
-* Resume a new virtualMachine
-*
-**/
-func (v *VirtualMachine) Resume() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.T)
-	if err != nil {
-		return nil, err
-	}
-
-	args := []interface{}{v.T.Key, RESUME, uvm.Id}
-	res, err := v.T.Call(ONE_VM_ACTION, args)
-	//close connection
-	defer v.T.Client.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
-
 }
 
 /**
@@ -154,6 +106,29 @@ func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
 	}
 	args := []interface{}{v.T.Key, POWEROFF, uvm.Id}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
+	defer v.T.Client.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+
+}
+
+/**
+ *
+ * Deletes a new virtualMachine
+ *
+ **/
+func (v *VirtualMachine) Delete() ([]interface{}, error) {
+	uvm, err := listByName(v.Name, v.T)
+	if err != nil {
+		return nil, err
+	}
+
+	args := []interface{}{v.T.Key, DELETE, uvm.Id}
+	res, err := v.T.Call(ONE_VM_ACTION, args)
+	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
 		return nil, err
