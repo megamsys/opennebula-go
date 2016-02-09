@@ -1,17 +1,18 @@
-
-package template
+package metrics
 
 import (
 	"testing"
+	"time"
 
 	"github.com/megamsys/opennebula-go/api"
-
 	"gopkg.in/check.v1"
 )
+
 
 func Test(t *testing.T) {
 	check.TestingT(t)
 }
+
 
 type S struct {
 	cm map[string]string
@@ -27,11 +28,10 @@ func (s *S) SetUpSuite(c *check.C) {
 	s.cm = cm
 }
 
-
 func (s *S) TestGet(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	flav := TemplateReqs{TemplateName: "newone", T: client}
-	res, error := flav.Get()
+
+	vm := Accounting{Api: client, starttime: time.Now().Unix(), endtime: time.Now().Unix()}
+	_, error := vm.Get()
 	c.Assert(error, check.IsNil)
-	c.Assert(res, check.NotNil)
 }

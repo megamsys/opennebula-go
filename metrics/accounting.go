@@ -1,10 +1,27 @@
-package virtualmachine
+package metrics
 
 import (
-	"github.com/megamsys/opennebula-go/api"
 	"strconv"
 	"time"
+
+	"github.com/megamsys/opennebula-go/api"
 )
+
+type Accounting struct {
+	Api    *api.Rpc
+	starttime int64
+	endtime   int64
+}
+
+func (a *Accounting) Get() ([]interface{}, error) {
+	args := []interface{}{a.Api.Key, -2, -1, a.starttime, a.endtime}
+	res, err := a.Api.Call(api.VMPOOL_ACCOUNTING, args)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 
 type VmState int
 type LcmState int
@@ -78,12 +95,6 @@ type HistoryRecords struct {
 
 type OpenNebulaStatus struct {
 	History_Records []*HistoryRecords `xml:"HISTORY_RECORDS"`
-}
-
-type Accounting struct {
-	Client    *api.Rpc
-	starttime int64
-	endtime   int64
 }
 
 func (h *History) Cpu() string {
@@ -197,15 +208,4 @@ func (v *VM) lcmStateString() string {
 	default:
 		return "Unknown"
 	}
-}
-
-func (a *Accounting) Get() ([]interface{}, error) {
-
-	args := []interface{}{a.Client.Key, -2, -1, a.starttime, a.endtime}
-	res, err := a.Client.Call(a.Client.RPCClient, "one.vmpool.accounting", args)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
-
 }

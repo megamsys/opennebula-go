@@ -6,11 +6,6 @@ import (
 	"github.com/megamsys/opennebula-go/api"
 )
 
-const (
-	TEMPLATEPOOL_INFO = "one.templatepool.info"
-	TEMPLATE_UPDATE   = "one.template.update"
-)
-
 type UserTemplates struct {
 	UserTemplate []*UserTemplate `xml:"VMTEMPLATE"`
 }
@@ -97,7 +92,7 @@ type TemplateReqs struct {
 	TemplateName string
 	TemplateId   int
 	TemplateData string
-	Client       *api.Rpc
+	T       *api.Rpc
 }
 
 /**
@@ -106,8 +101,8 @@ type TemplateReqs struct {
  *
  **/
 func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
-	args := []interface{}{t.Client.Key, -2, t.TemplateId, t.TemplateId}
-	res, err := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
+	args := []interface{}{t.T.Key, -2, t.TemplateId, t.TemplateId}
+	res, err := t.T.Call(api.TEMPLATEPOOL_INFO, args)
 
 	if err != nil {
 		return nil, err
@@ -120,9 +115,9 @@ func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
  * Gets a particular template with a template name given
  *
  **/
-func (t *TemplateReqs) GetTemplateByName() ([]*UserTemplate, error) {
-	args := []interface{}{t.Client.Key, -2, -1, -1}
-	templatePool, err := t.Client.Call(t.Client.RPCClient, TEMPLATEPOOL_INFO, args)
+func (t *TemplateReqs) Get() ([]*UserTemplate, error) {
+	args := []interface{}{t.T.Key, -2, -1, -1}
+	templatePool, err := t.T.Call(api.TEMPLATEPOOL_INFO, args)
 
 	if err != nil {
 		return nil, err
@@ -151,9 +146,9 @@ func (t *TemplateReqs) GetTemplateByName() ([]*UserTemplate, error) {
  * Update a template in OpenNebula
  *
  **/
-func (t *TemplateReqs) UpdateTemplate() error {
-	args := []interface{}{t.Client.Key, t.TemplateId, t.TemplateData, 0}
-	if _, err := t.Client.Call(t.Client.RPCClient, TEMPLATE_UPDATE, args); err != nil {
+func (t *TemplateReqs) Update() error {
+	args := []interface{}{t.T.Key, t.TemplateId, t.TemplateData, 0}
+	if _, err := t.T.Call(api.TEMPLATE_UPDATE, args); err != nil {
 		return err
 	}
 	return nil

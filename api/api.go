@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/kolo/xmlrpc"
@@ -11,58 +12,59 @@ import (
 const (
 	ENDPOINT = "endpoint"
 	USERID   = "userid"
-	TEMPLATE = "template"
 	PASSWORD = "password"
+	TEMPLATE = "template"
 	IMAGE    = "image"
+
+	VMPOOL_ACCOUNTING = "one.vmpool.accounting"
+	VMPOOL_INFO       = "one.vmpool.info"
+	TEMPLATEPOOL_INFO = "one.templatepool.info"
+	TEMPLATE_UPDATE   = "one.template.update"
 )
 
-var ErrConnRefused = errors.New("connection refused")
+var (
+	ErrArgsNotSatisfied = errors.New("[" + ENDPOINT + "," + USERID + "," + PASSWORD + "] one (or) more args missing!")
+)
 
-/*
- * RPC Client and secret key
- */
 type Rpc struct {
-	RPCClient xmlrpc.Client
-	Key       string
+	Client xmlrpc.Client
+	Key    string
 }
 
-/**
- *
- * Creates an RPCClient with endpoint and returns it
- *
- **/
-func NewRPCClient(endpoint string, username string, password string) (*Rpc, error) {
+func NewClient(config map[string]string) (*Rpc, error) {
 	log.Debugf(cmd.Colorfy("  > [one-go] connecting", "blue", "", "bold"))
 
-	RPCclient, err := xmlrpc.NewClient(endpoint, nil)
+	if !satisfied(config) {
+		return nil, ErrArgsNotSatisfied
+	}
 
+	client, err := xmlrpc.NewClient(config[ENDPOINT], nil)
 	if err != nil {
-		//TO-DO: trap and send connRefused error.
 		return nil, err
 	}
-	log.Debugf(cmd.Colorfy("  > [one-go] connected", "blue", "", "bold")+" %s", endpoint)
+
+	log.Debugf(cmd.Colorfy("  > [one-go] connected", "blue", "", "bold")+" %s", config[ENDPOINT])
 
 	return &Rpc{
-		RPCClient: *RPCclient,
-		Key:       username + ":" + password}, nil
+		Client: *client,
+		Key:    config[USERID] + ":" + config[PASSWORD]}, nil
 }
 
-/**
- *
- * Do an RPC Call
- *
- **/
-func (c *Rpc) Call(RPC xmlrpc.Client, command string, args []interface{}) ([]interface{}, error) {
+func (c *Rpc) Call(command string, args []interface{}) ([]interface{}, error) {
 	log.Debugf(cmd.Colorfy("  > [one-go] ", "blue", "", "bold")+"%s", command)
 	log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)
 
 	result := []interface{}{}
-	err := RPC.Call(command, args, &result)
-
-	if err != nil {
+	if err := c.Client.Call(command, args, &result); err != nil {
 		return nil, err
 	}
 	//log.Debugf(cmd.Colorfy("\n> response ", "cyan", "", "bold")+" %v", result)
 	log.Debugf(cmd.Colorfy("  > [one-go] ( ´ ▽ ` ) SUCCESS", "blue", "", "bold"))
 	return result, nil
+}
+
+func satisfied(c map[string]string) bool {
+	return len(strings.TrimSpace(c[ENDPOINT])) > 0 &&
+		len(strings.TrimSpace(c[USERID])) > 0 &&
+		len(strings.TrimSpace(c[PASSWORD])) > 0
 }
