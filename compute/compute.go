@@ -17,7 +17,7 @@ const (
 	DELETE               = "delete"
 	REBOOT               = "reboot"
 	POWEROFF             = "poweroff"
-
+  RESUME               = "resume"
 	ASSEMBLY_ID    = "assembly_id"
 	ASSEMBLIES_ID  = "assemblies_id"
 	ACCOUNTS_ID    = "accounts_id"
@@ -106,6 +106,29 @@ func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
 	}
 	args := []interface{}{v.T.Key, POWEROFF, uvm.Id}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
+	defer v.T.Client.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+
+}
+
+/**
+*
+* Resume a new virtualMachine
+*
+**/
+func (v *VirtualMachine) Resume() ([]interface{}, error) {
+	uvm, err := listByName(v.Name, v.T)
+	if err != nil {
+		return nil, err
+	}
+
+	args := []interface{}{v.T.Key, RESUME, uvm.Id}
+	res, err := v.T.Call(ONE_VM_ACTION, args)
+	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
 		return nil, err
