@@ -1,9 +1,9 @@
 package api
 
 import (
-  "errors"
-  "strings"
-	
+	"errors"
+	"strings"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/kolo/xmlrpc"
 	"github.com/megamsys/libgo/cmd"
@@ -15,6 +15,11 @@ const (
 	PASSWORD = "password"
 	TEMPLATE = "template"
 	IMAGE    = "image"
+
+	VMPOOL_ACCOUNTING = "one.vmpool.accounting"
+	VMPOOL_INFO       = "one.vmpool.info"
+	TEMPLATEPOOL_INFO = "one.templatepool.info"
+	TEMPLATE_UPDATE   = "one.template.update"
 )
 
 var (
@@ -40,7 +45,7 @@ func NewClient(config map[string]string) (*Rpc, error) {
 
 	log.Debugf(cmd.Colorfy("  > [one-go] connected", "blue", "", "bold")+" %s", config[ENDPOINT])
 
-	return &Rpc {
+	return &Rpc{
 		Client: *client,
 		Key:    config[USERID] + ":" + config[PASSWORD]}, nil
 }

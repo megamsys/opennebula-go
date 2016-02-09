@@ -24,7 +24,7 @@ type UserVM struct {
 // Given a name, this function will return the VM
 func (v *Query) GetByName() ([]*UserVM, error) {
 	args := []interface{}{v.T.Key, -2, -1, -1, -1}
-	VMPool, err := v.T.Call("one.vmpool.info", args)
+	VMPool, err := v.T.Call(api.VMPOOL_INFO, args)
 	if err != nil {
 		return nil, err
 	}
