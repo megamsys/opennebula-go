@@ -42,6 +42,14 @@ func (s *S) TestReboot(c *check.C) {
 	c.Assert(err, check.IsNil)
 }
 
+func (s *S) TestResume(c *check.C) {
+	cl, _ := api.NewClient(s.cm)
+	v := VirtualMachine{Name: "test", T: cl}
+	c.Assert(v, check.NotNil)
+	_, err := v.Resume()
+	c.Assert(err, check.IsNil)
+}
+
 func (s *S) TestPoweroff(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	vmObj := VirtualMachine{Name: "test", T: cl}
