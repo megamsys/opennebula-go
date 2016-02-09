@@ -23,6 +23,7 @@ const (
 	ASSEMBLIES_ID = "assemblies_id"
 	ACCOUNTS_ID   = "accounts_id"
 	PLATFORM_ID   = "platform_id"
+	SSH_PUBLIC_KEY = "SSH_PUBLIC_KEY"
 )
 
 type VirtualMachine struct {
@@ -65,7 +66,8 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.Context.Platform_id = v.ContextMap[PLATFORM_ID]
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
 	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
-
+  XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
+	
 	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate
 
