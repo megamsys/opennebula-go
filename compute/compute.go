@@ -34,28 +34,18 @@ type VirtualMachine struct {
 	Cpu          string
 	VCpu         string
 	Memory       string
-	Client       *api.Rpc
+	T            *api.Rpc
 }
 
-/**
- *
- * Creates a new VirtualMachine
- *
- **/
+// Creates a new VirtualMachine
 func (v *VirtualMachine) Create() ([]interface{}, error) {
-	templateObj := template.TemplateReqs{TemplateName: v.TemplateName, Client: v.Client}
+	templateObj := template.TemplateReqs{TemplateName: v.TemplateName, T: v.T}
+	defer v.T.Client.Close()
 
-	/*
-	 * get a particular template to configure it
-	 */
 	XMLtemplate, err := templateObj.GetTemplateByName()
 	if err != nil {
 		return nil, err
 	}
-
-	/*
-	 * Assign Values
-	 */
 
 	XMLtemplate[0].Template.Cpu = v.Cpu
 	XMLtemplate[0].Template.VCpu = v.VCpu
@@ -72,17 +62,12 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	finalData, _ := xml.Marshal(finalXML.UserTemplate[0].Template)
 	data := string(finalData)
 
-	/*
-	 * Instantiate a template
-	 */
-	args := []interface{}{v.Client.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
-	res, err := v.Client.Call(v.Client.RPCClient, TEMPLATE_INSTANTIATE, args)
-	//close connection
-	defer v.Client.RPCClient.Close()
-
-	if err != nil {
+	args := []interface{}{v.T.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
+	res, err := v.T.Call(TEMPLATE_INSTANTIATE, args)
+ if err != nil {
 		return nil, err
 	}
+	
 	return res, nil
 }
 
@@ -92,15 +77,15 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
  *
  **/
 func (v *VirtualMachine) Delete() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.Client)
+	uvm, err := listByName(v.Name, v.T)
 	if err != nil {
 		return nil, err
 	}
 
-	args := []interface{}{v.Client.Key, DELETE, uvm.Id}
-	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
+	args := []interface{}{v.T.Key, DELETE, uvm.Id}
+	res, err := v.T.Call(ONE_VM_ACTION, args)
 	//close connection
-	defer v.Client.RPCClient.Close()
+	defer v.T.Client.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -115,15 +100,15 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Resume() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.Client)
+	uvm, err := listByName(v.Name, v.T)
 	if err != nil {
 		return nil, err
 	}
 
-	args := []interface{}{v.Client.Key, RESUME, uvm.Id}
-	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
+	args := []interface{}{v.T.Key, RESUME, uvm.Id}
+	res, err := v.T.Call(ONE_VM_ACTION, args)
 	//close connection
-	defer v.Client.RPCClient.Close()
+	defer v.T.Client.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -138,15 +123,15 @@ func (v *VirtualMachine) Resume() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Reboot() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.Client)
+	uvm, err := listByName(v.Name, v.T)
 	if err != nil {
 		return nil, err
 	}
 
-	args := []interface{}{v.Client.Key, REBOOT, uvm.Id}
-	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
+	args := []interface{}{v.T.Key, REBOOT, uvm.Id}
+	res, err := v.T.Call(ONE_VM_ACTION, args)
 	//close connection
-	defer v.Client.RPCClient.Close()
+	defer v.T.Client.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -161,13 +146,13 @@ func (v *VirtualMachine) Reboot() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.Client)
+	uvm, err := listByName(v.Name, v.T)
 	if err != nil {
 		return nil, err
 	}
-	args := []interface{}{v.Client.Key, POWEROFF, uvm.Id}
-	res, err := v.Client.Call(v.Client.RPCClient, ONE_VM_ACTION, args)
-	defer v.Client.RPCClient.Close()
+	args := []interface{}{v.T.Key, POWEROFF, uvm.Id}
+	res, err := v.T.Call(ONE_VM_ACTION, args)
+	defer v.T.Client.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -177,9 +162,9 @@ func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
 }
 
 func listByName(name string, client *api.Rpc) (*virtualmachine.UserVM, error) {
-	vms := virtualmachine.VirtualMachineReqs{VMName: name, Client: client}
+	vms := virtualmachine.Query{VMName: name, T: client}
 
-	svm, err := vms.GetVirtualMachineByName()
+	svm, err := vms.GetByName()
 	if err != nil {
 		return nil, err
 	}

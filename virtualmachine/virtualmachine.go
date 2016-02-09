@@ -6,9 +6,9 @@ import (
 	"github.com/megamsys/opennebula-go/api"
 )
 
-type VirtualMachineReqs struct {
+type Query struct {
 	VMName string
-	Client *api.Rpc
+	T      *api.Rpc
 }
 
 type UserVMs struct {
@@ -21,15 +21,10 @@ type UserVM struct {
 	Name string `xml:"NAME"`
 }
 
-/**
- *
- * Given a name, this function will return the VM
- *
- **/
-func (v *VirtualMachineReqs) GetVirtualMachineByName() ([]*UserVM, error) {
-
-	args := []interface{}{v.Client.Key, -2, -1, -1, -1}
-	VMPool, err := v.Client.Call(v.Client.RPCClient, "one.vmpool.info", args)
+// Given a name, this function will return the VM
+func (v *Query) GetByName() ([]*UserVM, error) {
+	args := []interface{}{v.T.Key, -2, -1, -1, -1}
+	VMPool, err := v.T.Call("one.vmpool.info", args)
 	if err != nil {
 		return nil, err
 	}

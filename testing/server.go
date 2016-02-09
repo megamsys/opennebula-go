@@ -22,7 +22,6 @@ func (t *One) Template(args int, reply *int) error {
 // Stop stops the server.
 func (s *OneServer) Stop() {
 	if s.listener != nil {
-		fmt.Println("---> Stopping oneserver")
 		s.listener.Close()
 	}
 }
@@ -53,7 +52,7 @@ func NewServer(address string) (*OneServer, error) {
 			cxn, err := ln.Accept()
 			if err != nil {
 				fmt.Printf("listen(%q): %s\n", address, err)
-				return 
+				return
 			}
 			fmt.Printf("Server ccepted connection to %s from %s\n", cxn.LocalAddr(), cxn.RemoteAddr())
 			go handler.ServeConn(cxn)
