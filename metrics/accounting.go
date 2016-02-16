@@ -8,12 +8,12 @@ import (
 
 type Accounting struct {
 	Api    *api.Rpc
-	starttime int64
-	endtime   int64
+	StartTime int64
+	EndTime   int64
 }
 
 func (a *Accounting) Get() ([]interface{}, error) {
-	args := []interface{}{a.Api.Key, -2, -1, a.starttime, a.endtime}
+	args := []interface{}{a.Api.Key, -2, -1, a.StartTime, a.EndTime}
 	res, err := a.Api.Call(api.VMPOOL_ACCOUNTING, args)
 	if err != nil {
 		return nil, err
