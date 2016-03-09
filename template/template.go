@@ -74,6 +74,7 @@ type Disk struct {
 	Driver      string `xml:"DRIVER"`
 	Image       string `xml:"IMAGE"`
 	Image_Uname string `xml:"IMAGE_UNAME"`
+	Size        string `xml:"SIZE"`
 }
 
 type Permissions struct {
@@ -92,7 +93,7 @@ type TemplateReqs struct {
 	TemplateName string
 	TemplateId   int
 	TemplateData string
-	T       *api.Rpc
+	T            *api.Rpc
 }
 
 /**
