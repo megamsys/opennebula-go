@@ -30,7 +30,6 @@ func (s *S) SetUpSuite(c *check.C) {
 
 func (s *S) TestGet(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-
 	vm := Accounting{Api: client, StartTime: time.Now().Add(-10 * time.Minute).Unix(), EndTime: time.Now().Unix()}
 	_, error := vm.Get()
 	c.Assert(error, check.IsNil)
