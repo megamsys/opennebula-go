@@ -17,12 +17,12 @@ const (
 	DELETE               = "delete"
 	REBOOT               = "reboot"
 	POWEROFF             = "poweroff"
-  RESUME               = "resume"
-	ASSEMBLY_ID    = "assembly_id"
-	ASSEMBLIES_ID  = "assemblies_id"
-	ACCOUNTS_ID    = "accounts_id"
-	PLATFORM_ID    = "platform_id"
-	SSH_PUBLIC_KEY = "SSH_PUBLIC_KEY"
+	RESUME               = "resume"
+	ASSEMBLY_ID          = "assembly_id"
+	ASSEMBLIES_ID        = "assemblies_id"
+	ACCOUNTS_ID          = "accounts_id"
+	PLATFORM_ID          = "platform_id"
+	SSH_PUBLIC_KEY       = "SSH_PUBLIC_KEY"
 )
 
 type VirtualMachine struct {
@@ -34,6 +34,7 @@ type VirtualMachine struct {
 	Cpu          string
 	VCpu         string
 	Memory       string
+	HDD          string
 	T            *api.Rpc
 }
 
@@ -51,6 +52,7 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.VCpu = v.VCpu
 	XMLtemplate[0].Template.Memory = v.Memory
 	XMLtemplate[0].Template.Disk.Image = v.Image
+	XMLtemplate[0].Template.Disk.Size = v.HDD
 	XMLtemplate[0].Template.Context.Accounts_id = v.ContextMap[ACCOUNTS_ID]
 	XMLtemplate[0].Template.Context.Platform_id = v.ContextMap[PLATFORM_ID]
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
