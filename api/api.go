@@ -16,7 +16,7 @@ const (
 	TEMPLATE = "template"
 	IMAGE    = "image"
 
-	VMPOOL_ACCOUNTING = "one.vmpool.accounting"
+	VMPOOL_ACCOUNTING = "one.vmpool.showback"
 	VMPOOL_INFO       = "one.vmpool.info"
 	TEMPLATEPOOL_INFO = "one.templatepool.info"
 	TEMPLATE_UPDATE   = "one.template.update"

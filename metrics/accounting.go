@@ -1,13 +1,13 @@
 package metrics
 
 import (
+	"github.com/megamsys/opennebula-go/api"
 	"strconv"
 	"time"
-	"github.com/megamsys/opennebula-go/api"
 )
 
 type Accounting struct {
-	Api    *api.Rpc
+	Api       *api.Rpc
 	StartTime int64
 	EndTime   int64
 }
@@ -20,7 +20,6 @@ func (a *Accounting) Get() ([]interface{}, error) {
 	}
 	return res, nil
 }
-
 
 type VmState int
 type LcmState int
@@ -62,6 +61,7 @@ type History struct {
 	Etime    string `xml:"ETIME"`
 	VM       *VM    `xml:"VM"`
 }
+
 type VM struct {
 	Name      string    `xml:"NAME"`
 	State     string    `xml:"STATE"`
@@ -111,9 +111,11 @@ func (h *History) Memory() string {
 func (h *History) MemoryCost() string {
 	return h.VM.Template.Memory_cost
 }
+
 func (h *History) AssemblyName() string {
 	return h.VM.Name
 }
+
 func (h *History) AccountsId() string {
 	return h.VM.Template.Context.Accounts_id
 }
@@ -121,24 +123,28 @@ func (h *History) AccountsId() string {
 func (h *History) AssembliesId() string {
 	return h.VM.Template.Context.Assemblies_id
 }
+
 func (h *History) AssemblyId() string {
 	return h.VM.Template.Context.Assembly_id
 }
+
 func (h *History) State() string {
 	return h.VM.stateString()
 }
+
 func (h *History) LcmState() string {
 	return h.VM.lcmStateString()
 }
-func timeAsInt64(tm string) int64 {
+
+func TimeAsInt64(tm string) int64 {
 	if i, err := strconv.ParseInt(tm, 10, 64); err != nil {
 		return i
 	}
 	return 0
 }
-func (v *VM) elapsed() string {
-	elapsed := strconv.FormatFloat(time.Since(time.Unix(timeAsInt64(v.Stime), 0)).Hours(), 'E', -1, 64)
-	return elapsed
+
+func (h *History) Elapsed() string {
+	return strconv.FormatFloat(time.Since(time.Unix(TimeAsInt64(h.VM.Stime), 0)).Hours(), 'E', -1, 64)
 }
 
 func (v *VM) stateAsInt(s string) int {
