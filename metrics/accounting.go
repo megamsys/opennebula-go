@@ -4,6 +4,7 @@ import (
 	"github.com/megamsys/opennebula-go/api"
 	"strconv"
 	"time"
+	log "github.com/Sirupsen/logrus"
 )
 
 type Accounting struct {
@@ -13,8 +14,10 @@ type Accounting struct {
 }
 
 func (a *Accounting) Get() ([]interface{}, error) {
+	log.Debugf("showback Get (%d, %d) started", a.StartTime, a.EndTime)
 	args := []interface{}{a.Api.Key, -2, -1, a.StartTime, a.EndTime}
 	res, err := a.Api.Call(api.VMPOOL_ACCOUNTING, args)
+	
 	if err != nil {
 		return nil, err
 	}
@@ -88,12 +91,8 @@ type Context struct {
 	Assemblies_id string `xml:"ASSEMBLIES_ID"`
 }
 
-type HistoryRecords struct {
-	History_Records *History `xml:"HISTORY"`
-}
-
 type OpenNebulaStatus struct {
-	History_Records []*HistoryRecords `xml:"HISTORY_RECORDS"`
+	History_Records []*History `xml:"HISTORY"`
 }
 
 func (h *History) Cpu() string {
