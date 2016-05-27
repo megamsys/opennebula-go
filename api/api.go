@@ -15,6 +15,7 @@ const (
 	PASSWORD = "password"
 	TEMPLATE = "template"
 	IMAGE    = "image"
+	VCPU_PERCENTAGE ="vcpu_percentage"
 
 	VMPOOL_ACCOUNTING = "one.vmpool.accounting"
 	VMPOOL_INFO       = "one.vmpool.info"
