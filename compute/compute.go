@@ -3,7 +3,7 @@ package compute
 import (
 	"encoding/xml"
 	"errors"
-
+  "fmt"
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"
@@ -41,6 +41,8 @@ type VirtualMachine struct {
 // Creates a new VirtualMachine
 func (v *VirtualMachine) Create() ([]interface{}, error) {
 	templateObj := template.TemplateReqs{TemplateName: v.TemplateName, T: v.T}
+	fmt.Println("*****************Virtual*******************")
+	fmt.Println(templateObj)
 	defer v.T.Client.Close()
 
 	XMLtemplate, err := templateObj.Get()
@@ -61,12 +63,16 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 
 	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate
-
+  fmt.Println("**********finalxml")
+	fmt.Println(finalXML.UserTemplate)
 	finalData, _ := xml.Marshal(finalXML.UserTemplate[0].Template)
 	data := string(finalData)
-
+ fmt.Println("***************datw**********")
+ fmt.Println(data)
 	args := []interface{}{v.T.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
 	res, err := v.T.Call(TEMPLATE_INSTANTIATE, args)
+  fmt.Println("***************res**********")
+	fmt.Println(res)
 	if err != nil {
 		return nil, err
 	}

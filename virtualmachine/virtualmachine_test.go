@@ -18,16 +18,24 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://103.56.92.4:2633/RPC2"
+	cm[api.ENDPOINT] = "http://88.198.139.81:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "yourWuOtHij3"
+	cm[api.PASSWORD] = "yeghorbAjif4"
 	s.cm = cm
 }
 
-
+/*
 func (s *S) TestGetByName(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	vm := Query{VMName: "yeshapp", T: client}
+	vm := Query{VMName: "testrj", T: client}
 	_, err := vm.GetByName()
-	c.Assert(err, check.IsNil)
+	c.Assert(err, check.NotNil)
+}
+*/
+
+func (s *S) TestGetByPort(c *check.C) {
+	client, _ := api.NewClient(s.cm)
+	vm := Apiclient{ T: client, VmId: 511 }
+	_, err := vm.GetVm()
+	c.Assert(err, check.NotNil)
 }
