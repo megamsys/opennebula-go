@@ -35,7 +35,7 @@ func (s *S) TestGetByName(c *check.C) {
 
 func (s *S) TestGetByPort(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	vm := Apiclient{ T: client, VmId: 511 }
+	vm := Apiclient{ T: client, VmId: "549" }
 	_, err := vm.GetVm()
 	c.Assert(err, check.NotNil)
 }

@@ -4,10 +4,11 @@ import (
 "encoding/xml"
    "fmt"
 	"github.com/megamsys/opennebula-go/api"
+  "strconv"
 )
 
 type Apiclient struct {
-   VmId  int
+   VmId  string
 T      *api.Rpc
 VM     *VM `xml:"VM"`
 }
@@ -15,7 +16,7 @@ VM     *VM `xml:"VM"`
 
 type VM struct {
 
-	Id   int    `xml:"ID"`
+	Id   string    `xml:"ID"`
   Name string `xml:"NAME"`
 	VmTemplate *VmTemplate `xml:"TEMPLATE"`
 	HistoryRecords *HistoryRecords  `xml:"HISTORY_RECORDS"`
@@ -38,8 +39,10 @@ type Graphics struct {
 
 
 func (v *Apiclient) GetVm() (*VM, error) {
-
-	args := []interface{}{v.T.Key, v.VmId}
+   number, _ := strconv.Atoi(v.VmId)
+   fmt.Println("^^^^^^^^^^^^^^^^^^^^^^^")
+   fmt.Println(number)
+	args := []interface{}{v.T.Key, number}
 	onevm, err := v.T.Call(api.VM_INFO, args)
 	fmt.Println("********************************")
 	fmt.Println(onevm)
@@ -58,7 +61,8 @@ func (v *Apiclient) GetVm() (*VM, error) {
 fmt.Println("**************ip")
 
 fmt.Println(*xmlVM)
-fmt.Println(xmlVM.GetPort())
+ port :=xmlVM.GetPort()
+fmt.Println(port)
 fmt.Println(xmlVM.GetHostIp())
 return xmlVM, err
 }
