@@ -61,9 +61,9 @@ func (v *Apiclient) GetVm() (*VM, error) {
 fmt.Println("**************ip")
 
 fmt.Println(*xmlVM)
- port :=xmlVM.GetPort()
-fmt.Println(port)
-fmt.Println(xmlVM.GetHostIp())
+ //port :=xmlVM.GetPort()
+//fmt.Println(port)
+//fmt.Println(xmlVM.GetHostIp())
 return xmlVM, err
 }
 
