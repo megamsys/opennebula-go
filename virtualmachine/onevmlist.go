@@ -58,20 +58,20 @@ func (v *Apiclient) GetVm() (*VM, error) {
 fmt.Println("**************ip")
 
 fmt.Println(*xmlVM)
-fmt.Println(xmlVM.getPort())
-fmt.Println(xmlVM.getHostIp())
+fmt.Println(xmlVM.GetPort())
+fmt.Println(xmlVM.GetHostIp())
 return xmlVM, err
 }
 
 
-func (u *VM) getPort() string {
+func (u *VM) GetPort() string {
 
 	fmt.Println("*********port")
 	fmt.Println(u.VmTemplate.Graphics.Port)
 	return u.VmTemplate.Graphics.Port
 }
 
-func (u *VM) getHostIp() string {
+func (u *VM) GetHostIp() string {
 	fmt.Println("*********ip")
 	fmt.Println(u.HistoryRecords.History.HostName)
 	return u.HistoryRecords.History.HostName
