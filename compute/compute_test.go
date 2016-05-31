@@ -20,12 +20,12 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://88.198.139.81:2633/RPC2"
+	cm[api.ENDPOINT] = "http://103.56.92.4:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "yeghorbAjif4"
+	cm[api.PASSWORD] = "yourWuOtHij3"
 	s.cm = cm
 }
-/*
+
 func (s *S) TestCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := VirtualMachine{Name: "testmegam", TemplateName: "megam", Cpu: "1", Memory: "1024", Image: "megam", T: cl, ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007"}} //memory in terms of MB! duh!
@@ -65,4 +65,3 @@ func (s *S) TestDelete(c *check.C) {
 	_, err := v.Delete()
 	c.Assert(err, check.IsNil)
 }
-*/

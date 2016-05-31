@@ -1,16 +1,15 @@
 package virtualmachine
 
 import (
-"encoding/xml"
-   "fmt"
+   "encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
   "strconv"
 )
 
-type Apiclient struct {
+type Vnc struct {
    VmId  string
-T      *api.Rpc
-VM     *VM `xml:"VM"`
+   T      *api.Rpc
+   VM     *VM `xml:"VM"`
 }
 
 
@@ -39,14 +38,11 @@ type Graphics struct {
 }
 
 
-func (v *Apiclient) GetVm() (*VM, error) {
-   number, _ := strconv.Atoi(v.VmId)
-   fmt.Println("^^^^^^^^^^^^^^^^^^^^^^^")
-   fmt.Println(number)
-	args := []interface{}{v.T.Key, number}
+func (v *Vnc) GetVm() (*VM, error) {
+   intstr, _ := strconv.Atoi(v.VmId)
+	args := []interface{}{v.T.Key, intstr}
 	onevm, err := v.T.Call(api.VM_INFO, args)
-	fmt.Println("********************************")
-	fmt.Println(onevm)
+	defer v.T.Client.Close()
 
 	if err != nil {
 		return nil, err
@@ -57,27 +53,14 @@ func (v *Apiclient) GetVm() (*VM, error) {
   	if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {
   		return nil, err
   	}
-
-
-fmt.Println("**************ip")
-
-fmt.Println(*xmlVM)
- port :=xmlVM.GetPort()
-fmt.Println(port)
-fmt.Println(xmlVM.GetHostIp())
 return xmlVM, err
 }
 
 
 func (u *VM) GetPort() string {
-
-	fmt.Println("*********port")
-	fmt.Println(u.VmTemplate.Graphics.Port)
 	return u.VmTemplate.Graphics.Port
 }
 
 func (u *VM) GetHostIp() string {
-	fmt.Println("*********ip")
-	fmt.Println(u.HistoryRecords.History.HostName)
 	return u.HistoryRecords.History.HostName
 }
