@@ -20,6 +20,7 @@ type VM struct {
   Name string `xml:"NAME"`
 	VmTemplate *VmTemplate `xml:"TEMPLATE"`
 	HistoryRecords *HistoryRecords  `xml:"HISTORY_RECORDS"`
+
 }
 
 type VmTemplate struct {
@@ -61,9 +62,9 @@ func (v *Apiclient) GetVm() (*VM, error) {
 fmt.Println("**************ip")
 
 fmt.Println(*xmlVM)
- //port :=xmlVM.GetPort()
-//fmt.Println(port)
-//fmt.Println(xmlVM.GetHostIp())
+ port :=xmlVM.GetPort()
+fmt.Println(port)
+fmt.Println(xmlVM.GetHostIp())
 return xmlVM, err
 }
 

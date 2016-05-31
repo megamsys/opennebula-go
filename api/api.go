@@ -60,7 +60,7 @@ func (c *Rpc) Call(command string, args []interface{}) ([]interface{}, error) {
 	if err := c.Client.Call(command, args, &result); err != nil {
 		return nil, err
 	}
-	//log.Debugf(cmd.Colorfy("\n> response ", "cyan", "", "bold")+" %v", result)
+	log.Debugf(cmd.Colorfy("\n> response ", "cyan", "", "bold")+" %v", result)
 	log.Debugf(cmd.Colorfy("  > [one-go] ( ´ ▽ ` ) SUCCESS", "blue", "", "bold"))
 	return result, nil
 }
