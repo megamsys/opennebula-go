@@ -1,7 +1,6 @@
 package virtualmachine
 
 import (
-  "fmt"
    "encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
   "strconv"
@@ -44,12 +43,9 @@ func (v *Vnc) GetVm() (*VM, error) {
 	args := []interface{}{v.T.Key, intstr}
 	onevm, err := v.T.Call(api.VM_INFO, args)
 	defer v.T.Client.Close()
-  fmt.Println("**********xml*************")
-  fmt.Println(onevm)
 	if err != nil {
 		return nil, err
 	}
-
   	xmlVM := &VM{}
   	assert, _ := onevm[1].(string)
   	if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {

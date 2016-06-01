@@ -18,7 +18,7 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://88.198.139.81:2633/RPC2"
+	cm[api.ENDPOINT] = "http://103.56.92.4:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
 	cm[api.PASSWORD] = "yeghorbAjif4"
 	s.cm = cm
