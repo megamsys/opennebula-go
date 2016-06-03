@@ -3,7 +3,7 @@ package compute
 import (
 	"encoding/xml"
 	"errors"
-
+  
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"
@@ -61,10 +61,8 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 
 	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate
-
 	finalData, _ := xml.Marshal(finalXML.UserTemplate[0].Template)
 	data := string(finalData)
-
 	args := []interface{}{v.T.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
 	res, err := v.T.Call(TEMPLATE_INSTANTIATE, args)
 	if err != nil {
