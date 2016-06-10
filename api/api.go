@@ -20,6 +20,7 @@ const (
 	VMPOOL_INFO       = "one.vmpool.info"
 	TEMPLATEPOOL_INFO = "one.templatepool.info"
 	TEMPLATE_UPDATE   = "one.template.update"
+	ONE_HOST_INFO   = "one.host.info"
 )
 
 var (

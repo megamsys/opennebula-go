@@ -1,6 +1,7 @@
-package virtualmachine
+package host
 
 import (
+  "fmt"
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
 	"testing"
@@ -25,9 +26,10 @@ func (s *S) SetUpSuite(c *check.C) {
 }
 
 
-func (s *S) TestGetByName(c *check.C) {
+func (s *S) TestGetVMs(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	vm := Query{VMName: "kvm109", T: client}
-	_, err := vm.GetByName()
+	vm := HQuery{T: client}
+  fmt.Printf("%#v",vm)
+	_, err := vm.GetVMs(10)
 	c.Assert(err, check.IsNil)
 }
