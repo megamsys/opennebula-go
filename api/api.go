@@ -3,7 +3,7 @@ package api
 import (
 	"errors"
 	"strings"
-
+  "fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/kolo/xmlrpc"
 	"github.com/megamsys/libgo/cmd"
@@ -21,11 +21,8 @@ const (
 	VMPOOL_INFO       = "one.vmpool.info"
 	TEMPLATEPOOL_INFO = "one.templatepool.info"
 	TEMPLATE_UPDATE   = "one.template.update"
-<<<<<<< HEAD
 	ONE_HOST_INFO   = "one.host.info"
-=======
 	VM_INFO           = "one.vm.info"
->>>>>>> origin/master
 )
 
 var (
@@ -61,6 +58,8 @@ func (c *Rpc) Call(command string, args []interface{}) ([]interface{}, error) {
 	log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)
 
 	result := []interface{}{}
+
+	fmt.Println("*****************************\n",args)
 	if err := c.Client.Call(command, args, &result); err != nil {
 		return nil, err
 	}

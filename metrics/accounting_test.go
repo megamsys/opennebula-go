@@ -1,5 +1,5 @@
 package metrics
-
+/*
 import (
 	"testing"
 	"time"
@@ -34,3 +34,4 @@ func (s *S) TestGet(c *check.C) {
 	_, error := vm.Get()
 	c.Assert(error, check.IsNil)
 }
+*/
