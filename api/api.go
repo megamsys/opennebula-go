@@ -15,12 +15,17 @@ const (
 	PASSWORD = "password"
 	TEMPLATE = "template"
 	IMAGE    = "image"
+	VCPU_PERCENTAGE ="vcpu_percentage"
 
 	VMPOOL_ACCOUNTING = "one.vmpool.accounting"
 	VMPOOL_INFO       = "one.vmpool.info"
 	TEMPLATEPOOL_INFO = "one.templatepool.info"
 	TEMPLATE_UPDATE   = "one.template.update"
+<<<<<<< HEAD
 	ONE_HOST_INFO   = "one.host.info"
+=======
+	VM_INFO           = "one.vm.info"
+>>>>>>> origin/master
 )
 
 var (

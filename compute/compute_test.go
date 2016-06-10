@@ -2,7 +2,6 @@ package compute
 
 import (
 	"testing"
- "fmt"
 	"github.com/megamsys/opennebula-go/api"
 
 	"gopkg.in/check.v1"
@@ -37,19 +36,19 @@ func (s *S) SetUpSuite(c *check.C) {
 
 func (s *S) TestCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
-	fmt.Println("Client New :",cl)
-	v := VirtualMachine{Name: "test", TemplateName: "megam", Cpu: "1", Memory: "1024", Image: "megam", T: cl, ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007"}} //memory in terms of MB! duh!
+	v := VirtualMachine{Name: "testmegam", TemplateName: "megam", Cpu: "1", Memory: "1024", Image: "megam", T: cl, ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007"}} //memory in terms of MB! duh!
+
 	c.Assert(v, check.NotNil)
 	_, err := v.Create()
-	c.Assert(err, check.IsNil)
+	c.Assert(err, check.NotNil)
 }
 /*
 func (s *S) TestReboot(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
-	v := VirtualMachine{Name: "test", T: cl}
+	v := VirtualMachine{Name: "testrj", T: cl}
 	c.Assert(v, check.NotNil)
 	_, err := v.Reboot()
-	c.Assert(err, check.IsNil)
+	c.Assert(err, check.NotNil)
 }
 
 func (s *S) TestResume(c *check.C) {
