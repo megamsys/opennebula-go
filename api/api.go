@@ -3,7 +3,7 @@ package api
 import (
 	"errors"
 	"strings"
-  "fmt"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/kolo/xmlrpc"
 	"github.com/megamsys/libgo/cmd"
@@ -59,7 +59,6 @@ func (c *Rpc) Call(command string, args []interface{}) ([]interface{}, error) {
 
 	result := []interface{}{}
 
-	fmt.Println("*****************************\n",args)
 	if err := c.Client.Call(command, args, &result); err != nil {
 		return nil, err
 	}

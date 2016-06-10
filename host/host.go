@@ -2,7 +2,6 @@ package host
 
 import (
 	"encoding/xml"
-  "fmt"
 	"github.com/megamsys/opennebula-go/api"
 )
 
@@ -34,10 +33,8 @@ type VM struct {
 // Given a name, this function will return the VM
 func (v *HQuery) GetVMs(a int) ([]*VM, error) {
   args := []interface{}{v.T.Key,a}
-  fmt.Println("Args for action :\n",args)
 	HostVMs, err := v.T.Call(api.ONE_HOST_INFO, args)
 	if err != nil {
-    fmt.Println("*****************host***err***************",err)
 		return nil, err
 	}
 
@@ -47,8 +44,6 @@ func (v *HQuery) GetVMs(a int) ([]*VM, error) {
 		return nil, err
 	}
 
-  fmt.Println("*****************host*****xmlvm***************")
-  fmt.Printf("%#v",xmlVM.Temp)
 	var matchedVM = make([]*VM, 2)
 
 	return matchedVM, nil
