@@ -18,24 +18,33 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://103.56.92.4:2633/RPC2"
+	cm[api.ENDPOINT] = "http://localhost:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "yeghorbAjif4"
+	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
 }
 
 /*
 func (s *S) TestGetByName(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	vm := Query{VMName: "testrj", T: client}
+	vm := Query{VMName: "kvm109", T: client}
 	_, err := vm.GetByName()
 	c.Assert(err, check.NotNil)
 }
-*/
+
 
 func (s *S) TestGetByPort(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	vm := Vnc{ T: client, VmId: "508" }
-	_, err := vm.GetVm()
+	vm := Vnc{ T: client, VmId: "743" }
+	b, err := vm.GetVm()
+	fmt.Println(b)
 	c.Assert(err, check.NotNil)
+}
+*/
+func (s *S) TestDiskSnap(c *check.C) {
+	cl, _ := api.NewClient(s.cm)
+	v := Query{VMName: "rj", VMId: 743, T: cl}
+	c.Assert(v, check.NotNil)
+	_, err := v.DiskSnap()
+	c.Assert(err, check.IsNil)
 }

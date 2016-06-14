@@ -1,12 +1,10 @@
-
-package template
+package host
 /*
 import (
-	"testing"
-
+  "fmt"
 	"github.com/megamsys/opennebula-go/api"
-
 	"gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) {
@@ -21,18 +19,18 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://localhost:2633/RPC2"
+	cm[api.ENDPOINT] = "http://83.136.86.155:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "asdf"
+	cm[api.PASSWORD] = "OsOdIcValan6"
 	s.cm = cm
 }
 
 
-func (s *S) TestGet(c *check.C) {
+func (s *S) TestGetVMs(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	flav := TemplateReqs{TemplateName: "newone", T: client}
-	res, error := flav.Get()
-	c.Assert(error, check.IsNil)
-	c.Assert(res, check.NotNil)
+	vm := HQuery{T: client}
+  fmt.Printf("%#v",vm)
+	_, err := vm.GetVMs(10)
+	c.Assert(err, check.IsNil)
 }
 */

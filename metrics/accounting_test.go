@@ -1,5 +1,5 @@
 package metrics
-
+/*
 import (
 	"testing"
 	"time"
@@ -22,7 +22,7 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://103.56.92.4:2633/RPC2"
+	cm[api.ENDPOINT] = "http://localhost:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
 	cm[api.PASSWORD] = "yourWuOtHij3"
 	s.cm = cm
@@ -34,3 +34,4 @@ func (s *S) TestGet(c *check.C) {
 	_, error := vm.Get()
 	c.Assert(error, check.IsNil)
 }
+*/

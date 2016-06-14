@@ -2,12 +2,14 @@ package virtualmachine
 
 import (
 	"encoding/xml"
-
 	"github.com/megamsys/opennebula-go/api"
 )
-
+const (
+		ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
+)
 type Query struct {
 	VMName string
+	VMId   int
 	T      *api.Rpc
 }
 
@@ -34,7 +36,6 @@ func (v *Query) GetByName() ([]*UserVM, error) {
 	if err = xml.Unmarshal([]byte(assert), &xmlVM); err != nil {
 		return nil, err
 	}
-
 	var matchedVM = make([]*UserVM, len(xmlVM.UserVM))
 
 	for _, u := range xmlVM.UserVM {
@@ -45,4 +46,20 @@ func (v *Query) GetByName() ([]*UserVM, error) {
 
 	return matchedVM, nil
 
+}
+/**
+ *
+ * VM save as a new Image (DISK_SNAPSHOT)
+ *
+ **/
+func (v *Query) DiskSnap() ([]interface{}, error) {
+	args := []interface{}{v.T.Key,v.VMId,0,v.VMName,"",-1}
+	res, err := v.T.Call("one.vm.disksaveas", args)
+	//close connection
+	defer v.T.Client.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }

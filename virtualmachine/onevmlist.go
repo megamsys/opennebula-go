@@ -14,7 +14,6 @@ type Vnc struct {
 
 
 type VM struct {
-
 	Id   string    `xml:"ID"`
   Name string `xml:"NAME"`
 	VmTemplate *VmTemplate `xml:"TEMPLATE"`

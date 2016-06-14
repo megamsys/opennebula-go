@@ -3,7 +3,7 @@ package compute
 import (
 	"encoding/xml"
 	"errors"
-  
+  //"fmt"
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"

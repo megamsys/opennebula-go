@@ -21,6 +21,7 @@ const (
 	VMPOOL_INFO       = "one.vmpool.info"
 	TEMPLATEPOOL_INFO = "one.templatepool.info"
 	TEMPLATE_UPDATE   = "one.template.update"
+	ONE_HOST_INFO   = "one.host.info"
 	VM_INFO           = "one.vm.info"
 )
 
@@ -57,6 +58,7 @@ func (c *Rpc) Call(command string, args []interface{}) ([]interface{}, error) {
 	log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)
 
 	result := []interface{}{}
+
 	if err := c.Client.Call(command, args, &result); err != nil {
 		return nil, err
 	}
