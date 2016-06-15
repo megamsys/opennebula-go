@@ -14,6 +14,7 @@ var ErrNoVM = errors.New("no vm found, Did you launch them ?")
 const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"
+	ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
 	DELETE               = "delete"
 	REBOOT               = "reboot"
 	POWEROFF             = "poweroff"
@@ -160,6 +161,29 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
 	return res, nil
 
 }
+
+
+/**
+ *
+ * VM save as a new Image (DISK_SNAPSHOT)
+ *
+ **/
+func (v *VirtualMachine) DiskSnap() ([]interface{}, error) {
+	uvm, err := listByName(v.Name, v.T)
+	if err != nil {
+		return nil, err
+	}
+	args := []interface{}{v.T.Key,uvm.Id,0,v.Name,"",-1}
+	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
+	//close connection
+	defer v.T.Client.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 
 func listByName(name string, client *api.Rpc) (*virtualmachine.UserVM, error) {
 	vms := virtualmachine.Query{VMName: name, T: client}
