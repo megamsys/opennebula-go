@@ -47,7 +47,7 @@ func NewClient(config map[string]string) (*Rpc, error) {
 	if err != nil {
 		return nil, err
 	}
-  log.Debugf(cmd.Colorfy("  > [one-go] connection response", "blue", "", "bold")+"%#v",client)
+  //log.Debugf(cmd.Colorfy("  > [one-go] connection response", "blue", "", "bold")+"%#v",client)
 	log.Debugf(cmd.Colorfy("  > [one-go] connected", "blue", "", "bold")+" %s", config[ENDPOINT])
 
 	return &Rpc{
