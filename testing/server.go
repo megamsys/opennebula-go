@@ -15,7 +15,6 @@ type One struct {
 
 func (t *One) Template(args int, reply *int) error {
 	reply = &args
-	fmt.Println(args)
 	return nil
 }
 

@@ -15,7 +15,9 @@ const (
 	PASSWORD = "password"
 	TEMPLATE = "template"
 	IMAGE    = "image"
+	ONEZONE     = "region"
 	VCPU_PERCENTAGE ="vcpu_percentage"
+	CLUSTER  = "cluster"
 
 	VMPOOL_ACCOUNTING = "one.vmpool.accounting"
 	VMPOOL_INFO       = "one.vmpool.info"
@@ -45,7 +47,7 @@ func NewClient(config map[string]string) (*Rpc, error) {
 	if err != nil {
 		return nil, err
 	}
-
+  log.Debugf(cmd.Colorfy("  > [one-go] connection response", "blue", "", "bold")+"%#v",client)
 	log.Debugf(cmd.Colorfy("  > [one-go] connected", "blue", "", "bold")+" %s", config[ENDPOINT])
 
 	return &Rpc{

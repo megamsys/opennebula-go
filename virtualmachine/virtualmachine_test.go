@@ -41,10 +41,3 @@ func (s *S) TestGetByPort(c *check.C) {
 	c.Assert(err, check.NotNil)
 }
 */
-func (s *S) TestDiskSnap(c *check.C) {
-	cl, _ := api.NewClient(s.cm)
-	v := Query{VMName: "rj", VMId: 743, T: cl}
-	c.Assert(v, check.NotNil)
-	_, err := v.DiskSnap()
-	c.Assert(err, check.IsNil)
-}

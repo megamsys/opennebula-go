@@ -3,7 +3,9 @@ package compute
 import (
 	"encoding/xml"
 	"errors"
-  //"fmt"
+  "fmt"
+		log "github.com/Sirupsen/logrus"
+			"github.com/megamsys/libgo/cmd"
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"
@@ -36,6 +38,9 @@ type VirtualMachine struct {
 	VCpu         string
 	Memory       string
 	HDD          string
+	Region       string
+	ClusterId    string
+	Vnets        map[string]string
 	T            *api.Rpc
 }
 
@@ -59,6 +64,13 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
 	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
 	XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
+
+	XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\""+ v.ClusterId +"\""
+	XMLtemplate[0].Template.Nic = XMLtemplate[0].Template.Nic[:0]
+	for _, v := range v.Vnets {
+		net := &template.NIC{Network: v,Network_uname: "oneadmin"}
+		XMLtemplate[0].Template.Nic	= append(XMLtemplate[0].Template.Nic,net)
+	}
 
 	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate
