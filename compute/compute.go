@@ -3,9 +3,7 @@ package compute
 import (
 	"encoding/xml"
 	"errors"
-  "fmt"
-		log "github.com/Sirupsen/logrus"
-			"github.com/megamsys/libgo/cmd"
+
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"
@@ -40,6 +38,7 @@ type VirtualMachine struct {
 	HDD          string
 	Region       string
 	ClusterId    string
+	VMId         int
 	Vnets        map[string]string
 	T            *api.Rpc
 }
@@ -66,10 +65,12 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
 
 	XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\""+ v.ClusterId +"\""
-	XMLtemplate[0].Template.Nic = XMLtemplate[0].Template.Nic[:0]
-	for _, v := range v.Vnets {
-		net := &template.NIC{Network: v,Network_uname: "oneadmin"}
-		XMLtemplate[0].Template.Nic	= append(XMLtemplate[0].Template.Nic,net)
+	if len(v.Vnets) > 0 {
+		XMLtemplate[0].Template.Nic = XMLtemplate[0].Template.Nic[:0]
+		for _, v := range v.Vnets {
+			net := &template.NIC{Network: v,Network_uname: "oneadmin"}
+			XMLtemplate[0].Template.Nic	= append(XMLtemplate[0].Template.Nic,net)
+		}
 	}
 
 	finalXML := template.UserTemplates{}
@@ -90,12 +91,8 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Reboot() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.T)
-	if err != nil {
-		return nil, err
-	}
 
-	args := []interface{}{v.T.Key, REBOOT, uvm.Id}
+	args := []interface{}{v.T.Key, REBOOT, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
 	//close connection
 	defer v.T.Client.Close()
@@ -113,11 +110,8 @@ func (v *VirtualMachine) Reboot() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.T)
-	if err != nil {
-		return nil, err
-	}
-	args := []interface{}{v.T.Key, POWEROFF, uvm.Id}
+
+	args := []interface{}{v.T.Key, POWEROFF, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
 	defer v.T.Client.Close()
 	if err != nil {
@@ -134,12 +128,8 @@ func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Resume() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.T)
-	if err != nil {
-		return nil, err
-	}
 
-	args := []interface{}{v.T.Key, RESUME, uvm.Id}
+	args := []interface{}{v.T.Key, RESUME, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
 	//close connection
 	defer v.T.Client.Close()
@@ -157,12 +147,8 @@ func (v *VirtualMachine) Resume() ([]interface{}, error) {
  *
  **/
 func (v *VirtualMachine) Delete() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.T)
-	if err != nil {
-		return nil, err
-	}
 
-	args := []interface{}{v.T.Key, DELETE, uvm.Id}
+	args := []interface{}{v.T.Key, DELETE, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
 	//close connection
 	defer v.T.Client.Close()
@@ -181,11 +167,8 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
  *
  **/
 func (v *VirtualMachine) DiskSnap() ([]interface{}, error) {
-	uvm, err := listByName(v.Name, v.T)
-	if err != nil {
-		return nil, err
-	}
-	args := []interface{}{v.T.Key,uvm.Id,0,v.Name,"",-1}
+
+	args := []interface{}{v.T.Key,v.VMId,0,v.Name,"",-1}
 	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
 	//close connection
 	defer v.T.Client.Close()
