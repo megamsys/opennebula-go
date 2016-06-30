@@ -38,8 +38,10 @@ type Template struct {
 	Disk                     *Disk     `xml:"DISK"`
 	From_app                 string    `xml:"FROM_APP"`
 	From_app_name            string    `xml:"FROM_APP_NAME"`
-	Nic                      *NIC      `xml:"NIC"`
+	Nic                      []*NIC      `xml:"NIC"`
 	Os                       *OS       `xml:"OS"`
+	Sched_requirments				 string    `xml:"SCHED_REQUIREMENTS"`
+	Sched_ds_requirments     string    `xml:"SCHED_DS_REQUIREMENTS"`
 }
 
 type Graphics struct {
