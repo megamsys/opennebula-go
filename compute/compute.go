@@ -63,8 +63,8 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
 	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
 	XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
-
 	XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\""+ v.ClusterId +"\""
+
 	if len(v.Vnets) > 0 {
 		XMLtemplate[0].Template.Nic = XMLtemplate[0].Template.Nic[:0]
 		for _, v := range v.Vnets {

@@ -25,7 +25,7 @@ func (s *S) SetUpSuite(c *check.C) {
 	s.cm = cm
 }
 
-
+/*
 func (s *S) TestCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := VirtualMachine{Name: "testmegam4", TemplateName: "megam", Cpu: "1", Memory: "1024", Image: "megam", ClusterId: "101" ,T: cl, ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007"},Vnets:map[string]string{"0":"pub2_ipv4"} } //memory in terms of MB! duh!
@@ -36,7 +36,7 @@ func (s *S) TestCreate(c *check.C) {
 	c.Assert(err, check.NotNil)
 }
 
-/*
+
 func (s *S) TestReboot(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := VirtualMachine{Name: "testrj", T: cl}
