@@ -37,6 +37,8 @@ const (
 	SUSPENDED
 	DONE
 	FAILED
+	POWEROFF
+	UNDEPLOYED
 
 	//LcmState starts at 0
 	LCM_INIT LcmState = iota
