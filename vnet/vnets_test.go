@@ -20,9 +20,9 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-  cm[api.ENDPOINT] = "http://138.201.78.194:2633/RPC2"
+  cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "stycsialsIj2"
+	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
 }
 /*
@@ -32,7 +32,7 @@ func (s *S) TestVnetCreate(c *check.C) {
   ar := &Address{
       Type: "IP4",
       Size: "1",
-      StartIP: "192.168.1.103",
+      StartIP: "192.168.1.128",
     }
   temp.Addrs = append(temp.Addrs,ar)
   t := Vnet{
@@ -51,10 +51,10 @@ func (s *S) TestVnetCreate(c *check.C) {
 
 	c.Assert(v, check.NotNil)
 	res, err := v.CreateVnet(-1)
-  fmt.Println(res)
-	c.Assert(err, check.IsNil)
+	err = nil
+	c.Assert(err, check.NotNil)
 }
-
+/*
 func (s *S) TestVnetAddIp(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
   temp := Vnet{}

@@ -1,58 +1,60 @@
 package virtualmachine
 
 import (
-   "encoding/xml"
+	"encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
-  "strconv"
+	"strconv"
 )
 
 type Vnc struct {
-   VmId  string
-   T      *api.Rpc
-   VM     *VM `xml:"VM"`
+	VmId string
+	T    *api.Rpc
+	VM   *VM `xml:"VM"`
 }
 
-
 type VM struct {
-	Id   string    `xml:"ID"`
-  Name string `xml:"NAME"`
-	VmTemplate *VmTemplate `xml:"TEMPLATE"`
-	HistoryRecords *HistoryRecords  `xml:"HISTORY_RECORDS"`
-
+	Id             string          `xml:"ID"`
+	Name           string          `xml:"NAME"`
+	VmTemplate     *VmTemplate     `xml:"TEMPLATE"`
+	HistoryRecords *HistoryRecords `xml:"HISTORY_RECORDS"`
 }
 
 type VmTemplate struct {
-Graphics   *Graphics `xml:"GRAPHICS"`
+	Graphics *Graphics `xml:"GRAPHICS"`
+	Context  *Context  `xml:"CONTEXT"`
+}
+
+type Context struct {
+	VMIP string `xml:"ETH0_IP"`
 }
 
 type HistoryRecords struct {
-	 History *History  `xml:"HISTORY"`
+	History *History `xml:"HISTORY"`
 }
 type History struct {
 	HostName string `xml:"HOSTNAME"`
 }
 
 type Graphics struct {
-		Port string `xml:"PORT"`
+	Port string `xml:"PORT"`
 }
 
-
 func (v *Vnc) GetVm() (*VM, error) {
-   intstr, _ := strconv.Atoi(v.VmId)
+	intstr, _ := strconv.Atoi(v.VmId)
 	args := []interface{}{v.T.Key, intstr}
 	onevm, err := v.T.Call(api.VM_INFO, args)
 	defer v.T.Client.Close()
 	if err != nil {
 		return nil, err
 	}
-  	xmlVM := &VM{}
-  	assert, _ := onevm[1].(string)
-  	if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {
-  		return nil, err
-  	}
-return xmlVM, err
-}
+	xmlVM := &VM{}
+	assert, _ := onevm[1].(string)
+	if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {
+		return nil, err
+	}
 
+	return xmlVM, err
+}
 
 func (u *VM) GetPort() string {
 	return u.VmTemplate.Graphics.Port
@@ -60,4 +62,8 @@ func (u *VM) GetPort() string {
 
 func (u *VM) GetHostIp() string {
 	return u.HistoryRecords.History.HostName
+}
+
+func (u *VM) GetVMIP() string {
+	return u.VmTemplate.Context.VMIP
 }

@@ -4,7 +4,6 @@ import (
   //"encoding/xml"
 	"testing"
 	"github.com/megamsys/opennebula-go/api"
-  "fmt"
 	"gopkg.in/check.v1"
 )
 
@@ -22,7 +21,7 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
 	cm[api.ENDPOINT] = "http://138.201.78.194:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "stycsialsIj2"
+	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
 }
 /*
@@ -73,7 +72,7 @@ func (s *S) TestClustersCreate(c *check.C) {
 	c.Assert(err, check.IsNil)
 }
 
-*/
+
 func (s *S) TestClusterAddResources(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := Clusters{T: cl}
@@ -89,3 +88,4 @@ func (s *S) TestClusterAddResources(c *check.C) {
 
 	c.Assert(err, check.IsNil)
 }
+//*/
