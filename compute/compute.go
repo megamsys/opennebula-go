@@ -63,13 +63,13 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
 	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
 	XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
+	XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\"" + v.ClusterId + "\""
 
-	XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\""+ v.ClusterId +"\""
 	if len(v.Vnets) > 0 {
 		XMLtemplate[0].Template.Nic = XMLtemplate[0].Template.Nic[:0]
 		for _, v := range v.Vnets {
-			net := &template.NIC{Network: v,Network_uname: "oneadmin"}
-			XMLtemplate[0].Template.Nic	= append(XMLtemplate[0].Template.Nic,net)
+			net := &template.NIC{Network: v, Network_uname: "oneadmin"}
+			XMLtemplate[0].Template.Nic = append(XMLtemplate[0].Template.Nic, net)
 		}
 	}
 
@@ -160,7 +160,6 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
 
 }
 
-
 /**
  *
  * VM save as a new Image (DISK_SNAPSHOT)
@@ -168,7 +167,7 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
  **/
 func (v *VirtualMachine) DiskSnap() ([]interface{}, error) {
 
-	args := []interface{}{v.T.Key,v.VMId,0,v.Name,"",-1}
+	args := []interface{}{v.T.Key, v.VMId, 0, v.Name, "", -1}
 	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
 	//close connection
 	defer v.T.Client.Close()
@@ -178,7 +177,6 @@ func (v *VirtualMachine) DiskSnap() ([]interface{}, error) {
 
 	return res, nil
 }
-
 
 func listByName(name string, client *api.Rpc) (*virtualmachine.UserVM, error) {
 	vms := virtualmachine.Query{VMName: name, T: client}

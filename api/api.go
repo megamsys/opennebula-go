@@ -23,8 +23,10 @@ const (
 	VMPOOL_INFO       = "one.vmpool.info"
 	TEMPLATEPOOL_INFO = "one.templatepool.info"
 	TEMPLATE_UPDATE   = "one.template.update"
-	ONE_HOST_INFO   = "one.host.info"
+	ONE_HOST_INFO     = "one.host.info"
 	VM_INFO           = "one.vm.info"
+  VNET_CREATE       = "one.vn.allocate"
+	VNET_ADDIP        = "one.vn.add_ar"
 )
 
 var (

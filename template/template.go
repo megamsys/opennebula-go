@@ -2,7 +2,6 @@ package template
 
 import (
 	"encoding/xml"
-
 	"github.com/megamsys/opennebula-go/api"
 )
 
@@ -38,9 +37,9 @@ type Template struct {
 	Disk                     *Disk     `xml:"DISK"`
 	From_app                 string    `xml:"FROM_APP"`
 	From_app_name            string    `xml:"FROM_APP_NAME"`
-	Nic                      []*NIC      `xml:"NIC"`
+	Nic                      []*NIC    `xml:"NIC"`
 	Os                       *OS       `xml:"OS"`
-	Sched_requirments				 string    `xml:"SCHED_REQUIREMENTS"`
+	Sched_requirments        string    `xml:"SCHED_REQUIREMENTS"`
 	Sched_ds_requirments     string    `xml:"SCHED_DS_REQUIREMENTS"`
 }
 
@@ -121,7 +120,6 @@ func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
 func (t *TemplateReqs) Get() ([]*UserTemplate, error) {
 	args := []interface{}{t.T.Key, -2, -1, -1}
 	templatePool, err := t.T.Call(api.TEMPLATEPOOL_INFO, args)
-
 	if err != nil {
 		return nil, err
 	}

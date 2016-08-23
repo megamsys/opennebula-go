@@ -1,9 +1,9 @@
 package compute
 
 import (
+	//"fmt"
 	"testing"
 	"github.com/megamsys/opennebula-go/api"
-  "fmt"
 	"gopkg.in/check.v1"
 )
 
@@ -19,24 +19,35 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://localhost:2633/RPC2"
+	cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "asdf"
+	cm[api.PASSWORD] = "dyovAupAuck9"
 	s.cm = cm
 }
 
-
+/*
 func (s *S) TestCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
-	v := VirtualMachine{Name: "testmegam4", TemplateName: "megam", Cpu: "1", Memory: "1024", Image: "megam", ClusterId: "101" ,T: cl, ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007"},Vnets:map[string]string{"0":"pub2_ipv4"} } //memory in terms of MB! duh!
+	fmt.Println(cl)
+	v := VirtualMachine {
+		Name: "testmegam4",
+		TemplateName: "megam",
+		Cpu: "1",
+		Memory: "1024",
+		Image: "megam",
+		ClusterId: "101" ,
+		T: cl,
+		ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007", ACCOUNTS_ID: "info@megam.io"},
+		Vnets:map[string]string{"0":"pub2_ipv4"},
+		} //memory in terms of MB! duh!
 
 	c.Assert(v, check.NotNil)
   res, err := v.Create()
 	fmt.Println(res)
 	c.Assert(err, check.NotNil)
 }
-
 /*
+
 func (s *S) TestReboot(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := VirtualMachine{Name: "testrj", T: cl}
@@ -76,7 +87,7 @@ func (s *S) TestDelete(c *check.C) {
 	_, err := v.Delete()
 	c.Assert(err, check.IsNil)
 }
-/*
+
 func (s *S) TestDiskSnap(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := VirtualMachine{Name: "rj",T: cl}
