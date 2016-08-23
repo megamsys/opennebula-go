@@ -19,14 +19,18 @@ const (
 	VCPU_PERCENTAGE ="vcpu_percentage"
 	CLUSTER  = "cluster"
 
-	VMPOOL_ACCOUNTING = "one.vmpool.accounting"
-	VMPOOL_INFO       = "one.vmpool.info"
-	TEMPLATEPOOL_INFO = "one.templatepool.info"
-	TEMPLATE_UPDATE   = "one.template.update"
-	ONE_HOST_INFO     = "one.host.info"
-	VM_INFO           = "one.vm.info"
-  VNET_CREATE       = "one.vn.allocate"
-	VNET_ADDIP        = "one.vn.add_ar"
+	VMPOOL_ACCOUNTING      = "one.vmpool.accounting"
+	VMPOOL_INFO            = "one.vmpool.info"
+	TEMPLATEPOOL_INFO      = "one.templatepool.info"
+	TEMPLATE_UPDATE        = "one.template.update"
+	VM_INFO                = "one.vm.info"
+  VNET_CREATE            = "one.vn.allocate"
+	VNET_ADDIP             = "one.vn.add_ar"
+	ONE_HOST_INFO          = "one.host.info"
+	ONE_HOST_ALLOCATE      = "one.host.allocate"
+	ONE_HOST_DELETE        = "one.host.delete"
+  ONE_DATASTORE_ALLOCATE = "one.datastore.allocate"
+
 )
 
 var (

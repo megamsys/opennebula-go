@@ -1,5 +1,5 @@
 package vnet
-
+/*
 import (
 
 	"testing"
@@ -25,7 +25,7 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
 }
-/*
+
 func (s *S) TestVnetCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
   temp := Vnet{}
@@ -54,7 +54,7 @@ func (s *S) TestVnetCreate(c *check.C) {
 	err = nil
 	c.Assert(err, check.NotNil)
 }
-/*
+
 func (s *S) TestVnetAddIp(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
   temp := Vnet{}

@@ -1,4 +1,5 @@
 package host
+
 /*
 import (
   "fmt"
@@ -19,9 +20,9 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://localhost:2633/RPC2"
+	cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "asdf"
+	cm[api.PASSWORD] = "dyovAupAuck9"
 	s.cm = cm
 }
 
@@ -30,7 +31,22 @@ func (s *S) TestGetVMs(c *check.C) {
 	client, _ := api.NewClient(s.cm)
 	vm := HQuery{T: client}
   fmt.Printf("%#v",vm)
-	_, err := vm.GetVMs(10)
-	c.Assert(err, check.IsNil)
+	_, err := vm.GetVMs(2)
+	c.Assert(err, check.NotNil)
+}
+
+func (s *S) TestAllocateHost(c *check.C) {
+  client, _ := api.NewClient(s.cm)
+  host := HostAllocate{T: client}
+  hostname := "192.168.1.103"
+  c.Assert(err, check.NotNil)
+  _, err := host.AllocateHost(hostname,"kvm","kvm", -1)
+}
+
+func (s *S) TestDelHost(c *check.C) {
+  client, _ := api.NewClient(s.cm)
+  host := HQuery{T: client}
+  _, err := host.DelHost(4)
+  c.Assert(err, check.NotNil)
 }
 */
