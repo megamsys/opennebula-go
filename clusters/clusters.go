@@ -49,10 +49,8 @@ type Vnet struct {
 }
 
 func (c *Clusters) ClusterPoolinfo() ([]interface{}, error) {
-  fmt.Println("-------------------------",c.T.Key)
   args := []interface{}{c.T.Key}
 	res, err := c.T.Call(GETCLUSTERS, args)
-  fmt.Println("************_---------------",res)
 	//close connection
 	defer c.T.Client.Close()
 	if err != nil {
@@ -125,7 +123,6 @@ func (c *Clusters) GetByName(name string) (int, error) {
   if err = xml.Unmarshal([]byte(assert), xmlCLS); err != nil {
      fmt.Println(err)
   }
-  fmt.Printf("%#v",xmlCLS.Clusters)
 
 	for _, u := range xmlCLS.Clusters {
 		if u.Name == name {

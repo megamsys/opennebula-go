@@ -1,8 +1,6 @@
 package clusters
 
 import (
-	"fmt"
-  //"encoding/xml"
 	"testing"
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
