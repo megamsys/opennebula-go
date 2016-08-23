@@ -1,6 +1,7 @@
 package clusters
 
 import (
+	"fmt"
   //"encoding/xml"
 	"testing"
 	"github.com/megamsys/opennebula-go/api"
@@ -19,7 +20,7 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://138.201.78.194:2633/RPC2"
+	cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
 	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
@@ -37,12 +38,12 @@ func (s *S) TestClustersInfo(c *check.C) {
   if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {
      fmt.Println(err)
   }
-  fmt.Printf("%#v",xmlVM.Cluster[0])
+  fmt.Printf("%#v",xmlVM.Clusters)
 
 	c.Assert(err, check.NotNil)
 }
 
-*/
+//*/
 /*
 func (s *S) TestClusterInfo(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
@@ -61,6 +62,7 @@ func (s *S) TestClusterInfo(c *check.C) {
 	c.Assert(err, check.NotNil)
 }
 
+
 func (s *S) TestClustersCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := Clusters{T: cl}
@@ -71,16 +73,19 @@ func (s *S) TestClustersCreate(c *check.C) {
 
 	c.Assert(err, check.IsNil)
 }
+*/
 
 
+/*
 func (s *S) TestClusterAddResources(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := Clusters{T: cl}
 
 	c.Assert(v, check.NotNil)
   resource_id := 0
-  cluster_name := "testcluster"
-	res, err := v.ClusterAddResources(cluster_name,CLUSTER_ADDVNET,resource_id)
+  //cluster_name := "testcluster"
+	cluster_id := 102
+	res, err := v.ClusterAddResources(CLUSTER_DELVNET,cluster_id,resource_id)
   xmlVM := &Clusters{}
   fmt.Println(res)
 

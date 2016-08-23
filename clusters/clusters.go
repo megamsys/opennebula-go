@@ -24,7 +24,7 @@ const (
 
 
 type Clusters struct {
-    Cluster   []*Cluster `xml:"CLUSTER"`
+    Clusters   []*Cluster `xml:"CLUSTER"`
   	T            *api.Rpc
 }
 
@@ -49,8 +49,10 @@ type Vnet struct {
 }
 
 func (c *Clusters) ClusterPoolinfo() ([]interface{}, error) {
+  fmt.Println("-------------------------",c.T.Key)
   args := []interface{}{c.T.Key}
 	res, err := c.T.Call(GETCLUSTERS, args)
+  fmt.Println("************_---------------",res)
 	//close connection
 	defer c.T.Client.Close()
 	if err != nil {
@@ -90,14 +92,14 @@ func (c *Clusters) CreateCluster(name string) ([]interface{}, error) {
   return res, nil
 }
 
-func (c *Clusters) ClusterAddResources(cname, method string,rid int) ([]interface{}, error) {
-  id ,err := c.GetByName(cname)
-  if err != nil {
-    return nil, err
-  }
+func (c *Clusters) ClusterAddResources(method string,cid,rid int) ([]interface{}, error) {
+  // id ,err := c.GetByName(cname)
+  // if err != nil {
+  //   return nil, err
+  // }
 
   fmt.Println(method)
-  args := []interface{}{c.T.Key,id,rid}
+  args := []interface{}{c.T.Key,cid,rid}
   res, Err := c.T.Call(method,args)
   //close connection
   defer c.T.Client.Close()
@@ -123,9 +125,9 @@ func (c *Clusters) GetByName(name string) (int, error) {
   if err = xml.Unmarshal([]byte(assert), xmlCLS); err != nil {
      fmt.Println(err)
   }
-  fmt.Printf("%#v",xmlCLS.Cluster[0])
+  fmt.Printf("%#v",xmlCLS.Clusters)
 
-	for _, u := range xmlCLS.Cluster {
+	for _, u := range xmlCLS.Clusters {
 		if u.Name == name {
       return u.Id , nil
 		}
@@ -133,4 +135,16 @@ func (c *Clusters) GetByName(name string) (int, error) {
 
 	return -1 , ErrNoCL
 
+}
+
+
+func (c *Clusters) AddVnet(cls_id,vnet int) ([]interface{}, error) {
+  args := []interface{}{c.T.Key,cls_id,vnet}
+  res, err := c.T.Call(CLUSTER_ADDVNET,args)
+  //close connection
+  defer c.T.Client.Close()
+  if err != nil {
+    return nil, err
+  }
+  return res, nil
 }
