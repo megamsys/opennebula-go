@@ -22,7 +22,7 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
 	cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "dyovAupAuck9"
+	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
 }
 
@@ -37,7 +37,7 @@ func (s *S) TestGetVMs(c *check.C) {
 
 func (s *S) TestAllocateHost(c *check.C) {
   client, _ := api.NewClient(s.cm)
-  host := HostAllocate{T: client}
+  host := HQuery{T: client}
   hostname := "192.168.1.103"
   c.Assert(err, check.NotNil)
   _, err := host.AllocateHost(hostname,"kvm","kvm", -1)

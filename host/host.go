@@ -4,20 +4,11 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/megamsys/opennebula-go/api"
-	"github.com/megamsys/opennebula-go/clusters"
 )
 
 const (
 	SHOW = "show"
 )
-
-type HostAllocate struct {
-	T        *api.Rpc
-	Hosts    *Host             `xml:HOST`
-	Clusters *clusters.Cluster `xml:Cluster`
-	VMMAD    string            `xml:VMMAD`
-	IMMAD    string            `xml:IMMAD`
-}
 
 type HQuery struct {
 	HostID string
@@ -60,9 +51,9 @@ func (v *HQuery) GetVMs(a int) ([]*VM, error) {
 
 }
 
-func (h *HostAllocate) AllocateHost(host, im, vm string, id int) ([]interface{}, error) {
-	args := []interface{}{h.T.Key, host, im, vm, id}
-	addHost, err := h.T.Call(api.ONE_HOST_ALLOCATE, args)
+func (v *HQuery) AllocateHost(host, im, vm string, id int) ([]interface{}, error) {
+	args := []interface{}{v.T.Key, host, im, vm, id}
+	addHost, err := v.T.Call(api.ONE_HOST_ALLOCATE, args)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +63,7 @@ func (h *HostAllocate) AllocateHost(host, im, vm string, id int) ([]interface{},
 
 func (v *HQuery) DelHost(a int) ([]interface{}, error) {
 	args := []interface{}{v.T.Key, a}
-	delHost, _ := v.T.Call(api.ONE_HOST_DELETE, args)
+	delHost, err := v.T.Call(api.ONE_HOST_DELETE, args)
 	if err != nil {
 		return nil, err
 	}
