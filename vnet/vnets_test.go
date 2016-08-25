@@ -1,10 +1,10 @@
 package vnet
-
+/*
 import (
 
 	"testing"
 	"github.com/megamsys/opennebula-go/api"
-  //"fmt"
+  "fmt"
 	"gopkg.in/check.v1"
 )
 
@@ -22,10 +22,10 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
   cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "asdf"
+	cm[api.PASSWORD] = "dyovAupAuck9"
 	s.cm = cm
 }
-/*
+
 func (s *S) TestVnetCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
   temp := Vnet{}
@@ -36,7 +36,7 @@ func (s *S) TestVnetCreate(c *check.C) {
     }
   temp.Addrs = append(temp.Addrs,ar)
   t := Vnet{
-    Name: "vnet1",
+    Name: "vnet2",
     Type: "fixed",
     Description: "vnet for iPV4 ",
     Bridge: "one",
@@ -51,6 +51,8 @@ func (s *S) TestVnetCreate(c *check.C) {
 
 	c.Assert(v, check.NotNil)
 	res, err := v.CreateVnet(-1)
+	fmt.Println(res)
+	fmt.Println("****************",err)
 	err = nil
 	c.Assert(err, check.NotNil)
 }
