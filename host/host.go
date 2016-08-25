@@ -1,7 +1,7 @@
 package host
 
 import (
-	"encoding/xml"
+	// "encoding/xml"
 	"fmt"
 	"github.com/megamsys/opennebula-go/api"
 )
@@ -33,23 +33,25 @@ type VM struct {
 }
 
 // Given a name, this function will return the VM
-func (v *HQuery) GetVMs(a int) ([]*VM, error) {
+func (v *HQuery) HostInfos(a int) ([]interface{}, error) {
 	args := []interface{}{v.T.Key, a}
-	HostVMs, err := v.T.Call(api.ONE_HOST_INFO, args)
+	fmt.Println(args)
+	hostInfos, err := v.T.Call(api.ONE_HOST_INFO, args)
 	if err != nil {
 		return nil, err
 	}
+	return hostInfos, nil
+}
 
-	xmlVM := Host{}
-	assert, _ := HostVMs[1].(string)
-	if err = xml.Unmarshal([]byte(assert), &xmlVM); err != nil {
+func (v *HQuery) HostsInfos(a int) ([]interface{}, error) {
+	args := []interface{}{v.T.Key, a}
+	hostInfos, err := v.T.Call(api.HOST_INFO, args)
+	if err != nil {
 		return nil, err
 	}
-	var matchedVM = make([]*VM, 2)
-
-	return matchedVM, nil
-
+	return hostInfos, nil
 }
+
 
 func (v *HQuery) AllocateHost(host, im, vm string, id int) ([]interface{}, error) {
 	args := []interface{}{v.T.Key, host, im, vm, id}
