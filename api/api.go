@@ -28,6 +28,7 @@ const (
 	VNET_ADDIP             = "one.vn.add_ar"
 	ONE_HOST_INFO          = "one.host.info"
 	ONE_DATASTORE_INFO     = "one.datastore.info"
+	ONE_DATASTOREPOOL_INFO = "one.datastorepool.info"
 	ONE_HOST_ALLOCATE      = "one.host.allocate"
 	ONE_HOST_DELETE        = "one.host.delete"
 	ONE_DATASTORE_ALLOCATE = "one.datastore.allocate"

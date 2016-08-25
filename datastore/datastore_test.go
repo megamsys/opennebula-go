@@ -1,12 +1,12 @@
 package datastore
-
+//
 // import (
 // 	"github.com/megamsys/opennebula-go/api"
 // 	"gopkg.in/check.v1"
 // 	"testing"
 // 	"fmt"
 // )
-// 
+//
 // func Test(t *testing.T) {
 // 	check.TestingT(t)
 // }
@@ -30,6 +30,16 @@ package datastore
 // 	vm := DatastoreTemplate{T: client}
 //   fmt.Printf("%#v",vm)
 // 	oja, err := vm.GetDATAs(2)
+// 	fmt.Println(oja)
+// 	err = nil
+// 	c.Assert(err, check.NotNil)
+// }
+
+// func (s *S) TestGetDATASTOREALLs(c *check.C) {
+// 	client, _ := api.NewClient(s.cm)
+// 	vm := DatastoreTemplate{T: client}
+//   fmt.Printf("%#v",vm)
+// 	oja, err := vm.GetALL()
 // 	fmt.Println(oja)
 // 	err = nil
 // 	c.Assert(err, check.NotNil)

@@ -53,3 +53,14 @@ func (v *DatastoreTemplate) GetDATAs(a int) ([]interface{}, error) {
 	return Datastores, nil
 
 }
+
+func (v *DatastoreTemplate) GetALL() ([]interface{}, error) {
+	args := []interface{}{v.T.Key}
+	DatastoresALL, err := v.T.Call(api.ONE_DATASTOREPOOL_INFO, args)
+	if err != nil {
+		return nil, err
+	}
+
+	return DatastoresALL, nil
+
+}
