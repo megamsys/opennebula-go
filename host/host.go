@@ -42,6 +42,7 @@ func (v *HQuery) GetVMs(a int) ([]*VM, error) {
 
 	xmlVM := Host{}
 	assert, _ := HostVMs[1].(string)
+	fmt.Println(assert)
 	if err = xml.Unmarshal([]byte(assert), &xmlVM); err != nil {
 		return nil, err
 	}
