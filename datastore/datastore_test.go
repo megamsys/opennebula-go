@@ -6,7 +6,7 @@ package datastore
 // 	"testing"
 // 	"fmt"
 // )
-//
+// 
 // func Test(t *testing.T) {
 // 	check.TestingT(t)
 // }
@@ -27,7 +27,7 @@ package datastore
 //
 // func (s *S) TestGetDATASTOREs(c *check.C) {
 // 	client, _ := api.NewClient(s.cm)
-// 	vm := HQuery{T: client}
+// 	vm := DatastoreTemplate{T: client}
 //   fmt.Printf("%#v",vm)
 // 	oja, err := vm.GetDATAs(2)
 // 	fmt.Println(oja)

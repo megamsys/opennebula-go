@@ -6,11 +6,6 @@ import (
 	"github.com/megamsys/opennebula-go/api"
 )
 
-type HQuery struct {
-	HostID string
-	T      *api.Rpc
-}
-
 type DatastoreTemplate struct {
 	Template Datastore `xml:"DATASTORES"`
 	T        *api.Rpc
@@ -48,7 +43,7 @@ func (v *DatastoreTemplate) AllocateDatastore(id int) ([]interface{}, error) {
 }
 
 
-func (v *HQuery) GetDATAs(a int) ([]interface{}, error) {
+func (v *DatastoreTemplate) GetDATAs(a int) ([]interface{}, error) {
 	args := []interface{}{v.T.Key, a}
 	Datastores, err := v.T.Call(api.ONE_DATASTORE_INFO, args)
 	if err != nil {
