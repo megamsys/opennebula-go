@@ -56,7 +56,7 @@ func (s *S) TestVnetCreate(c *check.C) {
 	err = nil
 	c.Assert(err, check.NotNil)
 }
-/*
+
 func (s *S) TestVnetAddIp(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
   temp := Vnet{}

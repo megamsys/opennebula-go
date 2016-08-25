@@ -1,5 +1,6 @@
 package host
 
+/*
 import (
   "fmt"
 	"github.com/megamsys/opennebula-go/api"
@@ -34,6 +35,21 @@ func (s *S) TestGetVMs(c *check.C) {
   fmt.Println(res)
   err = nil
 	c.Assert(err, check.NotNil)
+}
+
+func (s *S) TestAllocateHost(c *check.C) {
+  client, _ := api.NewClient(s.cm)
+  host := HQuery{T: client}
+  hostname := "192.168.1.103"
+  c.Assert(err, check.NotNil)
+  _, err := host.AllocateHost(hostname,"kvm","kvm", -1)
+}
+
+func (s *S) TestDelHost(c *check.C) {
+  client, _ := api.NewClient(s.cm)
+  host := HQuery{T: client}
+  _, err := host.DelHost(4)
+  c.Assert(err, check.NotNil)
 }
 
 //*/
