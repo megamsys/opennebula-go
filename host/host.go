@@ -42,6 +42,14 @@ func (v *HQuery) HostInfos(a int) ([]interface{}, error) {
 	return hostInfos, nil
 }
 
+func (v *HQuery) HostsPoolInfos(a int) ([]interface{}, error) {
+	args := []interface{}{v.T.Key, a}
+	hostInfos, err := v.T.Call(api.ONE_HOST_POOL, args)
+	if err != nil {
+		return nil, err
+	}
+	return hostInfos, nil
+}
 
 func (v *HQuery) AllocateHost(host, im, vm string, id int) ([]interface{}, error) {
 	args := []interface{}{v.T.Key, host, im, vm, id}
