@@ -32,6 +32,7 @@ const (
 	ONE_HOST_ALLOCATE      = "one.host.allocate"
 	ONE_HOST_DELETE        = "one.host.delete"
 	ONE_DATASTORE_ALLOCATE = "one.datastore.allocate"
+	ONE_TEMPLATE_ALLOCATE  = "one.template.allocate"
 )
 
 var (

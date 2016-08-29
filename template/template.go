@@ -3,13 +3,17 @@ package template
 import (
 	"encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
+	"fmt"
 )
 
 type UserTemplates struct {
+	T            *api.Rpc
 	UserTemplate []*UserTemplate `xml:"VMTEMPLATE"`
 }
 
 type UserTemplate struct {
+	T            *api.Rpc
+
 	Id          int          `xml:"ID"`
 	Uid         int          `xml:"UID"`
 	Gid         int          `xml:"GID"`
@@ -22,6 +26,7 @@ type UserTemplate struct {
 }
 
 type Template struct {
+	Name                     string       `xml:"NAME"`
 	Context                  *Context  `xml:"CONTEXT"`
 	Cpu                      string    `xml:"CPU"`
 	Cpu_cost                 string    `xml:"CPU_COST"`
@@ -60,6 +65,7 @@ type NIC struct {
 }
 
 type Context struct {
+	// NAME        string `xml:"NAME"`
 	Network        string `xml:"NETWORK"`
 	Files          string `xml:"FILES"`
 	SSH_Public_key string `xml:"SSH_PUBLIC_KEY"`
@@ -91,6 +97,7 @@ type Permissions struct {
 }
 
 type TemplateReqs struct {
+	TemplateSampleData Template `xml:"TEMPLATE"`
 	TemplateName string
 	TemplateId   int
 	TemplateData string
@@ -112,6 +119,19 @@ func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
 	return res, nil
 }
 
+func (v *UserTemplate) AllocateTemplate() ([]interface{}, error) {
+	finalXML := UserTemplate{}
+	finalXML.Template = v.Template
+	finalData, _ := xml.Marshal(finalXML.Template)
+	data := string(finalData)
+	args := []interface{}{v.T.Key, data}
+	res, err := v.T.Call(api.ONE_TEMPLATE_ALLOCATE, args)
+	if err != nil {
+		return nil, err
+	}
+  fmt.Println(res)
+	return res, nil
+}
 /**
  *
  * Gets a particular template with a template name given
