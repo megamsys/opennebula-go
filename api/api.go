@@ -26,6 +26,8 @@ const (
 	VM_INFO                = "one.vm.info"
 	VNET_CREATE            = "one.vn.allocate"
 	VNET_ADDIP             = "one.vn.add_ar"
+	VNET_SHOW              = "one.vn.info"
+	VNET_LIST              = "one.vnpool.info"
 	ONE_HOST_INFO          = "one.host.info"
 	ONE_DATASTORE_INFO     = "one.datastore.info"
 	ONE_DATASTOREPOOL_INFO = "one.datastorepool.info"
@@ -33,6 +35,7 @@ const (
 	ONE_HOST_DELETE        = "one.host.delete"
 	ONE_DATASTORE_ALLOCATE = "one.datastore.allocate"
 	ONE_TEMPLATE_ALLOCATE  = "one.template.allocate"
+	HOST_INFO              = "one.hostpool.info"
 )
 
 var (
