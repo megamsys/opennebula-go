@@ -1,7 +1,6 @@
 package host
 
 import (
-	"encoding/xml"
 	"fmt"
 	"github.com/megamsys/opennebula-go/api"
 )
@@ -18,6 +17,8 @@ type HQuery struct {
 type Host struct {
 	Id       int       `xml:ID`
 	HostName string    `xml:NAME`
+  // IM_mad   string    `xml:"IM_MAD"`
+  // VMM_mad  string    `xml:"VMM_MAD"`
 	Temp     *Template `xml:"TEMPLATE"`
 }
 
