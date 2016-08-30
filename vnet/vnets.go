@@ -3,7 +3,6 @@ package vnet
 import (
   "github.com/megamsys/opennebula-go/api"
   "encoding/xml"
-  //"fmt"
 )
 
 type VNETemplate struct {
@@ -52,6 +51,25 @@ func (v *VNETemplate) VnetAddIps() ([]interface{} ,error)  {
 	data := string(finalData)
 	args := []interface{}{v.T.Key,data, v.Template.Id}
 	res, err := v.T.Call(api.VNET_ADDIP, args)
+	if err != nil {
+		return nil, err
+	}
+  return res, nil
+}
+
+func (v *VNETemplate) VnetInfos(id int) ([]interface{}, error) {
+	args := []interface{}{v.T.Key, id}
+	res, err := v.T.Call(api.VNET_SHOW, args)
+	if err != nil {
+		return nil, err
+	}
+  return res, nil
+}
+
+
+func (v *VNETemplate) VnetsInfos(id int) ([]interface{}, error) {
+	args := []interface{}{v.T.Key, id, -1, -1}
+	res, err := v.T.Call(api.VNET_LIST, args)
 	if err != nil {
 		return nil, err
 	}

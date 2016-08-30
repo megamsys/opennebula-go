@@ -41,3 +41,26 @@ func (v *DatastoreTemplate) AllocateDatastore(id int) ([]interface{}, error) {
   fmt.Println(res)
 	return res, nil
 }
+
+
+func (v *DatastoreTemplate) GetDATAs(a int) ([]interface{}, error) {
+	args := []interface{}{v.T.Key, a}
+	Datastores, err := v.T.Call(api.ONE_DATASTORE_INFO, args)
+	if err != nil {
+		return nil, err
+	}
+
+	return Datastores, nil
+
+}
+
+func (v *DatastoreTemplate) GetALL() ([]interface{}, error) {
+	args := []interface{}{v.T.Key}
+	DatastoresALL, err := v.T.Call(api.ONE_DATASTOREPOOL_INFO, args)
+	if err != nil {
+		return nil, err
+	}
+
+	return DatastoresALL, nil
+
+}

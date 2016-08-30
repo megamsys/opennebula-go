@@ -1,7 +1,7 @@
 package host
 
 import (
-	"fmt"
+	// "encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
 )
 
@@ -10,15 +10,16 @@ const (
 )
 
 type HQuery struct {
-	HostID string
+	Host   *Host
 	T      *api.Rpc
 }
 
 type Host struct {
-	Id       int       `xml:ID`
-	HostName string    `xml:NAME`
-  // IM_mad   string    `xml:"IM_MAD"`
-  // VMM_mad  string    `xml:"VMM_MAD"`
+	Id       int       `xml:"ID"`
+	HostName string    `xml:"NAME"`
+	ClusterId int      `xml:"CLUSTER_ID"`
+  IM_mad   string    `xml:"IM_MAD"`
+  VMM_mad  string    `xml:"VMM_MAD"`
 	Temp     *Template `xml:"TEMPLATE"`
 }
 
@@ -39,20 +40,27 @@ func (v *HQuery) HostInfos(a int) ([]interface{}, error) {
 	hostinfo, err := v.T.Call(api.ONE_HOST_INFO, args)
 
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
   return hostinfo, nil
 }
 
-func (v *HQuery) AllocateHost(host, im, vm string, id int) ([]interface{}, error) {
-	args := []interface{}{v.T.Key, host, im, vm, id}
+func (v *HQuery) HostsPoolInfos(a int) ([]interface{}, error) {
+	args := []interface{}{v.T.Key, a}
+	hostInfos, err := v.T.Call(api.ONE_HOST_POOL, args)
+	if err != nil {
+		return nil, err
+	}
+	return hostInfos, nil
+}
+
+func (v *HQuery) AllocateHost() ([]interface{}, error) {
+	args := []interface{}{v.T.Key, v.Host.HostName, v.Host.IM_mad, v.Host.VMM_mad, v.Host.ClusterId}
 	addHost, err := v.T.Call(api.ONE_HOST_ALLOCATE, args)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(addHost)
 	return addHost, nil
 }
 
@@ -62,6 +70,5 @@ func (v *HQuery) DelHost(a int) ([]interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(delHost)
 	return delHost, nil
 }

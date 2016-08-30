@@ -1,8 +1,7 @@
 package host
 
-/*
 import (
-  "fmt"
+  // "fmt"
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
 	"testing"
@@ -25,31 +24,41 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm[api.PASSWORD] = "dyovAupAuck9"
 	s.cm = cm
 }
-
-
+/*
 func (s *S) TestGetVMs(c *check.C) {
 	client, _ := api.NewClient(s.cm)
 	vm := HQuery{T: client}
-  fmt.Printf("%#v",vm)
-	res, err := vm.HostInfos(0)
-  fmt.Println(res)
+	_, err := vm.HostInfos(2)
+  err = nil
+	c.Assert(err, check.NotNil)
+}
+
+func (s *S) TestListVMs(c *check.C) {
+	client, _ := api.NewClient(s.cm)
+	vm := HQuery{T: client}
+	_, err := vm.HostsInfos(-1)
   err = nil
 	c.Assert(err, check.NotNil)
 }
 
 func (s *S) TestAllocateHost(c *check.C) {
   client, _ := api.NewClient(s.cm)
-  host := HQuery{T: client}
-  hostname := "192.168.1.103"
+	host := &Host{
+	HostName: "192.168.1.103",
+	VMM_mad: "kvm",
+	IM_mad: "kvm",
+	ClusterId: -1,
+	}
+  hq := HQuery{T: client, Host: host}
+	_, err := hq.AllocateHost()
   c.Assert(err, check.NotNil)
-  _, err := host.AllocateHost(hostname,"kvm","kvm", -1)
-}
 
+}
+/*
 func (s *S) TestDelHost(c *check.C) {
   client, _ := api.NewClient(s.cm)
   host := HQuery{T: client}
   _, err := host.DelHost(4)
   c.Assert(err, check.NotNil)
 }
-
-//*/
+*/
