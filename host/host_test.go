@@ -1,6 +1,4 @@
 package host
-
-
 import (
   // "fmt"
 	"github.com/megamsys/opennebula-go/api"

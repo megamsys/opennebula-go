@@ -22,7 +22,7 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
   cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "dyovAupAuck9"
+	cm[api.PASSWORD] = "bbbbb"
 	s.cm = cm
 }
 
@@ -88,6 +88,5 @@ func (s *S) SetUpSuite(c *check.C) {
 //
 //   c.Assert(v, check.NotNil)
 //   res, err := v.VnetAddIps()
-//   fmt.Println(res)
 //   c.Assert(err, check.IsNil)
 // }

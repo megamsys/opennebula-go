@@ -35,7 +35,6 @@ type VM struct {
 // Given a name, this function will return the VM
 func (v *HQuery) HostInfos(a int) ([]interface{}, error) {
 	args := []interface{}{v.T.Key, a}
-	fmt.Println(args)
 	hostInfos, err := v.T.Call(api.ONE_HOST_INFO, args)
 	if err != nil {
 		return nil, err
@@ -43,15 +42,14 @@ func (v *HQuery) HostInfos(a int) ([]interface{}, error) {
 	return hostInfos, nil
 }
 
-func (v *HQuery) HostsInfos(a int) ([]interface{}, error) {
+func (v *HQuery) HostsPoolInfos(a int) ([]interface{}, error) {
 	args := []interface{}{v.T.Key, a}
-	hostInfos, err := v.T.Call(api.HOST_INFO, args)
+	hostInfos, err := v.T.Call(api.ONE_HOST_POOL, args)
 	if err != nil {
 		return nil, err
 	}
 	return hostInfos, nil
 }
-
 
 func (v *HQuery) AllocateHost(host, im, vm string, id int) ([]interface{}, error) {
 	args := []interface{}{v.T.Key, host, im, vm, id}
@@ -59,7 +57,6 @@ func (v *HQuery) AllocateHost(host, im, vm string, id int) ([]interface{}, error
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(addHost)
 	return addHost, nil
 }
 
@@ -69,6 +66,5 @@ func (v *HQuery) DelHost(a int) ([]interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(delHost)
 	return delHost, nil
 }
