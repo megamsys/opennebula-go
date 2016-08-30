@@ -7,13 +7,11 @@ import (
 )
 
 type UserTemplates struct {
-	T            *api.Rpc
 	UserTemplate []*UserTemplate `xml:"VMTEMPLATE"`
 }
 
 type UserTemplate struct {
 	T            *api.Rpc
-
 	Id          int          `xml:"ID"`
 	Uid         int          `xml:"UID"`
 	Gid         int          `xml:"GID"`
@@ -65,7 +63,6 @@ type NIC struct {
 }
 
 type Context struct {
-	// NAME        string `xml:"NAME"`
 	Network        string `xml:"NETWORK"`
 	Files          string `xml:"FILES"`
 	SSH_Public_key string `xml:"SSH_PUBLIC_KEY"`
@@ -97,8 +94,7 @@ type Permissions struct {
 }
 
 type TemplateReqs struct {
-	TemplateSampleData Template `xml:"TEMPLATE"`
-	TemplateName string
+		TemplateName string
 	TemplateId   int
 	TemplateData string
 	T            *api.Rpc
