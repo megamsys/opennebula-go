@@ -22,8 +22,38 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
   cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "bbbbb"
+	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
+}
+/*
+func (s *S) TestVnetCreate(c *check.C) {
+	cl, _ := api.NewClient(s.cm)
+  temp := Vnet{}
+  ar := &Address{
+      Type: "IP4",
+      Size: "1",
+      StartIP: "192.168.1.128",
+    }
+  temp.Addrs = append(temp.Addrs,ar)
+  t := Vnet{
+    Name: "vnet2",
+    Type: "fixed",
+    Description: "vnet for iPV4 ",
+    Bridge: "one",
+    Network_addr: "10.0.0.0",
+    Network_mask: "255.255.255.0",
+    Dns: "10.0.0.1",
+    Gateway: "10.0.0.1",
+    Vn_mad: "dummy",
+    Addrs: temp.Addrs,
+  }
+	v := VNETemplate{T: cl, Template: t}
+
+	c.Assert(v, check.NotNil)
+	res, err := v.CreateVnet(-1)
+	fmt.Println(res)
+	err = nil
+	c.Assert(err, check.NotNil)
 }
 
 // func (s *S) TestGetVNets(c *check.C) {
@@ -38,35 +68,6 @@ func (s *S) SetUpSuite(c *check.C) {
 // 	vm := VNETemplate{T: client}
 // 	_, err := vm.VnetsInfos(-1)
 //   err = nil
-// 	c.Assert(err, check.NotNil)
-// }
-// func (s *S) TestVnetCreate(c *check.C) {
-// 	cl, _ := api.NewClient(s.cm)
-//   temp := Vnet{}
-//   ar := &Address{
-//       Type: "IP4",
-//       Size: "1",
-//       StartIP: "192.168.1.128",
-//     }
-//   temp.Addrs = append(temp.Addrs,ar)
-//   t := Vnet{
-//     Name: "vnet1",
-//     Type: "fixed",
-//     Description: "vnet for iPV4 ",
-//     Bridge: "one",
-//     Network_addr: "10.0.0.0",
-//     Network_mask: "255.255.255.0",
-//     Dns: "10.0.0.1",
-//     Gateway: "10.0.0.1",
-//     Vn_mad: "dummy",
-//     Addrs: temp.Addrs,
-//   }
-// 	v := VNETemplate{T: cl, Template: t}
-//
-// 	c.Assert(v, check.NotNil)
-//
-// 	_, err := v.CreateVnet(-1)
-// 	err = nil
 // 	c.Assert(err, check.NotNil)
 // }
 
@@ -90,3 +91,4 @@ func (s *S) SetUpSuite(c *check.C) {
 //   res, err := v.VnetAddIps()
 //   c.Assert(err, check.IsNil)
 // }
+*/

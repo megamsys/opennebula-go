@@ -3,7 +3,6 @@ package vnet
 import (
   "github.com/megamsys/opennebula-go/api"
   "encoding/xml"
-  "fmt"
 )
 
 type VNETemplate struct {
@@ -12,23 +11,23 @@ type VNETemplate struct {
 }
 
 type Vnet struct {
-  Id             int    `xml:"ID"`
-  Name           string `xml:"NAME"`
-  Type           string  `xml:"TYPE"`
-  Description    string `xml:"DESCRIPTION"`
-  Bridge         string `xml:"BRIDGE"`
-  Network_addr   string `xml:"NETWORK_ADDRESS"`
-  Network_mask   string `xml:"NETWORK_MASK"`
-  Dns            string `xml:"DNS"`
-  Gateway        string `xml:"GATEWAY"`
-  Vn_mad         string  `xml:"VN_MAD"`
-  Addrs          []*Address  `xml:"AR"`
+  Id             int    `json:"id" xml:"ID"`
+  Name           string `json:"name" xml:"NAME"`
+  Type           string  `json:"type" xml:"TYPE"`
+  Description    string `json:"description" xml:"DESCRIPTION"`
+  Bridge         string `json:"bridge" xml:"BRIDGE"`
+  Network_addr   string `json:"network_addr" xml:"NETWORK_ADDRESS"`
+  Network_mask   string `json:"network_mask" xml:"NETWORK_MASK"`
+  Dns            string `json:"dns" xml:"DNS"`
+  Gateway        string `json:"gateway" xml:"GATEWAY"`
+  Vn_mad         string  `json:"vn_mad" xml:"VN_MAD"`
+  Addrs          []*Address  `json:"addrs" xml:"AR"`
 }
 
 type Address struct {
-  Type        string `xml:"TYPE"`
-  StartIP     string `xml:"IP"`
-  Size        string `xml:"SIZE"`
+  Type        string `json:"type" xml:"TYPE"`
+  StartIP     string `json:"ip" xml:"IP"`
+  Size        string `json:"size" xml:"SIZE"`
 }
 
 func (v *VNETemplate) CreateVnet(id int) ([]interface{} ,error)  {
@@ -42,7 +41,7 @@ func (v *VNETemplate) CreateVnet(id int) ([]interface{} ,error)  {
 	if err != nil {
 		return nil, err
 	}
-    return res, nil
+  return res, nil
 }
 
 func (v *VNETemplate) VnetAddIps() ([]interface{} ,error)  {
