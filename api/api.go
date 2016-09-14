@@ -24,6 +24,7 @@ const (
 	TEMPLATEPOOL_INFO      = "one.templatepool.info"
 	TEMPLATE_UPDATE        = "one.template.update"
 	VM_INFO                = "one.vm.info"
+	DISK_CREATE            = "one.vm.attach"
 	VNET_CREATE            = "one.vn.allocate"
 	VNET_ADDIP             = "one.vn.add_ar"
 	VNET_SHOW              = "one.vn.info"
