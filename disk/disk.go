@@ -70,7 +70,12 @@ func (v *VmDisk) ListDisk() (*Vm, error) {
 	if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {
 		return nil, err
 	}
+	xmlVM.GetDisk()
 	return xmlVM, err
+}
+
+func (u *Vm) GetDisk() []Disk{
+return u.VmTemplate.Disk
 }
 
 func (u *Vm) GetDiskId() []int{
