@@ -22,8 +22,8 @@ import (
  	cm[api.PASSWORD] = "WuedmopFupt6"
  	s.cm = cm
  }
-
- func (s *S) TestDatastoreAllocate(c *check.C) {
+/*
+ func (s *S) TestDiskAttach(c *check.C) {
  	cl, _ := api.NewClient(s.cm)
 	d := Disk{
 //Disk_Type:    "FS",
@@ -32,10 +32,32 @@ import (
   //Target:       "vdc",
 }
 	t := Vm{Disk: d}
- 	v := VmDisk{T: cl, VmId: 0, Vm: t}
+ 	v := VmDisk{T: cl, VmId: 335, Vm: t}
 
  	c.Assert(v, check.NotNil)
 	_, err := v.AttachDisk()
  	err = nil
- 	c.Assert(err, check.IsNil)
+ 	c.Assert(err, check.NotNil)
  }
+
+ func (s *S) TestDiskDetach(c *check.C) {
+  cl, _ := api.NewClient(s.cm)
+  d := Disk{
+ Disk_Id:    4,
+ }
+  t := Vm{Disk: d}
+  v := VmDisk{T: cl, VmId: 335, Vm: t}
+
+  c.Assert(v, check.NotNil)
+  _, err := v.DetachDisk()
+  err = nil
+  c.Assert(err, check.NotNil)
+ }
+*/
+
+func (s *S) TestGetVMDisk(c *check.C) {
+	client, _ := api.NewClient(s.cm)
+	vm := VmDisk{VmId: 335, T: client}
+	_, err := vm.ListDisk()
+	c.Assert(err, check.IsNil)
+}
