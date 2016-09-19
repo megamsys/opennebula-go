@@ -15,6 +15,7 @@ const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"
 	ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
+	ONE_IMAGE_REMOVE     = "one.image.delete"
 	DELETE               = "delete"
 	REBOOT               = "reboot"
 	POWEROFF             = "poweroff"
@@ -42,6 +43,15 @@ type VirtualMachine struct {
 	Vnets        map[string]string
 	T            *api.Rpc
 }
+
+type Image struct {
+	Name         string
+	VMId         int
+	ImageId      int
+	Region       string
+	T            *api.Rpc
+}
+
 
 // Creates a new VirtualMachine
 func (v *VirtualMachine) Create() ([]interface{}, error) {
@@ -165,7 +175,7 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
  * VM save as a new Image (DISK_SNAPSHOT)
  *
  **/
-func (v *VirtualMachine) DiskSnap() ([]interface{}, error) {
+func (v *Image) DiskSnap() ([]interface{}, error) {
 
 	args := []interface{}{v.T.Key, v.VMId, 0, v.Name, "", -1}
 	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
@@ -176,6 +186,18 @@ func (v *VirtualMachine) DiskSnap() ([]interface{}, error) {
 	}
 
 	return res, nil
+}
+
+func (v *Image) RemoveImage() ([]interface{}, error) {
+	args := []interface{}{v.T.Key, v.ImageId}
+	res, err := v.T.Call(ONE_IMAGE_REMOVE, args)
+	//close connection
+	defer v.T.Client.Close()
+	if err != nil {
+		return nil,err
+	}
+
+	return res,nil
 }
 
 func listByName(name string, client *api.Rpc) (*virtualmachine.UserVM, error) {
