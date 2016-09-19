@@ -73,11 +73,11 @@ func (v *VmDisk) ListDisk() (*Vm, error) {
 	return xmlVM, err
 }
 
-func (u *Vm) GetDisk() []Disk{
-return u.VmTemplate.Disk
+func (u *Vm) GetDisks() []Disk{
+  return u.VmTemplate.Disk
 }
 
-func (u *Vm) GetDiskId() []int{
+func (u *Vm) GetDiskIds() []int{
 	var diskid []int
 for  _, v := range u.VmTemplate.Disk {
 	if v.Disk_Type == "fs" {
