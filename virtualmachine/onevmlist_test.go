@@ -1,5 +1,5 @@
 package virtualmachine
-/*
+
 import (
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
@@ -9,8 +9,7 @@ import (
 
 func (s *S) TestGetVMTemplate(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	vm := Vnc{VmId: "228", T: client}
+	vm := Vnc{VmId: "573", T: client}
 	_, err := vm.GetVm()
 	c.Assert(err, check.NotNil)
 }
-*/

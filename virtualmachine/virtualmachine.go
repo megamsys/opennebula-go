@@ -30,8 +30,7 @@ func (v *Query) GetByName() ([]*UserVM, error) {
 	}
 
 	xmlVM := UserVMs{}
-	assert, _ := VMPool[1].(string)
-	if err = xml.Unmarshal([]byte(assert), &xmlVM); err != nil {
+	if err = xml.Unmarshal([]byte(VMPool), &xmlVM); err != nil {
 		return nil, err
 	}
 	var matchedVM = make([]*UserVM, len(xmlVM.UserVM))

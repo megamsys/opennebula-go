@@ -1,6 +1,7 @@
 package virtualmachine
 
 import (
+	"fmt"
 	"encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
 	"strconv"
@@ -40,6 +41,7 @@ type Graphics struct {
 }
 
 func (v *Vnc) GetVm() (*VM, error) {
+		fmt.Println("**********%%%%%%%%%%%%%%%%%*****  1")
 	intstr, _ := strconv.Atoi(v.VmId)
 	args := []interface{}{v.T.Key, intstr}
 	onevm, err := v.T.Call(api.VM_INFO, args)
@@ -47,11 +49,15 @@ func (v *Vnc) GetVm() (*VM, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("**********%%%%%%%%%%%%%%%%%*****  2")
+
+
 	xmlVM := &VM{}
-	assert, _ := onevm[1].(string)
-	if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {
+	if err = xml.Unmarshal([]byte(onevm), xmlVM); err != nil {
 		return nil, err
 	}
+		fmt.Println("**********%%%%%%%%%%%%%%%%%*****",xmlVM)
+
 
 	return xmlVM, err
 }

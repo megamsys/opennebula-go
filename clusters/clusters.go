@@ -48,7 +48,7 @@ type Vnet struct {
    ID    []*string `xml:"ID"`
 }
 
-func (c *Clusters) ClusterPoolinfo() ([]interface{}, error) {
+func (c *Clusters) ClusterPoolinfo() (interface{}, error) {
   args := []interface{}{c.T.Key}
 	res, err := c.T.Call(GETCLUSTERS, args)
 	//close connection
@@ -61,7 +61,7 @@ func (c *Clusters) ClusterPoolinfo() ([]interface{}, error) {
 
 }
 
-func (c *Clusters) ClusterInfo(cname string) ([]interface{}, error) {
+func (c *Clusters) ClusterInfo(cname string) (interface{}, error) {
   id ,err := c.GetByName(cname)
   if err != nil {
     return nil, err
@@ -79,7 +79,7 @@ func (c *Clusters) ClusterInfo(cname string) ([]interface{}, error) {
 
 }
 
-func (c *Clusters) CreateCluster(name string) ([]interface{}, error) {
+func (c *Clusters) CreateCluster(name string) (interface{}, error) {
   args := []interface{}{c.T.Key,name}
   res, err := c.T.Call(CREATE_CLUSTER,args)
   //close connection
@@ -90,19 +90,14 @@ func (c *Clusters) CreateCluster(name string) ([]interface{}, error) {
   return res, nil
 }
 
-func (c *Clusters) ClusterAddResources(method string,cid,rid int) ([]interface{}, error) {
-  // id ,err := c.GetByName(cname)
-  // if err != nil {
-  //   return nil, err
-  // }
+func (c *Clusters) ClusterAddResources(method string,cid,rid int) (interface{}, error) {
 
-  fmt.Println(method)
   args := []interface{}{c.T.Key,cid,rid}
-  res, Err := c.T.Call(method,args)
+  res, err := c.T.Call(method,args)
   //close connection
   defer c.T.Client.Close()
-  if Err != nil {
-    return nil, Err
+  if err != nil {
+    return nil, err
   }
   return res, nil
 }
@@ -119,8 +114,7 @@ func (c *Clusters) GetByName(name string) (int, error) {
 	}
 
   xmlCLS := &Clusters{}
-  assert := res[1].(string)
-  if err = xml.Unmarshal([]byte(assert), xmlCLS); err != nil {
+  if err = xml.Unmarshal([]byte(res), xmlCLS); err != nil {
      fmt.Println(err)
   }
 
@@ -135,7 +129,7 @@ func (c *Clusters) GetByName(name string) (int, error) {
 }
 
 
-func (c *Clusters) AddVnet(cls_id,vnet int) ([]interface{}, error) {
+func (c *Clusters) AddVnet(cls_id,vnet int) (interface{}, error) {
   args := []interface{}{c.T.Key,cls_id,vnet}
   res, err := c.T.Call(CLUSTER_ADDVNET,args)
   //close connection

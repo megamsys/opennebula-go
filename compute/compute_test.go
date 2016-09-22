@@ -1,7 +1,7 @@
 package compute
-
+/*
 import (
-	//"fmt"
+	"fmt"
 	"testing"
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
@@ -19,16 +19,15 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://192.168.0.117:2633/RPC2"
+	cm[api.ENDPOINT] = "http://192.168.0.118:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "dyovAupAuck9"
+	cm[api.PASSWORD] = "WuedmopFupt6"
 	s.cm = cm
 }
 
-/*
+
 func (s *S) TestCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
-	fmt.Println(cl)
 	v := VirtualMachine {
 		Name: "testmegam4",
 		TemplateName: "megam",
@@ -38,12 +37,14 @@ func (s *S) TestCreate(c *check.C) {
 		ClusterId: "101" ,
 		T: cl,
 		ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007", ACCOUNTS_ID: "info@megam.io"},
-		Vnets:map[string]string{"0":"pub2_ipv4"},
+		Vnets:map[string]string{"0":"ipv4-pri"},
 		} //memory in terms of MB! duh!
 
 	c.Assert(v, check.NotNil)
   res, err := v.Create()
-	fmt.Println(res)
+	fmt.Println("res  :",res)
+	fmt.Println(err)
+	err = nil
 	c.Assert(err, check.NotNil)
 }
 /*
