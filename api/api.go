@@ -79,8 +79,6 @@ func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 		return "", err
 	}
 
-	fmt.Println("%%%%%%%%%%%%%%%%%%  3")
-
 	res, err := c.IsSuccess(result)
 	if err != nil {
 		return "", err
