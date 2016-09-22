@@ -92,7 +92,6 @@ func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 
 func (c *Rpc) IsSuccess(result []interface{}) (string, error) {
 	var res string
-		fmt.Println("**********%%%%%%%%%%%%%%%%%*****  4")
   isSuccess := result[0].(bool)
 
 	if !isSuccess {
