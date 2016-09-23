@@ -1,9 +1,9 @@
 package compute
 
 import (
+
 	"encoding/xml"
 	"errors"
-
 	"github.com/megamsys/opennebula-go/api"
 	"github.com/megamsys/opennebula-go/template"
 	"github.com/megamsys/opennebula-go/virtualmachine"
@@ -54,13 +54,13 @@ type Image struct {
 
 
 // Creates a new VirtualMachine
-func (v *VirtualMachine) Create() ([]interface{}, error) {
+func (v *VirtualMachine) Create() (interface{}, error) {
 	templateObj := template.TemplateReqs{TemplateName: v.TemplateName, T: v.T}
 	defer v.T.Client.Close()
 
 	XMLtemplate, err := templateObj.Get()
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
 
 	XMLtemplate[0].Template.Cpu = v.Cpu
@@ -90,25 +90,27 @@ func (v *VirtualMachine) Create() ([]interface{}, error) {
 	args := []interface{}{v.T.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
 	res, err := v.T.Call(TEMPLATE_INSTANTIATE, args)
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
+
 	return res, nil
 }
+
 
 /**
 *
 * REBoot a new virtualMachine
 *
 **/
-func (v *VirtualMachine) Reboot() ([]interface{}, error) {
+func (v *VirtualMachine) Reboot() (interface{}, error) {
 
 	args := []interface{}{v.T.Key, REBOOT, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
+	if err != nil {
+		return nil,err
+	}
 	//close connection
 	defer v.T.Client.Close()
-	if err != nil {
-		return nil, err
-	}
 
 	return res, nil
 
@@ -119,14 +121,14 @@ func (v *VirtualMachine) Reboot() ([]interface{}, error) {
 * POWEROFF a new virtualMachine
 *
 **/
-func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
+func (v *VirtualMachine) Poweroff() (interface{}, error) {
 
 	args := []interface{}{v.T.Key, POWEROFF, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
-	defer v.T.Client.Close()
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
+	defer v.T.Client.Close()
 
 	return res, nil
 
@@ -137,14 +139,14 @@ func (v *VirtualMachine) Poweroff() ([]interface{}, error) {
 * Resume a new virtualMachine
 *
 **/
-func (v *VirtualMachine) Resume() ([]interface{}, error) {
+func (v *VirtualMachine) Resume() (interface{}, error) {
 
 	args := []interface{}{v.T.Key, RESUME, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
 	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
 
 	return res, nil
@@ -156,14 +158,14 @@ func (v *VirtualMachine) Resume() ([]interface{}, error) {
  * Deletes a new virtualMachine
  *
  **/
-func (v *VirtualMachine) Delete() ([]interface{}, error) {
+func (v *VirtualMachine) Delete() (interface{}, error) {
 
 	args := []interface{}{v.T.Key, DELETE, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
 	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
 
 	return res, nil
@@ -177,34 +179,32 @@ func (v *VirtualMachine) Delete() ([]interface{}, error) {
  **/
 
 
-	func (v *VirtualMachine) DiskSnap() ([]interface{}, error) {
+	func (v *VirtualMachine) DiskSnap() (interface{}, error) {
 
 		args := []interface{}{v.T.Key, v.VMId, 0, v.Name, "", -1}
 		res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
 		//close connection
 		defer v.T.Client.Close()
 		if err != nil {
-			return nil, err
+			return nil,err
 		}
 
 		return res, nil
 	}
 
 
-func (v *Image) DiskSnap() ([]interface{}, error) {
-
+func (v *Image) DiskSnap() (interface{}, error) {
 	args := []interface{}{v.T.Key, v.VMId, 0, v.Name, "", -1}
 	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
 	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
-
 	return res, nil
 }
 
-func (v *Image) RemoveImage() ([]interface{}, error) {
+func (v *Image) RemoveImage() (interface{}, error) {
 	args := []interface{}{v.T.Key, v.ImageId}
 	res, err := v.T.Call(ONE_IMAGE_REMOVE, args)
 	//close connection

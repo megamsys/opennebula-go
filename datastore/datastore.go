@@ -2,7 +2,6 @@ package datastore
 
 import (
 	"encoding/xml"
-	"fmt"
 	"github.com/megamsys/opennebula-go/api"
 )
 
@@ -28,39 +27,38 @@ type Datastore struct {
   Vg_name     string `xml:"VG_NAME"`
 }
 
-func (v *DatastoreTemplate) AllocateDatastore(id int) ([]interface{}, error) {
+func (v *DatastoreTemplate) AllocateDatastore(cluster_id int) (interface{}, error) {
 	finalXML := DatastoreTemplate{}
 	finalXML.Template = v.Template
 	finalData, _ := xml.Marshal(finalXML.Template)
 	data := string(finalData)
-	args := []interface{}{v.T.Key, data, id}
+	args := []interface{}{v.T.Key, data, cluster_id}
 	res, err := v.T.Call(api.ONE_DATASTORE_ALLOCATE, args)
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
-  fmt.Println(res)
+
 	return res, nil
 }
 
 
-func (v *DatastoreTemplate) GetDATAs(a int) ([]interface{}, error) {
+func (v *DatastoreTemplate) GetDATAs(a int) (interface{}, error) {
 	args := []interface{}{v.T.Key, a}
-	Datastores, err := v.T.Call(api.ONE_DATASTORE_INFO, args)
+	datastore, err := v.T.Call(api.ONE_DATASTORE_INFO, args)
 	if err != nil {
 		return nil, err
 	}
-
-	return Datastores, nil
+	return datastore, nil
 
 }
 
-func (v *DatastoreTemplate) GetALL() ([]interface{}, error) {
+func (v *DatastoreTemplate) GetALL() (interface{}, error) {
 	args := []interface{}{v.T.Key}
-	DatastoresALL, err := v.T.Call(api.ONE_DATASTOREPOOL_INFO, args)
+	datastores, err := v.T.Call(api.ONE_DATASTOREPOOL_INFO, args)
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
 
-	return DatastoresALL, nil
+	return datastores, nil
 
 }

@@ -53,7 +53,7 @@ import (
   err = nil
   c.Assert(err, check.NotNil)
  }
-*/
+
 
 func (s *S) TestGetVMDisk(c *check.C) {
 	client, _ := api.NewClient(s.cm)
@@ -61,3 +61,4 @@ func (s *S) TestGetVMDisk(c *check.C) {
 	_, err := vm.ListDisk()
 	c.Assert(err, check.IsNil)
 }
+*/

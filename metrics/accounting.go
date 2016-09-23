@@ -1,10 +1,10 @@
 package metrics
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"github.com/megamsys/opennebula-go/api"
 	"strconv"
 	"time"
-	log "github.com/Sirupsen/logrus"
 )
 
 type Accounting struct {
@@ -13,13 +13,12 @@ type Accounting struct {
 	EndTime   int64
 }
 
-func (a *Accounting) Get() ([]interface{}, error) {
+func (a *Accounting) Get() (interface{}, error) {
 	log.Debugf("showback Get (%d, %d) started", a.StartTime, a.EndTime)
 	args := []interface{}{a.Api.Key, -2, -1, a.StartTime, a.EndTime}
 	res, err := a.Api.Call(api.VMPOOL_ACCOUNTING, args)
-
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
 	return res, nil
 }

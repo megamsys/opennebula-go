@@ -43,16 +43,14 @@ func (v *Vnc) GetVm() (*VM, error) {
 	intstr, _ := strconv.Atoi(v.VmId)
 	args := []interface{}{v.T.Key, intstr}
 	onevm, err := v.T.Call(api.VM_INFO, args)
-	defer v.T.Client.Close()
 	if err != nil {
 		return nil, err
 	}
+
 	xmlVM := &VM{}
-	assert, _ := onevm[1].(string)
-	if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {
+	if err = xml.Unmarshal([]byte(onevm), xmlVM); err != nil {
 		return nil, err
 	}
-
 	return xmlVM, err
 }
 

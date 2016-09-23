@@ -12,21 +12,21 @@ type VmDisk struct {
 }
 
 type Vm struct {
-	VmTemplate     VmTemplate     `xml:"TEMPLATE"`
-  Disk Disk `xml:"DISK"`
+	VmTemplate VmTemplate `xml:"TEMPLATE"`
+	Disk       Disk       `xml:"DISK"`
 }
 type VmTemplate struct {
 	Disk []Disk `xml:"DISK"`
 }
 type Disk struct {
-	Disk_Id    int `xml:"DISK_ID"`
+	Disk_Id    int    `xml:"DISK_ID"`
 	Disk_Type  string `xml:"TYPE"`
 	Dev_Prefix string `xml:"DEV_PREFIX"`
 	Size       string `xml:"SIZE"`
 	Target     string `xml:"TARGET"`
 }
 
-func (v *VmDisk) AttachDisk() ([]interface{}, error) {
+func (v *VmDisk) AttachDisk() (interface{}, error) {
 	if v.Vm.Disk.Dev_Prefix == "" {
 		v.Vm.Disk.Dev_Prefix = "vd"
 	}
@@ -41,18 +41,18 @@ func (v *VmDisk) AttachDisk() ([]interface{}, error) {
 	res, err := v.T.Call(api.DISK_ATTACH, args)
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
 	return res, err
 
 }
 
-func (v *VmDisk) DetachDisk() ([]interface{}, error) {
+func (v *VmDisk) DetachDisk() (interface{}, error) {
 	args := []interface{}{v.T.Key, v.VmId, v.Vm.Disk.Disk_Id}
 	res, err := v.T.Call(api.DISK_DETACH, args)
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
 	return res, err
 
@@ -66,23 +66,22 @@ func (v *VmDisk) ListDisk() (*Vm, error) {
 		return nil, err
 	}
 	xmlVM := &Vm{}
-	assert, _ := onevm[1].(string)
-	if err = xml.Unmarshal([]byte(assert), xmlVM); err != nil {
+	if err = xml.Unmarshal([]byte(onevm), xmlVM); err != nil {
 		return nil, err
 	}
 	return xmlVM, err
 }
 
-func (u *Vm) GetDisks() []Disk{
-  return u.VmTemplate.Disk
+func (u *Vm) GetDisks() []Disk {
+	return u.VmTemplate.Disk
 }
 
-func (u *Vm) GetDiskIds() []int{
+func (u *Vm) GetDiskIds() []int {
 	var diskid []int
-for  _, v := range u.VmTemplate.Disk {
-	if v.Disk_Type == "fs" {
-	diskid = append(diskid,v.Disk_Id)
-}
-}
-return diskid
+	for _, v := range u.VmTemplate.Disk {
+		if v.Disk_Type == "fs" {
+			diskid = append(diskid, v.Disk_Id)
+		}
+	}
+	return diskid
 }

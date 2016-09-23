@@ -1,9 +1,10 @@
 package api
 
 import (
+	"fmt"
 	"errors"
 	"strings"
-
+	"strconv"
 	log "github.com/Sirupsen/logrus"
 	"github.com/kolo/xmlrpc"
 	"github.com/megamsys/libgo/cmd"
@@ -68,19 +69,41 @@ func NewClient(config map[string]string) (*Rpc, error) {
 		Key:    config[USERID] + ":" + config[PASSWORD]}, nil
 }
 
-func (c *Rpc) Call(command string, args []interface{}) ([]interface{}, error) {
+func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 	log.Debugf(cmd.Colorfy("  > [one-go] ", "blue", "", "bold")+"%s", command)
 	log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)
 
 	result := []interface{}{}
 
 	if err := c.Client.Call(command, args, &result); err != nil {
-		return nil, err
+		return "", err
+	}
+
+	res, err := c.IsSuccess(result)
+	if err != nil {
+		return "", err
 	}
 	//log.Debugf(cmd.Colorfy("\n> response ", "cyan", "", "bold")+" %v", result)
 	log.Debugf(cmd.Colorfy("  > [one-go] ( ´ ▽ ` ) SUCCESS", "blue", "", "bold"))
-	return result, nil
+	return res, nil
 }
+
+func (c *Rpc) IsSuccess(result []interface{}) (string, error) {
+	var res string
+  isSuccess := result[0].(bool)
+
+	if !isSuccess {
+	return "", fmt.Errorf("%s",result[1].(string))
+	}
+	if w, ok := result[1].(int64); ok {
+     res = strconv.FormatInt(w, 10)
+  } else if w, ok := result[1].(string); ok {
+    res = w
+	}
+  //result[1] is error message or ID of action vm,vnet,cluster and etc.,
+  return res , nil
+}
+
 
 func satisfied(c map[string]string) bool {
 	return len(strings.TrimSpace(c[ENDPOINT])) > 0 &&

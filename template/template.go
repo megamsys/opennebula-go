@@ -3,7 +3,6 @@ package template
 import (
 	"encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
-	"fmt"
 )
 
 type UserTemplates struct {
@@ -11,7 +10,7 @@ type UserTemplates struct {
 }
 
 type UserTemplate struct {
-	T            *api.Rpc
+	T           *api.Rpc
 	Id          int          `xml:"ID"`
 	Uid         int          `xml:"UID"`
 	Gid         int          `xml:"GID"`
@@ -24,7 +23,7 @@ type UserTemplate struct {
 }
 
 type Template struct {
-	Name                     string       `xml:"NAME"`
+	Name                     string    `xml:"NAME"`
 	Context                  *Context  `xml:"CONTEXT"`
 	Cpu                      string    `xml:"CPU"`
 	Cpu_cost                 string    `xml:"CPU_COST"`
@@ -94,7 +93,7 @@ type Permissions struct {
 }
 
 type TemplateReqs struct {
-		TemplateName string
+	TemplateName string
 	TemplateId   int
 	TemplateData string
 	T            *api.Rpc
@@ -105,17 +104,16 @@ type TemplateReqs struct {
  * Given a templateId it would return the XML of that particular template
  *
  **/
-func (t *TemplateReqs) GetTemplate() ([]interface{}, error) {
+func (t *TemplateReqs) GetTemplate() (interface{}, error) {
 	args := []interface{}{t.T.Key, -2, t.TemplateId, t.TemplateId}
 	res, err := t.T.Call(api.TEMPLATEPOOL_INFO, args)
-
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
 	return res, nil
 }
 
-func (v *UserTemplate) AllocateTemplate() ([]interface{}, error) {
+func (v *UserTemplate) AllocateTemplate() (interface{}, error) {
 	finalXML := UserTemplate{}
 	finalXML.Template = v.Template
 	finalData, _ := xml.Marshal(finalXML.Template)
@@ -123,11 +121,11 @@ func (v *UserTemplate) AllocateTemplate() ([]interface{}, error) {
 	args := []interface{}{v.T.Key, data}
 	res, err := v.T.Call(api.ONE_TEMPLATE_ALLOCATE, args)
 	if err != nil {
-		return nil, err
+		return nil,err
 	}
-  fmt.Println(res)
 	return res, nil
 }
+
 /**
  *
  * Gets a particular template with a template name given
@@ -139,15 +137,10 @@ func (t *TemplateReqs) Get() ([]*UserTemplate, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	xmlStrt := UserTemplates{}
-
-	assert := templatePool[1].(string)
-
-	if err = xml.Unmarshal([]byte(assert), &xmlStrt); err != nil {
+	if err = xml.Unmarshal([]byte(templatePool), &xmlStrt); err != nil {
 		return nil, err
 	}
-
 	var matchedTemplate = make([]*UserTemplate, len(xmlStrt.UserTemplate))
 
 	for _, v := range xmlStrt.UserTemplate {
