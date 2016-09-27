@@ -179,20 +179,6 @@ func (v *VirtualMachine) Delete() (interface{}, error) {
  **/
 
 
-	func (v *VirtualMachine) DiskSnap() (interface{}, error) {
-
-		args := []interface{}{v.T.Key, v.VMId, 0, v.Name, "", -1}
-		res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
-		//close connection
-		defer v.T.Client.Close()
-		if err != nil {
-			return nil,err
-		}
-
-		return res, nil
-	}
-
-
 func (v *Image) DiskSnap() (interface{}, error) {
 	args := []interface{}{v.T.Key, v.VMId, 0, v.Name, "", -1}
 	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
