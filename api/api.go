@@ -39,6 +39,8 @@ const (
 	ONE_DATASTORE_ALLOCATE = "one.datastore.allocate"
 	ONE_TEMPLATE_ALLOCATE  = "one.template.allocate"
 	ONE_HOST_POOL          = "one.hostpool.info"
+	ONE_IMAGE_SHOW         = "one.image.info"
+	ONE_IMAGE_LIST         = "one.imagepool.info"
 )
 
 var (

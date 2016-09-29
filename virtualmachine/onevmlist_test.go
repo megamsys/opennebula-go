@@ -9,7 +9,7 @@ import (
 
 func (s *S) TestGetVMTemplate(c *check.C) {
 	client, _ := api.NewClient(s.cm)
-	vm := Vnc{VmId: "573", T: client}
+	vm := Vnc{VmId: "2", T: client}
 	_, err := vm.GetVm()
-	c.Assert(err, check.NotNil)
+	c.Assert(err, check.IsNil)
 }
