@@ -23,6 +23,7 @@ const (
 	ASSEMBLY_ID          = "assembly_id"
 	ASSEMBLIES_ID        = "assemblies_id"
 	ACCOUNTS_ID          = "accounts_id"
+	ORG_ID               = "org_id"
 	PLATFORM_ID          = "platform_id"
 	SSH_PUBLIC_KEY       = "SSH_PUBLIC_KEY"
 )
@@ -72,6 +73,7 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	XMLtemplate[0].Template.Context.Platform_id = v.ContextMap[PLATFORM_ID]
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
 	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
+	XMLtemplate[0].Template.Context.Org_id = v.ContextMap[ORG_ID]
 	XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
 	XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\"" + v.ClusterId + "\""
 
