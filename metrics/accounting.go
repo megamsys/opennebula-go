@@ -80,6 +80,7 @@ type Template struct {
 	Vcpu        string  `xml:"VCPU"`
 	Memory      string  `xml:"MEMORY"`
 	Memory_cost string  `xml:"MEMORY_COST"`
+	Disk_cost   string  `xml:"DISK_COST"`
 	Disk_size   string  `xml:"SIZE"`
 }
 
@@ -108,6 +109,14 @@ func (h *History) Memory() string {
 
 func (h *History) MemoryCost() string {
 	return h.VM.Template.Memory_cost
+}
+
+func (h *History) DiskSize() string {
+	return h.VM.Template.Disk_size
+}
+
+func (h *History) DiskCost() string {
+	return h.VM.Template.Disk_cost
 }
 
 func (h *History) AssemblyName() string {
