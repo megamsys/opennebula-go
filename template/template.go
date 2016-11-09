@@ -37,6 +37,7 @@ type Template struct {
 	VCpu                     string    `xml:"VCPU"`
 	Graphics                 *Graphics `xml:"GRAPHICS"`
 	Disk                     *Disk     `xml:"DISK"`
+	Disk_cost                string    `xml:"DISK_COST"`
 	From_app                 string    `xml:"FROM_APP"`
 	From_app_name            string    `xml:"FROM_APP_NAME"`
 	Nic                      []*NIC    `xml:"NIC"`
