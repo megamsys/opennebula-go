@@ -72,25 +72,6 @@ func NewClient(config map[string]string) (*Rpc, error) {
 		Key:    config[USERID] + ":" + config[PASSWORD]}, nil
 }
 
-func NewAdminClient(config map[string]string) (*Rpc, error) {
-	log.Debugf(cmd.Colorfy("  > [one-go] connecting", "blue", "", "bold"))
-
-	if !satisfied(config) {
-		return nil, ErrArgsNotSatisfied
-	}
-
-	client, err := xmlrpc.NewClient(config[ENDPOINT], nil)
-	if err != nil {
-		return nil, err
-	}
-	//log.Debugf(cmd.Colorfy("  > [one-go] connection response", "blue", "", "bold")+"%#v",client)
-	log.Debugf(cmd.Colorfy("  > [one-go] connected", "blue", "", "bold")+" %s", config[ENDPOINT])
-
-	return &Rpc{
-		Client: *client,
-		Key:    config[USERID] + ":"+config[CURRENTUSER]+":" + config[PASSWORD]}, nil
-}
-
 func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 	log.Debugf(cmd.Colorfy("  > [one-go] ", "blue", "", "bold")+"%s", command)
 	log.Debugf(cmd.Colorfy("\n> args   ", "cyan", "", "bold")+" %v\n", args)

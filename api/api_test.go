@@ -2,7 +2,6 @@ package api
 
 import (
 	"testing"
- "fmt"
 	"gopkg.in/check.v1"
 )
 
@@ -19,9 +18,8 @@ var _ = check.Suite(&S{})
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
 	cm[ENDPOINT] = "http://192.168.0.123:2633/RPC2"
-	cm[USERID] = "vijay"
-	cm[PASSWORD] = "52016d74852e228725ef4c68bde6bb3bd2abcfc3"
-	cm[CURRENTUSER] = "mvijaykanth@megam.io"
+	cm[USERID] = "oneadmin"
+	cm[PASSWORD] = "oneadmin"
 	s.cm = cm
 }
 
@@ -38,15 +36,3 @@ func (s *S) SetUpSuite(c *check.C) {
 // 	_, err = c1.Call("one.templatepool.info", args)
 // 	c.Assert(err, check.IsNil)
 // }
-
-
-func (s *S) TestCreateAdminClient(c *check.C) {
-	c1, err := NewAdminClient(s.cm)
-	c.Assert(err, check.IsNil)
-	fmt.Println("*****************",c1.Key)
-	args := []interface{}{c1.Key, -1}
-	res, err := c1.Call("one.user.info", args)
-	fmt.Println(res)
-	fmt.Println(err)
-	c.Assert(nil, check.NotNil)
-}
