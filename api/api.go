@@ -13,6 +13,7 @@ import (
 const (
 	ENDPOINT        = "endpoint"
 	USERID          = "userid"
+	CURRENTUSER     = "username"
 	PASSWORD        = "password"
 	TEMPLATE        = "template"
 	IMAGE           = "image"
