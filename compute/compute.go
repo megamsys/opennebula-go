@@ -9,8 +9,9 @@ import (
 	"github.com/megamsys/opennebula-go/virtualmachine"
 )
 
-var ErrNoVM = errors.New("no vm found, Did you launch them ?")
-
+var (
+	ErrNoVM = errors.New("no vm found, Did you launch them ?")
+)
 const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"

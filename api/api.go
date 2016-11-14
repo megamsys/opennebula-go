@@ -42,6 +42,7 @@ const (
 	ONE_HOST_POOL          = "one.hostpool.info"
 	ONE_IMAGE_SHOW         = "one.image.info"
 	ONE_IMAGE_LIST         = "one.imagepool.info"
+	ONE_USER_CREATE        = "one.user.allocate"
 )
 
 var (

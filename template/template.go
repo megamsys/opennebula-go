@@ -3,6 +3,11 @@ package template
 import (
 	"encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
+	"errors"
+)
+
+var (
+	ErrNoTemplate = errors.New("no templates found, Did you have templates ?")
 )
 
 type UserTemplates struct {
@@ -143,13 +148,17 @@ func (t *TemplateReqs) Get() ([]*UserTemplate, error) {
 	if err = xml.Unmarshal([]byte(templatePool), &xmlStrt); err != nil {
 		return nil, err
 	}
-	var matchedTemplate = make([]*UserTemplate, len(xmlStrt.UserTemplate))
 
+	if len(xmlStrt.UserTemplate) < 1 {
+		return nil, ErrNoTemplate
+	}
+	var matchedTemplate = make([]*UserTemplate, len(xmlStrt.UserTemplate))
 	for _, v := range xmlStrt.UserTemplate {
 		if v.Name == t.TemplateName {
 			matchedTemplate[0] = v
 		}
 	}
+
 	return matchedTemplate, nil
 }
 
