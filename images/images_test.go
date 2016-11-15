@@ -1,5 +1,5 @@
 package images
-
+/*
 import (
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
@@ -45,3 +45,4 @@ import (
   fmt.Println(res)
  	c.Assert(err, check.IsNil)
  }
+ */
