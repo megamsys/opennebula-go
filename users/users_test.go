@@ -4,7 +4,6 @@ import (
 	"testing"
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
-  "fmt"
 )
 
 func Test(t *testing.T) {
@@ -19,14 +18,13 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-  cm[api.ENDPOINT] = "http://213.32.56.135:2633/RPC2"
+  cm[api.ENDPOINT] = "http://localhost:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "Mumdidacnat1"
+	cm[api.PASSWORD] = "oneadmin"
 	s.cm = cm
 }
 
 func (s *S) TestGetUsers(c *check.C) {
-  fmt.Println("**********************user test*************************")
 	client, _ := api.NewClient(s.cm)
   u := User{
     UserName: "vijaym@megam.io",
@@ -38,9 +36,6 @@ func (s *S) TestGetUsers(c *check.C) {
     T: client,
     Users: u,
    }
-	res, err := vm.CreateUsers()
-  fmt.Println("*****************res*************",res)
-  fmt.Println(err)
-  err = nil
+	_, err := vm.CreateUsers()
 	c.Assert(err, check.NotNil)
 }
