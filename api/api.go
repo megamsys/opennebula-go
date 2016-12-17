@@ -82,7 +82,7 @@ func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 	if err := c.Client.Call(command, args, &result); err != nil {
 		return "", err
 	}
-
+	
 	res, err := c.IsSuccess(result)
 	if err != nil {
 		return "", err
