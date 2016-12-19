@@ -17,7 +17,7 @@ const (
 	ONE_VM_ACTION        = "one.vm.action"
 	ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
 	ONE_IMAGE_REMOVE     = "one.image.delete"
-	DELETE               = "delete"
+	DELETE               = "terminate"
 	REBOOT               = "reboot"
 	POWEROFF             = "poweroff"
 	RESUME               = "resume"
@@ -25,6 +25,7 @@ const (
 	ASSEMBLIES_ID        = "assemblies_id"
 	ACCOUNTS_ID          = "accounts_id"
 	ORG_ID               = "org_id"
+	API_KEY              = "api_key"
 	PLATFORM_ID          = "platform_id"
 	SSH_PUBLIC_KEY       = "SSH_PUBLIC_KEY"
 )

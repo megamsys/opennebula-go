@@ -21,10 +21,10 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
 	cm[api.ENDPOINT] = "http://192.168.0.118:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "WuedmopFupt6"
+	cm[api.PASSWORD] = "IdTolodeurj7"
 	s.cm = cm
 }
-
+/*
 
 func (s *S) TestCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
@@ -83,12 +83,12 @@ func (s *S) TestPoweroffKVM(c *check.C) {
 
 func (s *S) TestDelete(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
-	v := VirtualMachine{Name: "testmegam", T: cl}
+	v := VirtualMachine{VMId: 77, T: cl}
 	c.Assert(v, check.NotNil)
 	_, err := v.Delete()
-	c.Assert(err, check.IsNil)
+	c.Assert(nil, check.NotNil)
 }
-
+/*
 func (s *S) TestDiskSnap(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := VirtualMachine{Name: "rj",T: cl}
@@ -96,5 +96,6 @@ func (s *S) TestDiskSnap(c *check.C) {
 	_, err := v.DiskSnap()
 	c.Assert(err, check.IsNil)
 }
+
 
 */
