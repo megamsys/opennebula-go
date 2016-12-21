@@ -77,6 +77,7 @@ type Context struct {
 	Platform_id    string `xml:"PLATFORM_ID"`
 	Assembly_id    string `xml:"ASSEMBLY_ID"`
 	Assemblies_id  string `xml:"ASSEMBLIES_ID"`
+	ApiKey         string `xml:"API_KEY"`
 	Org_id         string `xml:"ORG_ID"`
 }
 
