@@ -15,6 +15,8 @@ type Vnc struct {
 type VM struct {
 	Id             string          `xml:"ID"`
 	Name           string          `xml:"NAME"`
+	State          int             `xml:"STATE"`
+	LcmState       int             `xml:"LCM_STATE"`
 	VmTemplate     *VmTemplate     `xml:"TEMPLATE"`
 	HistoryRecords *HistoryRecords `xml:"HISTORY_RECORDS"`
 }
@@ -56,6 +58,14 @@ func (v *Vnc) GetVm() (*VM, error) {
 
 func (u *VM) GetPort() string {
 	return u.VmTemplate.Graphics.Port
+}
+
+func (u *VM) GetState() int {
+	return u.State
+}
+
+func (u *VM) GetLcmState() int {
+	return u.LcmState
 }
 
 func (u *VM) GetHostIp() string {
