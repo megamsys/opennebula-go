@@ -176,7 +176,6 @@ package template
 //
 // 	// c.Assert(v, check.NotNil)
 // 	oja, err := v.AllocateTemplate()
-// 	fmt.Println("************************************")
 // 	fmt.Println(oja)
 // 	err = nil
 // 	c.Assert(err, check.NotNil)

@@ -3,59 +3,17 @@ package metrics
 import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/megamsys/opennebula-go/api"
+	vm "github.com/megamsys/opennebula-go/virtualmachine"
 	"strconv"
 	"time"
 )
+
 
 type Accounting struct {
 	Api       *api.Rpc
 	StartTime int64
 	EndTime   int64
 }
-
-func (a *Accounting) Get() (interface{}, error) {
-	log.Debugf("showback Get (%d, %d) started", a.StartTime, a.EndTime)
-	args := []interface{}{a.Api.Key, -2, a.StartTime, a.EndTime}
-	res, err := a.Api.Call(api.VMPOOL_ACCOUNTING, args)
-	if err != nil {
-		return nil,err
-	}
-	return res, nil
-}
-
-type VmState int
-type LcmState int
-
-const (
-	//VmState starts at 0
-	INIT VmState = iota
-	PENDING
-	HOLD
-	ACTIVE
-	STOPPED
-	SUSPENDED
-	DONE
-	FAILED
-
-	//LcmState starts at 0
-	LCM_INIT LcmState = iota
-	PROLOG
-	BOOT
-	RUNNING
-	MIGRATE
-	SAVE_STOP
-	SAVE_SUSPEND
-	SAVE_MIGRATE
-	PROLOG_MIGRATE
-	PROLOG_RESUME
-	EPILOG_STOP
-	EPILOG
-	SHUTDOWN
-	CANCEL
-	FAILURE
-	CLEANUP
-	UNKNOWN
-)
 
 type History struct {
 	HostName string `xml:"HOSTNAME"`
@@ -94,6 +52,18 @@ type Context struct {
 type OpenNebulaStatus struct {
 	History_Records []*History `xml:"HISTORY"`
 }
+
+
+func (a *Accounting) Get() (interface{}, error) {
+	log.Debugf("showback Get (%d, %d) started", a.StartTime, a.EndTime)
+	args := []interface{}{a.Api.Key, -2, a.StartTime, a.EndTime}
+	res, err := a.Api.Call(api.VMPOOL_ACCOUNTING, args)
+	if err != nil {
+		return nil,err
+	}
+	return res, nil
+}
+
 
 func (h *History) Cpu() string {
 	return h.VM.Template.Cpu
@@ -162,62 +132,9 @@ func (v *VM) stateAsInt(s string) int {
 }
 
 func (v *VM) stateString() string {
-	switch VmState(v.stateAsInt(v.State)) {
-	case INIT:
-		return "Init"
-	case PENDING:
-		return "Pending"
-	case HOLD:
-		return "Hold"
-	case ACTIVE:
-		return "Active"
-	case STOPPED:
-		return "Stopped"
-	case SUSPENDED:
-		return "Suspended"
-	case DONE:
-		return "Done"
-	case FAILED:
-		return "Failed"
-	default:
-	}
-	return "Unknown"
+	return vm.VmStateString[vm.VmState(v.stateAsInt(v.State))]
 }
+
 func (v *VM) lcmStateString() string {
-	switch LcmState(v.stateAsInt(v.Lcm_state)) {
-	case LCM_INIT:
-		return "Lcm Init"
-	case PROLOG:
-		return "Prolog"
-	case BOOT:
-		return "Boot"
-	case RUNNING:
-		return "Running"
-	case MIGRATE:
-		return "Migrate"
-	case SAVE_STOP:
-		return "Save stop"
-	case SAVE_SUSPEND:
-		return "Save suspend"
-	case SAVE_MIGRATE:
-		return "Save migrate"
-	case PROLOG_MIGRATE:
-		return "Prolog migrate"
-	case PROLOG_RESUME:
-		return "Prolog resume"
-	case EPILOG_STOP:
-		return "Eplilog stop"
-	case EPILOG:
-		return "Epilog"
-	case SHUTDOWN:
-		return "Shutdown"
-	case CANCEL:
-		return "Cancel"
-	case FAILURE:
-		return "Failure"
-	case CLEANUP:
-		return "Cleanup"
-	default:
-		return "Unknown"
-	}
+	return vm.LcmStateString[vm.LcmState(v.stateAsInt(v.Lcm_state))]
 }
