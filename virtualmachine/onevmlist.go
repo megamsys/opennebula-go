@@ -75,3 +75,11 @@ func (u *VM) GetHostIp() string {
 func (u *VM) GetVMIP() string {
 	return u.VmTemplate.Context.VMIP
 }
+
+func (v *VM) StateString() string {
+	return VmStateString[VmState(v.State)]
+}
+
+func (v *VM) ScmStateString() string {
+	return LcmStateString[LcmState(v.LcmState)]
+}
