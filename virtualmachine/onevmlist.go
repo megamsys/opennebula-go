@@ -6,6 +6,19 @@ import (
 	"strconv"
 )
 
+const (
+	//VmState starts at 0
+	INIT VmState = iota
+	PENDING
+	HOLD
+	ACTIVE
+	STOPPED
+	SUSPENDED
+	DONE
+	POWEROFF
+	UNDEPLOYED
+)
+
 type Vnc struct {
 	VmId string
 	T    *api.Rpc
@@ -80,6 +93,6 @@ func (v *VM) StateString() string {
 	return VmStateString[VmState(v.State)]
 }
 
-func (v *VM) ScmStateString() string {
+func (v *VM) LcmStateString() string {
 	return LcmStateString[LcmState(v.LcmState)]
 }

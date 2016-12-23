@@ -17,8 +17,12 @@ type Accounting struct {
 
 type History struct {
 	HostName string `xml:"HOSTNAME"`
-	Stime    string `xml:"STIME"`
-	Etime    string `xml:"ETIME"`
+	Stime    int64 `xml:"STIME"`
+	Etime    int64 `xml:"ETIME"`
+	PStime   int64 `xml:"PSTIME"`
+	PEtime   int64 `xml:"PETIME"`
+	RStime   int64 `xml:"RSTIME"`
+	REtime   int64 `xml:"RETIME"`
 	VM       *VM    `xml:"VM"`
 }
 
@@ -26,8 +30,8 @@ type VM struct {
 	Name      string    `xml:"NAME"`
 	State     string    `xml:"STATE"`
 	Lcm_state string    `xml:"LCM_STATE"`
-	Stime     string    `xml:"STIME"`
-	Etime     string    `xml:"ETIME"`
+	Stime     int64     `xml:"STIME"`
+	Etime     int64     `xml:"ETIME"`
 	Template  *Template `xml:"TEMPLATE"`
 }
 
@@ -113,15 +117,8 @@ func (h *History) LcmState() string {
 	return h.VM.lcmStateString()
 }
 
-func TimeAsInt64(tm string) int64 {
-	if i, err := strconv.ParseInt(tm, 10, 64); err != nil {
-		return i
-	}
-	return 0
-}
-
 func (h *History) Elapsed() string {
-	return strconv.FormatFloat(time.Since(time.Unix(TimeAsInt64(h.VM.Stime), 0)).Hours(), 'E', -1, 64)
+	return strconv.FormatFloat(time.Since(time.Unix(h.VM.Stime, 0)).Hours(), 'E', -1, 64)
 }
 
 func (v *VM) stateAsInt(s string) int {
