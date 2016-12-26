@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-
 type Accounting struct {
 	Api       *api.Rpc
 	StartTime int64
@@ -17,12 +16,12 @@ type Accounting struct {
 
 type History struct {
 	HostName string `xml:"HOSTNAME"`
-	Stime    int64 `xml:"STIME"`
-	Etime    int64 `xml:"ETIME"`
-	PStime   int64 `xml:"PSTIME"`
-	PEtime   int64 `xml:"PETIME"`
-	RStime   int64 `xml:"RSTIME"`
-	REtime   int64 `xml:"RETIME"`
+	Stime    int64  `xml:"STIME"`
+	Etime    int64  `xml:"ETIME"`
+	PStime   int64  `xml:"PSTIME"`
+	PEtime   int64  `xml:"PETIME"`
+	RStime   int64  `xml:"RSTIME"`
+	REtime   int64  `xml:"RETIME"`
 	VM       *VM    `xml:"VM"`
 }
 
@@ -39,11 +38,16 @@ type Template struct {
 	Context     Context `xml:"CONTEXT"`
 	Cpu         string  `xml:"CPU"`
 	Cpu_cost    string  `xml:"CPU_COST"`
+	Disks       []Disk  `xml:"DISK"`
 	Vcpu        string  `xml:"VCPU"`
 	Memory      string  `xml:"MEMORY"`
 	Memory_cost string  `xml:"MEMORY_COST"`
 	Disk_cost   string  `xml:"DISK_COST"`
-	Disk_size   string  `xml:"SIZE"`
+}
+
+type Disk struct {
+	DiskId string `xml:"DISK_ID"`
+	Size   int64  `xml:"SIZE"`
 }
 
 type Context struct {
@@ -57,17 +61,15 @@ type OpenNebulaStatus struct {
 	History_Records []*History `xml:"HISTORY"`
 }
 
-
 func (a *Accounting) Get() (interface{}, error) {
 	log.Debugf("showback Get (%d, %d) started", a.StartTime, a.EndTime)
 	args := []interface{}{a.Api.Key, -2, a.StartTime, a.EndTime}
 	res, err := a.Api.Call(api.VMPOOL_ACCOUNTING, args)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return res, nil
 }
-
 
 func (h *History) Cpu() string {
 	return h.VM.Template.Cpu
@@ -85,8 +87,12 @@ func (h *History) MemoryCost() string {
 	return h.VM.Template.Memory_cost
 }
 
-func (h *History) DiskSize() string {
-	return h.VM.Template.Disk_size
+func (h *History) DiskSize() int64 {
+	var totalsize int64
+	for _,v := range h.VM.Template.Disks {
+    totalsize = totalsize + v.Size
+	}
+	return totalsize
 }
 
 func (h *History) DiskCost() string {
