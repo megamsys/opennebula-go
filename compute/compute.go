@@ -18,6 +18,8 @@ const (
 	ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
 	ONE_IMAGE_REMOVE     = "one.image.delete"
 	DELETE               = "terminate"
+	ONE_RECOVER          = "one.vm.recover"
+	FORCE_DELETE				 = 3
 	REBOOT               = "reboot"
 	POWEROFF             = "poweroff"
 	RESUME               = "resume"
@@ -173,6 +175,26 @@ func (v *VirtualMachine) Delete() (interface{}, error) {
 
 	args := []interface{}{v.T.Key, DELETE, v.VMId}
 	res, err := v.T.Call(ONE_VM_ACTION, args)
+	//close connection
+	defer v.T.Client.Close()
+	if err != nil {
+		return nil,err
+	}
+
+	return res, nil
+
+}
+
+
+/**
+ *
+ * Deletes a new virtualMachine in ANY state (force delete)
+ *
+ **/
+func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
+
+	args := []interface{}{v.T.Key , v.VMId, FORCE_DELETE}
+	res, err := v.T.Call(ONE_RECOVER, args)
 	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
