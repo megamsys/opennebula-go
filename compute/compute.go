@@ -77,9 +77,9 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	XMLtemplate[0].Template.Memory = v.Memory
 	XMLtemplate[0].Template.Disk.Image = v.Image
 	XMLtemplate[0].Template.Disk.Size = v.HDD
-	// XMLtemplate[0].Template.Cpu_cost = v.CpuCost
-	// XMLtemplate[0].Template.Memory_cost = v.MemoryCost
-	// XMLtemplate[0].Template.Disk_cost = v.HDDCost
+	XMLtemplate[0].Template.Cpu_cost = v.CpuCost
+	XMLtemplate[0].Template.Memory_cost = v.MemoryCost
+	XMLtemplate[0].Template.Disk_cost = v.HDDCost
 	if  v.Files != "" {
 		XMLtemplate[0].Template.Context.Files = v.Files
 	}
