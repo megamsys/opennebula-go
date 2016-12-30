@@ -45,6 +45,7 @@ type VirtualMachine struct {
 	MemoryCost   string
 	HDD          string
 	HDDCost      string
+	Files        string
 	Region       string
 	ClusterId    string
 	VMId         int
@@ -79,6 +80,9 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	// XMLtemplate[0].Template.Cpu_cost = v.CpuCost
 	// XMLtemplate[0].Template.Memory_cost = v.MemoryCost
 	// XMLtemplate[0].Template.Disk_cost = v.HDDCost
+	if  v.Files != "" {
+		XMLtemplate[0].Template.Context.Files = v.Files
+	}
 	XMLtemplate[0].Template.Context.Accounts_id = v.ContextMap[ACCOUNTS_ID]
 	XMLtemplate[0].Template.Context.Platform_id = v.ContextMap[PLATFORM_ID]
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
