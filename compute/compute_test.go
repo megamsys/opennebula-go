@@ -21,11 +21,11 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
 	cm[api.ENDPOINT] = "http://192.168.0.118:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
-	cm[api.PASSWORD] = "IdTolodeurj7"
+	cm[api.PASSWORD] = "oneadmin"
 	s.cm = cm
 }
-/*
 
+/*
 func (s *S) TestCreate(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	v := VirtualMachine {
@@ -34,10 +34,10 @@ func (s *S) TestCreate(c *check.C) {
 		Cpu: "1",
 		Memory: "1024",
 		Image: "megam",
-		ClusterId: "101" ,
+		ClusterId: "100" ,
 		T: cl,
 		ContextMap: map[string]string{"assembly_id": "ASM-007", "assemblies_id": "AMS-007", ACCOUNTS_ID: "info@megam.io"},
-		Vnets:map[string]string{"0":"ipv4-pri"},
+		Vnets:map[string]string{"0":"ipv4-pub"},
 		} //memory in terms of MB! duh!
 
 	c.Assert(v, check.NotNil)
