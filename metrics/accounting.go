@@ -75,6 +75,10 @@ func (h *History) Cpu() string {
 	return h.VM.Template.Cpu
 }
 
+func (h *History) VCpu() string {
+	return h.VM.Template.Vcpu
+}
+
 func (h *History) CpuCost() string {
 	return h.VM.Template.Cpu_cost
 }
