@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+const (
+	DISKS = "disks"
+	MEMORY = "memory"
+	CPU = "cpu"
+)
+
 type Accounting struct {
 	Api       *api.Rpc
 	StartTime int64
@@ -97,6 +103,10 @@ func (h *History) DiskSize() int64 {
     totalsize = totalsize + v.Size
 	}
 	return totalsize
+}
+
+func (h *History) Disks() []Disk {
+	return h.VM.Template.Disks
 }
 
 func (h *History) DiskCost() string {
