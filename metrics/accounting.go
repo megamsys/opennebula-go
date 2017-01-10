@@ -61,6 +61,7 @@ type Context struct {
 	Accounts_id   string `xml:"ACCOUNTS_ID"`
 	Assembly_id   string `xml:"ASSEMBLY_ID"`
 	Assemblies_id string `xml:"ASSEMBLIES_ID"`
+	Quota_id      string `xml:"QUOTA_ID"`
 }
 
 type OpenNebulaStatus struct {
@@ -123,6 +124,10 @@ func (h *History) AccountsId() string {
 
 func (h *History) AssembliesId() string {
 	return h.VM.Template.Context.Assemblies_id
+}
+
+func (h *History) QuotaId() string {
+	return h.VM.Template.Context.Quota_id
 }
 
 func (h *History) AssemblyId() string {

@@ -79,6 +79,7 @@ type Context struct {
 	Assemblies_id  string `xml:"ASSEMBLIES_ID"`
 	ApiKey         string `xml:"API_KEY"`
 	Org_id         string `xml:"ORG_ID"`
+	Quota_id       string `xml:"QUOTA_ID"`
 }
 
 type Disk struct {
