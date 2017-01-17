@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
 	"errors"
+	"fmt"
 )
 
 var (
@@ -49,6 +50,14 @@ type Template struct {
 	Os                       *OS       `xml:"OS"`
 	Sched_requirments        string    `xml:"SCHED_REQUIREMENTS"`
 	Sched_ds_requirments     string    `xml:"SCHED_DS_REQUIREMENTS"`
+	Vcenter_datastore        string    `xml:"VCENTER_DATASTORE,omitempty"`
+	Public_cloud             PublicCloud    `xml:"PUBLIC_CLOUD,omitempty"`
+	KeepDiskOnDone           string         `xml:"KEEP_DISKS_ON_DONE,omitempty"`
+}
+
+type PublicCloud struct {
+	Type string `xml:"TYPE,omitempty"`
+	VmTemplate string `xml:"VM_TEMPLATE,omitempty"`
 }
 
 type Graphics struct {
@@ -146,6 +155,7 @@ func (t *TemplateReqs) Get() ([]*UserTemplate, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	xmlStrt := UserTemplates{}
 	if err = xml.Unmarshal([]byte(templatePool), &xmlStrt); err != nil {
 		return nil, err
@@ -161,6 +171,9 @@ func (t *TemplateReqs) Get() ([]*UserTemplate, error) {
 		}
 	}
 
+  if matchedTemplate[0] == nil {
+		return nil, fmt.Errorf("Unavailable templatename ["+ t.TemplateName  + "]" )
+	}
 	return matchedTemplate, nil
 }
 
