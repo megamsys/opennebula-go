@@ -93,12 +93,13 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 		XMLtemplate[0].Template.Context.Files = v.Files
 	}
 
-	if  v.HDD != "" {
+	if XMLtemplate[0].Template.Disk != nil {
+		if v.HDD != "" {
 		XMLtemplate[0].Template.Disk.Size = v.HDD
-	}
-
-	if  v.Image != "" {
-		XMLtemplate[0].Template.Disk.Image = v.Image
+   	}
+		if  v.Image != "" {
+			XMLtemplate[0].Template.Disk.Image = v.Image
+		}
 	}
 
   if len(v.ClusterId) > 0 {

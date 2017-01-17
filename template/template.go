@@ -174,6 +174,7 @@ func (t *TemplateReqs) Get() ([]*UserTemplate, error) {
   if matchedTemplate[0] == nil {
 		return nil, fmt.Errorf("Unavailable templatename ["+ t.TemplateName  + "]" )
 	}
+	fmt.Println(matchedTemplate)
 	return matchedTemplate, nil
 }
 
