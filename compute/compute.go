@@ -76,14 +76,10 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	XMLtemplate[0].Template.Cpu = v.Cpu
 	XMLtemplate[0].Template.VCpu = v.VCpu
 	XMLtemplate[0].Template.Memory = v.Memory
-	XMLtemplate[0].Template.Disk.Image = v.Image
-	XMLtemplate[0].Template.Disk.Size = v.HDD
+
 	XMLtemplate[0].Template.Cpu_cost = v.CpuCost
 	XMLtemplate[0].Template.Memory_cost = v.MemoryCost
 	XMLtemplate[0].Template.Disk_cost = v.HDDCost
-	if  v.Files != "" {
-		XMLtemplate[0].Template.Context.Files = v.Files
-	}
 	XMLtemplate[0].Template.Context.Accounts_id = v.ContextMap[ACCOUNTS_ID]
 	XMLtemplate[0].Template.Context.Platform_id = v.ContextMap[PLATFORM_ID]
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
@@ -92,7 +88,22 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	XMLtemplate[0].Template.Context.ApiKey   = v.ContextMap[API_KEY]
 	XMLtemplate[0].Template.Context.Org_id = v.ContextMap[ORG_ID]
 	XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
-	XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\"" + v.ClusterId + "\""
+
+	if  v.Files != "" {
+		XMLtemplate[0].Template.Context.Files = v.Files
+	}
+
+	if  v.HDD != "" {
+		XMLtemplate[0].Template.Disk.Size = v.HDD
+	}
+
+	if  v.Image != "" {
+		XMLtemplate[0].Template.Disk.Image = v.Image
+	}
+
+  if len(v.ClusterId) > 0 {
+		XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\"" + v.ClusterId + "\""
+	}
 
 	if len(v.Vnets) > 0 {
 		XMLtemplate[0].Template.Nic = XMLtemplate[0].Template.Nic[:0]
