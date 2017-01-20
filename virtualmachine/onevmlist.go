@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"github.com/megamsys/opennebula-go/api"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -32,6 +33,7 @@ type VM struct {
 	State          int             `xml:"STATE"`
 	LcmState       int             `xml:"LCM_STATE"`
 	VmTemplate     *VmTemplate     `xml:"TEMPLATE"`
+	UserTemplate   UserTemplate    `xml:"USER_TEMPLATE"`
 	HistoryRecords *HistoryRecords `xml:"HISTORY_RECORDS"`
 }
 
@@ -53,6 +55,12 @@ type History struct {
 
 type Graphics struct {
 	Port string `xml:"PORT"`
+}
+
+type UserTemplate struct {
+	Description        string `xml:"DESCRIPTION"`
+	Error              string `xml:"ERROR"`
+	Sched_Requirements string `xml:"SCHED_REQUIREMENTS"`
 }
 
 func (v *Vnc) GetVm() (*VM, error) {
@@ -96,4 +104,8 @@ func (v *VM) StateString() string {
 
 func (v *VM) LcmStateString() string {
 	return LcmStateString[LcmState(v.LcmState)]
+}
+
+func (v *VM) IsFailure() bool {
+  return strings.Contains(v.LcmStateString(), "failure")
 }
