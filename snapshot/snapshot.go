@@ -2,7 +2,6 @@ package snapshot
 
 import (
   "github.com/megamsys/opennebula-go/api"
-  "encoding/xml"
 )
 
 type Snapshot struct {

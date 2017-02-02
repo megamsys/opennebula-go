@@ -4,7 +4,6 @@ import (
 
 	"testing"
 	"github.com/megamsys/opennebula-go/api"
-  "fmt"
 	"gopkg.in/check.v1"
 )
 
