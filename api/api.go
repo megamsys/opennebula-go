@@ -43,6 +43,9 @@ const (
 	ONE_IMAGE_SHOW         = "one.image.info"
 	ONE_IMAGE_LIST         = "one.imagepool.info"
 	ONE_USER_CREATE        = "one.user.allocate"
+	DISK_SNAPSHOT_CREATE   = "one.vm.disksnapshotcreate"
+	DISK_SNAPSHOT_DELETE   = "one.vm.disksnapshotdelete"
+	DISK_SNAPSHOT_REVERT   = "one.vm.disksnapshotrevert"
 )
 
 var (
@@ -82,7 +85,7 @@ func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 	if err := c.Client.Call(command, args, &result); err != nil {
 		return "", err
 	}
-	
+
 	res, err := c.IsSuccess(result)
 	if err != nil {
 		return "", err
