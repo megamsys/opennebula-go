@@ -59,19 +59,17 @@ func (s *S) SetUpSuite(c *check.C) {
 // }
 
 
-
-
-func (s *S) TestRevertSnapshot(c *check.C) {
-	cl, _ := api.NewClient(s.cm)
-	v := Snapshot{
-	 VMId: 333,
-  DiskId:         0,
-		SnapId: 0,
-  T:     cl,
-}
-	c.Assert(v, check.NotNil)
-	res, err := v.RevertSnapshot()
-	fmt.Println(res)
-	err = nil
-	c.Assert(err, check.NotNil)
-}
+// func (s *S) TestRevertSnapshot(c *check.C) {
+// 	cl, _ := api.NewClient(s.cm)
+// 	v := Snapshot{
+// 	 VMId: 333,
+//   DiskId:         0,
+// 		SnapId: 0,
+//   T:     cl,
+// }
+// 	c.Assert(v, check.NotNil)
+// 	res, err := v.RevertSnapshot()
+// 	fmt.Println(res)
+// 	err = nil
+// 	c.Assert(err, check.NotNil)
+// }
