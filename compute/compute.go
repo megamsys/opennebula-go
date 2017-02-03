@@ -57,6 +57,8 @@ type VirtualMachine struct {
 type Image struct {
 	Name         string
 	VMId         int
+	DiskId       int
+	SnapId       int
 	ImageId      int
 	Region       string
 	T            *api.Rpc
@@ -230,8 +232,8 @@ func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
  **/
 
 
-func (v *Image) DiskSnap() (interface{}, error) {
-	args := []interface{}{v.T.Key, v.VMId, 0, v.Name, "", -1}
+func (v *Image) DiskSaveAs() (interface{}, error) {
+	args := []interface{}{v.T.Key, v.VMId, v.DiskId, v.Name, "", v.SnapId}
 	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
 	//close connection
 	defer v.T.Client.Close()
