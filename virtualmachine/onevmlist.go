@@ -40,6 +40,12 @@ type VM struct {
 type VmTemplate struct {
 	Graphics *Graphics `xml:"GRAPHICS"`
 	Context  *Context  `xml:"CONTEXT"`
+	Nics      []Nic     `xml:"NIC"`
+}
+
+type Nic struct {
+  IPaddress string `xml:"IP"`
+	Mac       string `xml:"MAC"`
 }
 
 type Context struct {
@@ -100,6 +106,10 @@ func (u *VM) GetVMIP() string {
 
 func (v *VM) StateString() string {
 	return VmStateString[VmState(v.State)]
+}
+
+func (v *VM) Nics() []Nic {
+	return v.VmTemplate.Nics
 }
 
 func (v *VM) LcmStateString() string {
