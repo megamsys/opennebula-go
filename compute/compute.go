@@ -1,7 +1,6 @@
 package compute
 
 import (
-
 	"encoding/xml"
 	"errors"
 	"github.com/megamsys/opennebula-go/api"
@@ -12,25 +11,29 @@ import (
 var (
 	ErrNoVM = errors.New("no vm found, Did you launch them ?")
 )
+
 const (
 	TEMPLATE_INSTANTIATE = "one.template.instantiate"
 	ONE_VM_ACTION        = "one.vm.action"
 	ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
 	ONE_IMAGE_REMOVE     = "one.image.delete"
-	DELETE               = "terminate"
 	ONE_RECOVER          = "one.vm.recover"
-	FORCE_DELETE				 = 3
-	REBOOT               = "reboot"
-	POWEROFF             = "poweroff"
-	RESUME               = "resume"
-	ASSEMBLY_ID          = "assembly_id"
-	ASSEMBLIES_ID        = "assemblies_id"
-	ACCOUNTS_ID          = "accounts_id"
-	ORG_ID               = "org_id"
-	API_KEY              = "api_key"
-	QUOTA_ID 					   = "quota_id"
-	PLATFORM_ID          = "platform_id"
-	SSH_PUBLIC_KEY       = "SSH_PUBLIC_KEY"
+	FORCE_DELETE         = 3
+
+	DELETE   = "terminate"
+	REBOOT   = "reboot"
+	POWEROFF = "poweroff"
+	RESUME   = "resume"
+	SUSPEND  = "suspend"
+
+	ASSEMBLY_ID    = "assembly_id"
+	ASSEMBLIES_ID  = "assemblies_id"
+	ACCOUNTS_ID    = "accounts_id"
+	ORG_ID         = "org_id"
+	API_KEY        = "api_key"
+	QUOTA_ID       = "quota_id"
+	PLATFORM_ID    = "platform_id"
+	SSH_PUBLIC_KEY = "SSH_PUBLIC_KEY"
 )
 
 type VirtualMachine struct {
@@ -55,15 +58,14 @@ type VirtualMachine struct {
 }
 
 type Image struct {
-	Name         string
-	VMId         int
-	DiskId       int
-	SnapId       int
-	ImageId      int
-	Region       string
-	T            *api.Rpc
+	Name    string
+	VMId    int
+	DiskId  int
+	SnapId  int
+	ImageId int
+	Region  string
+	T       *api.Rpc
 }
-
 
 // Creates a new VirtualMachine
 func (v *VirtualMachine) Create() (interface{}, error) {
@@ -72,7 +74,7 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 
 	XMLtemplate, err := templateObj.Get()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	XMLtemplate[0].Template.Cpu = v.Cpu
@@ -87,24 +89,24 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	XMLtemplate[0].Template.Context.Assembly_id = v.ContextMap[ASSEMBLY_ID]
 	XMLtemplate[0].Template.Context.Assemblies_id = v.ContextMap[ASSEMBLIES_ID]
 	XMLtemplate[0].Template.Context.Quota_id = v.ContextMap[QUOTA_ID]
-	XMLtemplate[0].Template.Context.ApiKey   = v.ContextMap[API_KEY]
+	XMLtemplate[0].Template.Context.ApiKey = v.ContextMap[API_KEY]
 	XMLtemplate[0].Template.Context.Org_id = v.ContextMap[ORG_ID]
 	XMLtemplate[0].Template.Context.SSH_Public_key = v.ContextMap[SSH_PUBLIC_KEY]
 
-	if  v.Files != "" {
+	if v.Files != "" {
 		XMLtemplate[0].Template.Context.Files = v.Files
 	}
 
 	if XMLtemplate[0].Template.Disk != nil {
 		if v.HDD != "" {
-		XMLtemplate[0].Template.Disk.Size = v.HDD
-   	}
-		if  v.Image != "" {
+			XMLtemplate[0].Template.Disk.Size = v.HDD
+		}
+		if v.Image != "" {
 			XMLtemplate[0].Template.Disk.Image = v.Image
 		}
 	}
 
-  if len(v.ClusterId) > 0 {
+	if len(v.ClusterId) > 0 {
 		XMLtemplate[0].Template.Sched_requirments = "CLUSTER_ID=\"" + v.ClusterId + "\""
 	}
 
@@ -123,12 +125,30 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	args := []interface{}{v.T.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
 	res, err := v.T.Call(TEMPLATE_INSTANTIATE, args)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	return res, nil
 }
 
+/**
+*
+* Actions of virtualMachine
+* boot ,terminate, suspend, hold, stop, resume, release, poweroff, reboot
+*
+**/
+
+func (v *VirtualMachine) actions(action string) (interface{}, error) {
+	args := []interface{}{v.T.Key, action, v.VMId}
+	res, err := v.T.Call(ONE_VM_ACTION, args)
+	if err != nil {
+		return nil, err
+	}
+	//close connection
+	defer v.T.Client.Close()
+
+	return res, nil
+}
 
 /**
 *
@@ -136,17 +156,7 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Reboot() (interface{}, error) {
-
-	args := []interface{}{v.T.Key, REBOOT, v.VMId}
-	res, err := v.T.Call(ONE_VM_ACTION, args)
-	if err != nil {
-		return nil,err
-	}
-	//close connection
-	defer v.T.Client.Close()
-
-	return res, nil
-
+	return v.actions(REBOOT)
 }
 
 /**
@@ -155,16 +165,7 @@ func (v *VirtualMachine) Reboot() (interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Poweroff() (interface{}, error) {
-
-	args := []interface{}{v.T.Key, POWEROFF, v.VMId}
-	res, err := v.T.Call(ONE_VM_ACTION, args)
-	if err != nil {
-		return nil,err
-	}
-	defer v.T.Client.Close()
-
-	return res, nil
-
+	return v.actions(POWEROFF)
 }
 
 /**
@@ -173,38 +174,28 @@ func (v *VirtualMachine) Poweroff() (interface{}, error) {
 *
 **/
 func (v *VirtualMachine) Resume() (interface{}, error) {
-
-	args := []interface{}{v.T.Key, RESUME, v.VMId}
-	res, err := v.T.Call(ONE_VM_ACTION, args)
-	//close connection
-	defer v.T.Client.Close()
-	if err != nil {
-		return nil,err
-	}
-
-	return res, nil
+	return v.actions(RESUME)
 
 }
 
 /**
  *
- * Deletes a new virtualMachine
+ * Deletes an existing virtualMachine
  *
  **/
 func (v *VirtualMachine) Delete() (interface{}, error) {
-
-	args := []interface{}{v.T.Key, DELETE, v.VMId}
-	res, err := v.T.Call(ONE_VM_ACTION, args)
-	//close connection
-	defer v.T.Client.Close()
-	if err != nil {
-		return nil,err
-	}
-
-	return res, nil
+	return v.actions(DELETE)
 
 }
 
+/**
+ *
+ * Suspends a virtualMachine
+ *
+ **/
+func (v *VirtualMachine) Suspends() (interface{}, error) {
+	return v.actions(SUSPEND)
+}
 
 /**
  *
@@ -213,12 +204,12 @@ func (v *VirtualMachine) Delete() (interface{}, error) {
  **/
 func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
 
-	args := []interface{}{v.T.Key , v.VMId, FORCE_DELETE}
+	args := []interface{}{v.T.Key, v.VMId, FORCE_DELETE}
 	res, err := v.T.Call(ONE_RECOVER, args)
 	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	return res, nil
@@ -231,14 +222,13 @@ func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
  *
  **/
 
-
 func (v *Image) DiskSaveAs() (interface{}, error) {
 	args := []interface{}{v.T.Key, v.VMId, v.DiskId, v.Name, "", v.SnapId}
 	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
 	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return res, nil
 }
@@ -249,10 +239,10 @@ func (v *Image) RemoveImage() (interface{}, error) {
 	//close connection
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
-	return res,nil
+	return res, nil
 }
 
 func listByName(name string, client *api.Rpc) (*virtualmachine.UserVM, error) {
