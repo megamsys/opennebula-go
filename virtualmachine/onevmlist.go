@@ -119,3 +119,7 @@ func (v *VM) LcmStateString() string {
 func (v *VM) IsFailure() bool {
   return strings.Contains(v.LcmStateString(), "failure")
 }
+
+func (v *VM) IsSnapshotReady() bool {
+	return (v.State == int(ACTIVE) && v.LcmState == int(RUNNING)) || (v.State == int(POWEROFF) && v.LcmState == int(LCM_INIT))
+}
