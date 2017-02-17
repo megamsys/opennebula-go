@@ -18,13 +18,18 @@ const (
 	ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
 	ONE_IMAGE_REMOVE     = "one.image.delete"
 	ONE_RECOVER          = "one.vm.recover"
-	FORCE_DELETE         = 3
+	RECOVER_FORCE_DELETE         = 3
 
 	DELETE   = "terminate"
 	REBOOT   = "reboot"
 	POWEROFF = "poweroff"
 	RESUME   = "resume"
 	SUSPEND  = "suspend"
+	FORCE_DELETE = "terminate-hard"
+  UNDEPLOY_HARD = "undeploy-hard"
+  UNDEPLOY = "undeploy"
+  POWEROFF_HARD = "poweroff-hard"
+  REBOOT_HARD = "reboot-hard"
 
 	ASSEMBLY_ID    = "assembly_id"
 	ASSEMBLIES_ID  = "assemblies_id"
@@ -151,27 +156,21 @@ func (v *VirtualMachine) actions(action string) (interface{}, error) {
 }
 
 /**
-*
 * REBoot a new virtualMachine
-*
 **/
 func (v *VirtualMachine) Reboot() (interface{}, error) {
 	return v.actions(REBOOT)
 }
 
 /**
-*
 * POWEROFF a new virtualMachine
-*
 **/
 func (v *VirtualMachine) Poweroff() (interface{}, error) {
 	return v.actions(POWEROFF)
 }
 
 /**
-*
 * Resume a new virtualMachine
-*
 **/
 func (v *VirtualMachine) Resume() (interface{}, error) {
 	return v.actions(RESUME)
@@ -179,9 +178,7 @@ func (v *VirtualMachine) Resume() (interface{}, error) {
 }
 
 /**
- *
  * Deletes an existing virtualMachine
- *
  **/
 func (v *VirtualMachine) Delete() (interface{}, error) {
 	return v.actions(DELETE)
@@ -189,22 +186,46 @@ func (v *VirtualMachine) Delete() (interface{}, error) {
 }
 
 /**
- *
  * Suspends a virtualMachine
- *
  **/
 func (v *VirtualMachine) Suspends() (interface{}, error) {
 	return v.actions(SUSPEND)
 }
 
+//  * Undeploy a virtualMachine
+func (v *VirtualMachine) Undeploy() (interface{}, error) {
+	return v.actions(UNDEPLOY)
+}
+
+//  * UndeployHard a virtualMachine
+func (v *VirtualMachine) UndeployHard() (interface{}, error) {
+	return v.actions(UNDEPLOY_HARD)
+}
+
+//  * PoweroffHard a virtualMachine
+
+func (v *VirtualMachine) PoweroffHard() (interface{}, error) {
+	return v.actions(POWEROFF_HARD)
+}
+
+//  * RebootHard a virtualMachine
+
+func (v *VirtualMachine) RebootHard() (interface{}, error) {
+	return v.actions(REBOOT_HARD)
+}
+
+//  * TerminateHard a virtualMachine
+
+func (v *VirtualMachine) TerminateHard() (interface{}, error) {
+	return v.actions(FORCE_DELETE)
+}
+
 /**
- *
  * Deletes a new virtualMachine in ANY state (force delete)
- *
  **/
 func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
 
-	args := []interface{}{v.T.Key, v.VMId, FORCE_DELETE}
+	args := []interface{}{v.T.Key, v.VMId, RECOVER_FORCE_DELETE}
 	res, err := v.T.Call(ONE_RECOVER, args)
 	//close connection
 	defer v.T.Client.Close()
@@ -217,9 +238,7 @@ func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
 }
 
 /**
- *
  * VM save as a new Image (DISK_SNAPSHOT)
- *
  **/
 
 func (v *Image) DiskSaveAs() (interface{}, error) {
