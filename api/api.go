@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"errors"
 	"strings"
 	"strconv"
@@ -40,12 +39,21 @@ const (
 	ONE_DATASTORE_ALLOCATE = "one.datastore.allocate"
 	ONE_TEMPLATE_ALLOCATE  = "one.template.allocate"
 	ONE_HOST_POOL          = "one.hostpool.info"
+
 	ONE_IMAGE_SHOW         = "one.image.info"
 	ONE_IMAGE_LIST         = "one.imagepool.info"
+	ONE_IMAGE_CREATE       = "one.image.allocate"
+  ONE_IMAGE_DELETE       = "one.image.delete"
+	ONE_IMAGE_PERSISTENT   = "one.image.persistent"
+	ONE_IMAGE_TYPECHANGE   = "one.image.chtype"
+	ONE_IMAGE_RENAME       = "one.image.rename"
+	ONE_IMAGE_ENABLE       = "one.image.enable"
+	
 	ONE_USER_CREATE        = "one.user.allocate"
 	DISK_SNAPSHOT_CREATE   = "one.vm.disksnapshotcreate"
 	DISK_SNAPSHOT_DELETE   = "one.vm.disksnapshotdelete"
 	DISK_SNAPSHOT_REVERT   = "one.vm.disksnapshotrevert"
+
 )
 
 var (
@@ -86,7 +94,7 @@ func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 		return "", err
 	}
 
-	res, err := c.IsSuccess(result)
+	res, err := c.isSuccess(result)
 	if err != nil {
 		return "", err
 	}
@@ -95,12 +103,11 @@ func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 	return res, nil
 }
 
-func (c *Rpc) IsSuccess(result []interface{}) (string, error) {
+func (c *Rpc) isSuccess(result []interface{}) (string, error) {
 	var res string
-  isSuccess := result[0].(bool)
-
-	if !isSuccess {
-	return "", fmt.Errorf("%s",result[1].(string))
+  success := result[0].(bool)
+	if !success {
+  	return "", errors.New(result[1].(string))
 	}
 	if w, ok := result[1].(int64); ok {
      res = strconv.FormatInt(w, 10)

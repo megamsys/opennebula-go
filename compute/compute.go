@@ -101,13 +101,14 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	if v.Files != "" {
 		XMLtemplate[0].Template.Context.Files = v.Files
 	}
-
-	if XMLtemplate[0].Template.Disk != nil {
-		if v.HDD != "" {
-			XMLtemplate[0].Template.Disk.Size = v.HDD
-		}
-		if v.Image != "" {
-			XMLtemplate[0].Template.Disk.Image = v.Image
+  if len(XMLtemplate[0].Template.Disks) > 0 {
+		if XMLtemplate[0].Template.Disks[0] != nil {
+			if v.HDD != "" {
+				XMLtemplate[0].Template.Disks[0].Size = v.HDD
+			}
+			if v.Image != "" {
+				XMLtemplate[0].Template.Disks[0].Image = v.Image
+			}
 		}
 	}
 

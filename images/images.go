@@ -2,15 +2,23 @@ package images
 
 import (
   "encoding/xml"
+  "fmt"
   "github.com/megamsys/opennebula-go/api"
 )
+
+type ImageType string
 
 const (
   LOCKED = 4
   READY = 1
   USED = 2
   FAILURE = 5
+)
 
+const (
+  OPERATING_SYSTEM =  ImageType("OS")
+  CD_ROM = ImageType("CDROM")
+  DATABLOCK = ImageType("DATABLOCK")
 )
 
 type Images struct {
@@ -22,9 +30,11 @@ type Image struct {
 Id   int    `xml:"ID"`
 Uid  int    `xml:"UID"`
 Name string `xml:"NAME"`
-Type string `xml:"TYPE"`
+Type ImageType `xml:"TYPE"`
 Size int    `xml:"SIZE"`
 State int   `xml:"STATE"`
+Path string `xml:"PATH"`
+Persistent string `xml:"PERSISTENT"`
 DatastoreID int `xml:"DATASTORE_ID"`
 Datastore string `xml:"DATASTORE"`
 FsType   string  `xml:"FSTYPE"`
@@ -34,6 +44,53 @@ T    *api.Rpc
 
 type Vms struct {
   Id  []int `xml:"ID"`
+}
+
+func (v *Image) Create() (interface{}, error) {
+  // qcow2 has some feature block so we use raw by default
+  v.FsType = "raw"
+  finalData, _ := xml.Marshal(v)
+  data := string(finalData)
+  args := []interface{}{v.T.Key,  data, v.DatastoreID}
+ return  v.T.Call(api.ONE_IMAGE_CREATE, args)
+}
+
+func (v *Image) ByName() (*Image, error) {
+  ims, err := v.ImageList()
+  if err != nil {
+    return nil, err
+  }
+  for _,k := range ims.Images  {
+    if k.Name == v.Name {
+      return &k, nil
+    }
+  }
+  return nil, fmt.Errorf("ONE doesn't have any images name (%s)", v.Name)
+}
+
+func (v *Image) Delete() (interface{}, error) {
+  args := []interface{}{v.T.Key, v.Id}
+  return v.T.Call(api.ONE_IMAGE_SHOW, args)
+}
+
+func (v *Image) ChPersistent(state bool) (interface{}, error) {
+  args := []interface{}{v.T.Key, v.Id, state}
+  return v.T.Call(api.ONE_IMAGE_PERSISTENT, args)
+}
+
+func (v *Image) ChType(t ImageType) (interface{}, error) {
+  args := []interface{}{v.T.Key, v.Id, string(t)}
+  return v.T.Call(api.ONE_IMAGE_TYPECHANGE, args)
+}
+
+func (v *Image) Rename(new_name string) (interface{}, error) {
+  args := []interface{}{v.T.Key, v.Id, new_name}
+  return v.T.Call(api.ONE_IMAGE_RENAME, args)
+}
+
+func (v *Image) Enable(state string)(interface{}, error) {
+  args := []interface{}{v.T.Key, v.Id, state}
+  return v.T.Call(api.ONE_IMAGE_ENABLE, args)
 }
 
 func (v *Image) ImageShow() (*Image, error) {
@@ -46,8 +103,9 @@ func (v *Image) ImageShow() (*Image, error) {
   if err = xml.Unmarshal([]byte(res), xmlImage); err != nil {
     return nil, err
   }
-	return xmlImage, err
+  return xmlImage, err
 }
+
 
 func (v *Image) ImageList() (*Images, error) {
   first := -1 // -1 for default smaller ID
