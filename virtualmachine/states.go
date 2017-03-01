@@ -29,7 +29,7 @@ var LcmStateString = map[LcmState]string{LCM_INIT: "lcm_init", PROLOG: "prolog",
 	DISK_SNAPSHOT_DELETE: "disk_snapshot_delete", PROLOG_MIGRATE_UNKNOWN: "prolog_migrate_unknown",
 	PROLOG_MIGRATE_UNKNOWN_FAILURE: "prolog_migrate_unknown_failure"}
 
-var VmStateString = map[VmState]string{INIT: "init", PENDING: "pending", HOLD: "hold", ACTIVE: "active", STOPPED: "stopped", SUSPENDED: "suspended", DONE: "done",UNKNOWNSTATE: "unknown", POWEROFF: "poweroff", UNDEPLOYED: "undeployed"}
+var VmStateString = map[VmState]string{INIT: "init", PENDING: "pending", HOLD: "hold", ACTIVE: "active", STOPPED: "stopped", SUSPENDED: "suspended", DONE: "done", UNKNOWNSTATE: "unknown", POWEROFF: "poweroff", UNDEPLOYED: "undeployed"}
 
 const (
 

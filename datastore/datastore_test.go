@@ -1,4 +1,5 @@
 package datastore
+
 //
 // import (
 // 	"github.com/megamsys/opennebula-go/api"

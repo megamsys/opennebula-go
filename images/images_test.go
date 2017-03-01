@@ -1,4 +1,5 @@
 package images
+
 /*
 import (
 	"github.com/megamsys/opennebula-go/api"
@@ -105,4 +106,4 @@ import (
 	  fmt.Println("Error image create :",err)
 	  c.Assert(err, check.IsNil)
  }
-  */
+*/

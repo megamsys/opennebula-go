@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	DISKS = "disks"
+	DISKS  = "disks"
 	MEMORY = "memory"
-	CPU = "cpu"
+	CPU    = "cpu"
 )
 
 type Accounting struct {
@@ -100,8 +100,8 @@ func (h *History) MemoryCost() string {
 
 func (h *History) DiskSize() int64 {
 	var totalsize int64
-	for _,v := range h.VM.Template.Disks {
-    totalsize = totalsize + v.Size
+	for _, v := range h.VM.Template.Disks {
+		totalsize = totalsize + v.Size
 	}
 	return totalsize
 }

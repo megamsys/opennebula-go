@@ -1,8 +1,8 @@
 package api
 
 import (
-	"testing"
 	"gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) {
@@ -22,7 +22,6 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm[PASSWORD] = "oneadmin"
 	s.cm = cm
 }
-
 
 // func (s *S) TestCreateClient(c *check.C) {
 // 	_, error := NewClient(s.cm)

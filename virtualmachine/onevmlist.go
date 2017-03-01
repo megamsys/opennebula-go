@@ -40,11 +40,11 @@ type VM struct {
 type VmTemplate struct {
 	Graphics *Graphics `xml:"GRAPHICS"`
 	Context  *Context  `xml:"CONTEXT"`
-	Nics      []Nic     `xml:"NIC"`
+	Nics     []Nic     `xml:"NIC"`
 }
 
 type Nic struct {
-  IPaddress string `xml:"IP"`
+	IPaddress string `xml:"IP"`
 	Mac       string `xml:"MAC"`
 }
 
@@ -117,7 +117,7 @@ func (v *VM) LcmStateString() string {
 }
 
 func (v *VM) IsFailure() bool {
-  return strings.Contains(v.LcmStateString(), "failure")
+	return strings.Contains(v.LcmStateString(), "failure")
 }
 
 func (v *VM) IsSnapshotReady() bool {

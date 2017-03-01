@@ -13,23 +13,18 @@ var (
 )
 
 const (
-	TEMPLATE_INSTANTIATE = "one.template.instantiate"
-	ONE_VM_ACTION        = "one.vm.action"
-	ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
-	ONE_IMAGE_REMOVE     = "one.image.delete"
-	ONE_RECOVER          = "one.vm.recover"
-	RECOVER_FORCE_DELETE         = 3
+	RECOVER_FORCE_DELETE = 3
 
-	DELETE   = "terminate"
-	REBOOT   = "reboot"
-	POWEROFF = "poweroff"
-	RESUME   = "resume"
-	SUSPEND  = "suspend"
-	FORCE_DELETE = "terminate-hard"
-  UNDEPLOY_HARD = "undeploy-hard"
-  UNDEPLOY = "undeploy"
-  POWEROFF_HARD = "poweroff-hard"
-  REBOOT_HARD = "reboot-hard"
+	DELETE        = "terminate"
+	REBOOT        = "reboot"
+	POWEROFF      = "poweroff"
+	RESUME        = "resume"
+	SUSPEND       = "suspend"
+	FORCE_DELETE  = "terminate-hard"
+	UNDEPLOY_HARD = "undeploy-hard"
+	UNDEPLOY      = "undeploy"
+	POWEROFF_HARD = "poweroff-hard"
+	REBOOT_HARD   = "reboot-hard"
 
 	ASSEMBLY_ID    = "assembly_id"
 	ASSEMBLIES_ID  = "assemblies_id"
@@ -101,7 +96,7 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	if v.Files != "" {
 		XMLtemplate[0].Template.Context.Files = v.Files
 	}
-  if len(XMLtemplate[0].Template.Disks) > 0 {
+	if len(XMLtemplate[0].Template.Disks) > 0 {
 		if XMLtemplate[0].Template.Disks[0] != nil {
 			if v.HDD != "" {
 				XMLtemplate[0].Template.Disks[0].Size = v.HDD
@@ -129,12 +124,8 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 	finalData, _ := xml.Marshal(finalXML.UserTemplate[0].Template)
 	data := string(finalData)
 	args := []interface{}{v.T.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
-	res, err := v.T.Call(TEMPLATE_INSTANTIATE, args)
-	if err != nil {
-		return nil, err
-	}
 
-	return res, nil
+	return v.T.Call(api.TEMPLATE_INSTANTIATE, args)
 }
 
 /**
@@ -145,15 +136,9 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 **/
 
 func (v *VirtualMachine) actions(action string) (interface{}, error) {
-	args := []interface{}{v.T.Key, action, v.VMId}
-	res, err := v.T.Call(ONE_VM_ACTION, args)
-	if err != nil {
-		return nil, err
-	}
-	//close connection
 	defer v.T.Client.Close()
-
-	return res, nil
+	args := []interface{}{v.T.Key, action, v.VMId}
+	return v.T.Call(api.ONE_VM_ACTION, args)
 }
 
 /**
@@ -225,17 +210,7 @@ func (v *VirtualMachine) TerminateHard() (interface{}, error) {
  * Deletes a new virtualMachine in ANY state (force delete)
  **/
 func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
-
-	args := []interface{}{v.T.Key, v.VMId, RECOVER_FORCE_DELETE}
-	res, err := v.T.Call(ONE_RECOVER, args)
-	//close connection
-	defer v.T.Client.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
-
+	return v.T.Call(api.ONE_RECOVER, []interface{}{v.T.Key, v.VMId, RECOVER_FORCE_DELETE})
 }
 
 /**
@@ -243,26 +218,15 @@ func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
  **/
 
 func (v *Image) DiskSaveAs() (interface{}, error) {
-	args := []interface{}{v.T.Key, v.VMId, v.DiskId, v.Name, "", v.SnapId}
-	res, err := v.T.Call(ONE_DISK_SNAPSHOT, args)
-	//close connection
 	defer v.T.Client.Close()
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+	args := []interface{}{v.T.Key, v.VMId, v.DiskId, v.Name, "", v.SnapId}
+	return v.T.Call(api.ONE_DISK_SNAPSHOT, args)
 }
 
 func (v *Image) RemoveImage() (interface{}, error) {
-	args := []interface{}{v.T.Key, v.ImageId}
-	res, err := v.T.Call(ONE_IMAGE_REMOVE, args)
-	//close connection
 	defer v.T.Client.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	args := []interface{}{v.T.Key, v.ImageId}
+	return v.T.Call(api.ONE_IMAGE_REMOVE, args)
 }
 
 func listByName(name string, client *api.Rpc) (*virtualmachine.UserVM, error) {
@@ -273,12 +237,9 @@ func listByName(name string, client *api.Rpc) (*virtualmachine.UserVM, error) {
 		return nil, err
 	}
 
-	if len(svm) <= 0 {
+	if len(svm) <= 0 || svm[0] == nil {
 		return nil, ErrNoVM
 	}
 
-	if svm[0] == nil {
-		return nil, ErrNoVM
-	}
 	return svm[0], nil
 }

@@ -2,11 +2,11 @@ package api
 
 import (
 	"errors"
-	"strings"
-	"strconv"
 	log "github.com/Sirupsen/logrus"
 	"github.com/kolo/xmlrpc"
 	"github.com/megamsys/libgo/cmd"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -20,40 +20,55 @@ const (
 	VCPU_PERCENTAGE = "vcpu_percentage"
 	CLUSTER         = "cluster"
 
-	VMPOOL_ACCOUNTING      = "one.vmpool.accounting"
-	VMPOOL_INFO            = "one.vmpool.info"
-	TEMPLATEPOOL_INFO      = "one.templatepool.info"
-	TEMPLATE_UPDATE        = "one.template.update"
-	VM_INFO                = "one.vm.info"
-	DISK_ATTACH            = "one.vm.attach"
-	DISK_DETACH            = "one.vm.detach"
-	VNET_CREATE            = "one.vn.allocate"
-	VNET_ADDIP             = "one.vn.add_ar"
-	VNET_SHOW              = "one.vn.info"
-	VNET_LIST              = "one.vnpool.info"
-	ONE_HOST_INFO          = "one.host.info"
+	// user action methods
+	ONE_USER_CREATE = "one.user.allocate"
+
+	// virtual network action methods
+	VNET_CREATE = "one.vn.allocate"
+	VNET_ADDIP  = "one.vn.add_ar"
+	VNET_SHOW   = "one.vn.info"
+	VNET_LIST   = "one.vnpool.info"
+
+	// host action methods
+	ONE_HOST_INFO     = "one.host.info"
+	ONE_HOST_POOL     = "one.hostpool.info"
+	ONE_HOST_ALLOCATE = "one.host.allocate"
+	ONE_HOST_DELETE   = "one.host.delete"
+
+	// datastore action methods
 	ONE_DATASTORE_INFO     = "one.datastore.info"
 	ONE_DATASTOREPOOL_INFO = "one.datastorepool.info"
-	ONE_HOST_ALLOCATE      = "one.host.allocate"
-	ONE_HOST_DELETE        = "one.host.delete"
 	ONE_DATASTORE_ALLOCATE = "one.datastore.allocate"
-	ONE_TEMPLATE_ALLOCATE  = "one.template.allocate"
-	ONE_HOST_POOL          = "one.hostpool.info"
 
-	ONE_IMAGE_SHOW         = "one.image.info"
-	ONE_IMAGE_LIST         = "one.imagepool.info"
-	ONE_IMAGE_CREATE       = "one.image.allocate"
-  ONE_IMAGE_DELETE       = "one.image.delete"
-	ONE_IMAGE_PERSISTENT   = "one.image.persistent"
-	ONE_IMAGE_TYPECHANGE   = "one.image.chtype"
-	ONE_IMAGE_RENAME       = "one.image.rename"
-	ONE_IMAGE_ENABLE       = "one.image.enable"
-	
-	ONE_USER_CREATE        = "one.user.allocate"
-	DISK_SNAPSHOT_CREATE   = "one.vm.disksnapshotcreate"
-	DISK_SNAPSHOT_DELETE   = "one.vm.disksnapshotdelete"
-	DISK_SNAPSHOT_REVERT   = "one.vm.disksnapshotrevert"
+	// image action methods
+	ONE_IMAGE_SHOW       = "one.image.info"
+	ONE_IMAGE_LIST       = "one.imagepool.info"
+	ONE_IMAGE_CREATE     = "one.image.allocate"
+	ONE_IMAGE_DELETE     = "one.image.delete"
+	ONE_IMAGE_PERSISTENT = "one.image.persistent"
+	ONE_IMAGE_TYPECHANGE = "one.image.chtype"
+	ONE_IMAGE_RENAME     = "one.image.rename"
+	ONE_IMAGE_ENABLE     = "one.image.enable"
+	ONE_IMAGE_REMOVE     = "one.image.delete"
 
+	// virtualmachine action methods
+	VM_INFO              = "one.vm.info"
+	DISK_ATTACH          = "one.vm.attach"
+	DISK_DETACH          = "one.vm.detach"
+	ONE_VM_ACTION        = "one.vm.action"
+	ONE_DISK_SNAPSHOT    = "one.vm.disksaveas"
+	ONE_RECOVER          = "one.vm.recover"
+	DISK_SNAPSHOT_CREATE = "one.vm.disksnapshotcreate"
+	DISK_SNAPSHOT_DELETE = "one.vm.disksnapshotdelete"
+	DISK_SNAPSHOT_REVERT = "one.vm.disksnapshotrevert"
+	VMPOOL_ACCOUNTING    = "one.vmpool.accounting"
+	VMPOOL_INFO          = "one.vmpool.info"
+
+	// template action methods
+	TEMPLATE_INSTANTIATE  = "one.template.instantiate"
+	TEMPLATEPOOL_INFO     = "one.templatepool.info"
+	TEMPLATE_UPDATE       = "one.template.update"
+	ONE_TEMPLATE_ALLOCATE = "one.template.allocate"
 )
 
 var (
@@ -105,19 +120,18 @@ func (c *Rpc) Call(command string, args []interface{}) (string, error) {
 
 func (c *Rpc) isSuccess(result []interface{}) (string, error) {
 	var res string
-  success := result[0].(bool)
+	success := result[0].(bool)
 	if !success {
-  	return "", errors.New(result[1].(string))
+		return "", errors.New(result[1].(string))
 	}
 	if w, ok := result[1].(int64); ok {
-     res = strconv.FormatInt(w, 10)
-  } else if w, ok := result[1].(string); ok {
-    res = w
+		res = strconv.FormatInt(w, 10)
+	} else if w, ok := result[1].(string); ok {
+		res = w
 	}
-  //result[1] is error message or ID of action vm,vnet,cluster and etc.,
-  return res , nil
+	//result[1] is error message or ID of action vm,vnet,cluster and etc.,
+	return res, nil
 }
-
 
 func satisfied(c map[string]string) bool {
 	return len(strings.TrimSpace(c[ENDPOINT])) > 0 &&
