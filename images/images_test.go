@@ -1,4 +1,5 @@
 package images
+
 /*
 import (
 	"github.com/megamsys/opennebula-go/api"
@@ -18,19 +19,19 @@ import (
  var _ = check.Suite(&S{})
  func (s *S) SetUpSuite(c *check.C) {
  	cm := make(map[string]string)
- 	cm[api.ENDPOINT] = "http://192.168.0.118:2633/RPC2"
+ 	cm[api.ENDPOINT] = "http://192.168.0.116:2633/RPC2"
  	cm[api.USERID] = "oneadmin"
- 	cm[api.PASSWORD] = "WuedmopFupt6"
+ 	cm[api.PASSWORD] = "5suvJafOtper"
  	s.cm = cm
  }
-
+/*
  func (s *S) TestImageShow(c *check.C) {
  	cl, _ := api.NewClient(s.cm)
 
  	v := &Image{T: cl, Id: 94}
 
  	c.Assert(v, check.NotNil)
-	res, err := v.ImageShow()
+ res, err := v.ImageShow()
   fmt.Println("Image State: ",res.State_string())
  	c.Assert(err, check.IsNil)
  }
@@ -41,8 +42,68 @@ import (
  	v := &Image{T: cl}
 
  	c.Assert(v, check.NotNil)
-	res, err := v.ImageList()
+ res, err := v.ImageList()
   fmt.Println(res)
  	c.Assert(err, check.IsNil)
  }
- */
+
+ func (s *S) TestCreateISO(c *check.C)  {
+  cl, _ := api.NewClient(s.cm)
+
+  v := &Image{
+ 	 T: cl,
+ 	 Name: "NEW_TEST",
+ 	 Path: "http://archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/current/images/netboot/mini.iso",
+ 	 Type: CD_ROM,
+ 	 DatastoreID: 100,
+  }
+  c.Assert(v, check.NotNil)
+   _, err := v.Create()
+  fmt.Println("Error image create :",err)
+  c.Assert(err, check.IsNil)
+ }
+
+ func (s *S) TestCreateDataBlock(c *check.C)  {
+	cl, _ := api.NewClient(s.cm)
+
+	v := &Image{
+		T: cl,
+		Name: "NEW_TEST 10GB",
+		Size: 1024,
+		Type: DATABLOCK,
+		DatastoreID: 100,
+	}
+	c.Assert(v, check.NotNil)
+	 _, err := v.Create()
+	fmt.Println("Error image create :",err)
+	c.Assert(err, check.IsNil)
+ }
+
+ func (s *S) TestCreateOS(c *check.C) {
+	  cl, _ := api.NewClient(s.cm)
+
+	  v := &Image{
+	 	 T: cl,
+	 	 Name: "NEW_TEST OS",
+	 	 Path: "/var/lib/megam/images/ajenti.img",
+	 	 Type: CD_ROM,
+	 	 DatastoreID: 100,
+	  }
+	  c.Assert(v, check.NotNil)
+	   _, err := v.Create()
+	  fmt.Println("Error image create :",err)
+	  c.Assert(err, check.IsNil)
+ }
+
+
+ func (s *S) TestDelete(c *check.C) {
+	  cl, _ := api.NewClient(s.cm)
+
+	  v := &Image{T: cl, Name: "NEW_TEST OS" }
+
+	  c.Assert(v, check.NotNil)
+	   _, err := v.Create()
+	  fmt.Println("Error image create :",err)
+	  c.Assert(err, check.IsNil)
+ }
+*/

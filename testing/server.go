@@ -33,10 +33,9 @@ func (s *OneServer) URL() string {
 	return "http://" + s.listener.Addr().String() + "/"
 }
 
-
 func NewServer(address string) (*OneServer, error) {
 	handler := rpc.NewServer()
-	tmp_one:= new(One)
+	tmp_one := new(One)
 	handler.Register(tmp_one)
 
 	ln, err := net.Listen("tcp", address)

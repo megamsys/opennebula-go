@@ -1,7 +1,7 @@
 package host
 
 import (
-  // "fmt"
+	// "fmt"
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
 	"testing"
@@ -24,6 +24,7 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm[api.PASSWORD] = "dyovAupAuck9"
 	s.cm = cm
 }
+
 /*
 func (s *S) TestGetVMs(c *check.C) {
 	client, _ := api.NewClient(s.cm)

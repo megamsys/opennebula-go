@@ -1,10 +1,9 @@
 package snapshot
 
 import (
-
-	"testing"
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) {
@@ -19,7 +18,7 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-  cm[api.ENDPOINT] = "http://192.168.0.116:2633/RPC2"
+	cm[api.ENDPOINT] = "http://192.168.0.116:2633/RPC2"
 	cm[api.USERID] = "oneadmin"
 	cm[api.PASSWORD] = "5suvJafOtper"
 	s.cm = cm
@@ -41,7 +40,6 @@ func (s *S) SetUpSuite(c *check.C) {
 // 	c.Assert(err, check.NotNil)
 // }
 
-
 // func (s *S) TestDeleteSnapshot(c *check.C) {
 // 	cl, _ := api.NewClient(s.cm)
 // 	v := Snapshot{
@@ -56,7 +54,6 @@ func (s *S) SetUpSuite(c *check.C) {
 // 	err = nil
 // 	c.Assert(err, check.NotNil)
 // }
-
 
 // func (s *S) TestRevertSnapshot(c *check.C) {
 // 	cl, _ := api.NewClient(s.cm)

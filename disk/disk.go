@@ -41,7 +41,7 @@ func (v *VmDisk) AttachDisk() (interface{}, error) {
 	res, err := v.T.Call(api.DISK_ATTACH, args)
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return res, err
 
@@ -52,7 +52,7 @@ func (v *VmDisk) DetachDisk() (interface{}, error) {
 	res, err := v.T.Call(api.DISK_DETACH, args)
 	defer v.T.Client.Close()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return res, err
 

@@ -1,5 +1,6 @@
 package virtualmachine
-// 
+
+//
 // import (
 // 	"github.com/megamsys/opennebula-go/api"
 // 	"gopkg.in/check.v1"

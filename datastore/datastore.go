@@ -23,8 +23,8 @@ type Datastore struct {
 	Pool_name   string `xml:"Pool_NAME"`
 	Ceph_user   string `xml:"CEPH_USER"`
 	Ceph_secret string `xml:"CEPH_SECRET"`
-  Host        string `xml:"HOST"`
-  Vg_name     string `xml:"VG_NAME"`
+	Host        string `xml:"HOST"`
+	Vg_name     string `xml:"VG_NAME"`
 }
 
 func (v *DatastoreTemplate) AllocateDatastore(cluster_id int) (interface{}, error) {
@@ -35,12 +35,11 @@ func (v *DatastoreTemplate) AllocateDatastore(cluster_id int) (interface{}, erro
 	args := []interface{}{v.T.Key, data, cluster_id}
 	res, err := v.T.Call(api.ONE_DATASTORE_ALLOCATE, args)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	return res, nil
 }
-
 
 func (v *DatastoreTemplate) GetDATAs(a int) (interface{}, error) {
 	args := []interface{}{v.T.Key, a}
@@ -56,7 +55,7 @@ func (v *DatastoreTemplate) GetALL() (interface{}, error) {
 	args := []interface{}{v.T.Key}
 	datastores, err := v.T.Call(api.ONE_DATASTOREPOOL_INFO, args)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	return datastores, nil

@@ -1,9 +1,9 @@
 package clusters
 
 import (
-	"testing"
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) {
@@ -23,6 +23,7 @@ func (s *S) SetUpSuite(c *check.C) {
 	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
 }
+
 /*
 func (s *S) TestClustersInfo(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
@@ -72,7 +73,6 @@ func (s *S) TestClustersCreate(c *check.C) {
 	c.Assert(err, check.IsNil)
 }
 */
-
 
 /*
 func (s *S) TestClusterAddResources(c *check.C) {

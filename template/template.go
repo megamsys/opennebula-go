@@ -2,9 +2,9 @@ package template
 
 import (
 	"encoding/xml"
-	"github.com/megamsys/opennebula-go/api"
 	"errors"
 	"fmt"
+	"github.com/megamsys/opennebula-go/api"
 )
 
 var (
@@ -29,34 +29,34 @@ type UserTemplate struct {
 }
 
 type Template struct {
-	Name                     string    `xml:"NAME"`
-	Context                  *Context  `xml:"CONTEXT"`
-	Cpu                      string    `xml:"CPU"`
-	Cpu_cost                 string    `xml:"CPU_COST"`
-	Description              string    `xml:"DESCRIPTION"`
-	Hypervisor               string    `xml:"HYPERVISOR"`
-	Logo                     string    `xml:"LOGO"`
-	Memory                   string    `xml:"MEMORY"`
-	Memory_cost              string    `xml:"MEMORY_COST"`
-	Sunstone_capacity_select string    `xml:"SUNSTONE_CAPACITY_SELECT"`
-	Sunstone_Network_select  string    `xml:"SUNSTONE_NETWORK_SELECT"`
-	VCpu                     string    `xml:"VCPU"`
-	Graphics                 *Graphics `xml:"GRAPHICS"`
-	Disk                     *Disk     `xml:"DISK"`
-	Disk_cost                string    `xml:"DISK_COST"`
-	From_app                 string    `xml:"FROM_APP"`
-	From_app_name            string    `xml:"FROM_APP_NAME"`
-	Nic                      []*NIC    `xml:"NIC"`
-	Os                       *OS       `xml:"OS"`
-	Sched_requirments        string    `xml:"SCHED_REQUIREMENTS"`
-	Sched_ds_requirments     string    `xml:"SCHED_DS_REQUIREMENTS"`
-	Vcenter_datastore        string    `xml:"VCENTER_DATASTORE,omitempty"`
-	Public_cloud             PublicCloud    `xml:"PUBLIC_CLOUD,omitempty"`
-	KeepDiskOnDone           string         `xml:"KEEP_DISKS_ON_DONE,omitempty"`
+	Name                     string      `xml:"NAME"`
+	Context                  *Context    `xml:"CONTEXT"`
+	Cpu                      string      `xml:"CPU"`
+	Cpu_cost                 string      `xml:"CPU_COST"`
+	Description              string      `xml:"DESCRIPTION"`
+	Hypervisor               string      `xml:"HYPERVISOR"`
+	Logo                     string      `xml:"LOGO"`
+	Memory                   string      `xml:"MEMORY"`
+	Memory_cost              string      `xml:"MEMORY_COST"`
+	Sunstone_capacity_select string      `xml:"SUNSTONE_CAPACITY_SELECT"`
+	Sunstone_Network_select  string      `xml:"SUNSTONE_NETWORK_SELECT"`
+	VCpu                     string      `xml:"VCPU"`
+	Graphics                 *Graphics   `xml:"GRAPHICS"`
+	Disks                    []*Disk     `xml:"DISK"`
+	Disk_cost                string      `xml:"DISK_COST"`
+	From_app                 string      `xml:"FROM_APP"`
+	From_app_name            string      `xml:"FROM_APP_NAME"`
+	Nic                      []*NIC      `xml:"NIC"`
+	Os                       *OS         `xml:"OS"`
+	Sched_requirments        string      `xml:"SCHED_REQUIREMENTS"`
+	Sched_ds_requirments     string      `xml:"SCHED_DS_REQUIREMENTS"`
+	Vcenter_datastore        string      `xml:"VCENTER_DATASTORE,omitempty"`
+	Public_cloud             PublicCloud `xml:"PUBLIC_CLOUD,omitempty"`
+	KeepDiskOnDone           string      `xml:"KEEP_DISKS_ON_DONE,omitempty"`
 }
 
 type PublicCloud struct {
-	Type string `xml:"TYPE,omitempty"`
+	Type       string `xml:"TYPE,omitempty"`
 	VmTemplate string `xml:"VM_TEMPLATE,omitempty"`
 }
 
@@ -86,6 +86,7 @@ type Context struct {
 	Platform_id    string `xml:"PLATFORM_ID"`
 	Assembly_id    string `xml:"ASSEMBLY_ID"`
 	Assemblies_id  string `xml:"ASSEMBLIES_ID"`
+	Marketplace_id string `xml:"MARKETPLACE_ID"`
 	ApiKey         string `xml:"API_KEY"`
 	Org_id         string `xml:"ORG_ID"`
 	Quota_id       string `xml:"QUOTA_ID"`
@@ -126,7 +127,7 @@ func (t *TemplateReqs) GetTemplate() (interface{}, error) {
 	args := []interface{}{t.T.Key, -2, t.TemplateId, t.TemplateId}
 	res, err := t.T.Call(api.TEMPLATEPOOL_INFO, args)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return res, nil
 }
@@ -139,7 +140,7 @@ func (v *UserTemplate) AllocateTemplate() (interface{}, error) {
 	args := []interface{}{v.T.Key, data}
 	res, err := v.T.Call(api.ONE_TEMPLATE_ALLOCATE, args)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return res, nil
 }
@@ -171,11 +172,20 @@ func (t *TemplateReqs) Get() ([]*UserTemplate, error) {
 		}
 	}
 
-  if matchedTemplate[0] == nil {
-		return nil, fmt.Errorf("Unavailable templatename ["+ t.TemplateName  + "]" )
+	if matchedTemplate[0] == nil {
+		return nil, fmt.Errorf("Unavailable templatename [" + t.TemplateName + "]")
 	}
 	fmt.Println(matchedTemplate)
 	return matchedTemplate, nil
+}
+
+/**
+ * template instentiate in OpenNebula
+ **/
+
+func (t *TemplateReqs) Instantiate(name string) (interface{}, error) {
+	args := []interface{}{t.T.Key, t.TemplateId, name, false, t.TemplateData}
+	return t.T.Call(api.TEMPLATE_INSTANTIATE, args)
 }
 
 /**
