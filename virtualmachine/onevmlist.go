@@ -44,8 +44,10 @@ type VmTemplate struct {
 }
 
 type Nic struct {
-	IPaddress string `xml:"IP"`
-	Mac       string `xml:"MAC"`
+	Network    string `xml:"NETWORK"`
+	Network_id string `xml:"NETWORK_ID"`
+	IPaddress  string `xml:"IP"`
+	Mac        string `xml:"MAC"`
 }
 
 type Context struct {
@@ -84,6 +86,21 @@ func (v *Vnc) GetVm() (*VM, error) {
 	return xmlVM, err
 }
 
+func (v *Vnc) AttachNic(network string) error {
+	id, _ := strconv.Atoi(v.VmId)
+	nic := "NIC = [ NETWORK=\"" + network + "\", NETWORK_UNAME=\"oneadmin\" ]"
+	args := []interface{}{v.T.Key, id, nic}
+	_, err := v.T.Call(api.ONE_VM_ATTACHNIC, args)
+	return err
+}
+
+func (v *Vnc) DetachNic(nic int) error {
+	id, _ := strconv.Atoi(v.VmId)
+	args := []interface{}{v.T.Key, id, nic}
+	_, err := v.T.Call(api.ONE_VM_DETACHNIC, args)
+	return err
+}
+
 func (u *VM) GetPort() string {
 	return u.VmTemplate.Graphics.Port
 }
@@ -110,6 +127,15 @@ func (v *VM) StateString() string {
 
 func (v *VM) Nics() []Nic {
 	return v.VmTemplate.Nics
+}
+
+func (v *VM) NetworkIdByIP(ip string) string {
+	for _, n := range v.VmTemplate.Nics {
+		if ip == n.IPaddress {
+			return n.Network_id
+		}
+	}
+	return ""
 }
 
 func (v *VM) LcmStateString() string {

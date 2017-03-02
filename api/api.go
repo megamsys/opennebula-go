@@ -63,6 +63,8 @@ const (
 	DISK_SNAPSHOT_REVERT = "one.vm.disksnapshotrevert"
 	VMPOOL_ACCOUNTING    = "one.vmpool.accounting"
 	VMPOOL_INFO          = "one.vmpool.info"
+	ONE_VM_ATTACHNIC     = "one.vm.attachnic"
+	ONE_VM_DETACHNIC     = "one.vm.detachnic"
 
 	// template action methods
 	TEMPLATE_INSTANTIATE  = "one.template.instantiate"
