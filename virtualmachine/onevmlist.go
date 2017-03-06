@@ -44,10 +44,10 @@ type VmTemplate struct {
 }
 
 type Nic struct {
-	Network    string `xml:"NETWORK"`
-	Network_id string `xml:"NETWORK_ID"`
-	IPaddress  string `xml:"IP"`
-	Mac        string `xml:"MAC"`
+	Network   string `xml:"NETWORK"`
+	Id        string `xml:"NIC_ID"`
+	IPaddress string `xml:"IP"`
+	Mac       string `xml:"MAC"`
 }
 
 type Context struct {
@@ -132,7 +132,7 @@ func (v *VM) Nics() []Nic {
 func (v *VM) NetworkIdByIP(ip string) string {
 	for _, n := range v.VmTemplate.Nics {
 		if ip == n.IPaddress {
-			return n.Network_id
+			return n.Id
 		}
 	}
 	return ""
