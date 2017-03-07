@@ -39,7 +39,7 @@ type Image struct {
 	Datastore   string    `xml:"DATASTORE"`
 	FsType      string    `xml:"FSTYPE"`
 	RunningVMs  Vms       `xml:"VMS"`
-	T           *api.Rpc
+	T           *api.Rpc  `xml:"-"`
 }
 
 type Vms struct {
