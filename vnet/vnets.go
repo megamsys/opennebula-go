@@ -2,12 +2,19 @@ package vnet
 
 import (
 	"encoding/xml"
+	"fmt"
 	"github.com/megamsys/opennebula-go/api"
+	"strconv"
 )
 
 type VNETemplate struct {
 	Template Vnet `xml:"TEMPLATE"`
 	T        *api.Rpc
+}
+
+type VNetPool struct {
+	Vnets []*Vnet `xml:"VNET"`
+	T     *api.Rpc
 }
 
 type Vnet struct {
@@ -18,13 +25,33 @@ type Vnet struct {
 	Bridge       string     `json:"bridge" xml:"BRIDGE"`
 	Network_addr string     `json:"network_addr" xml:"NETWORK_ADDRESS"`
 	Network_mask string     `json:"network_mask" xml:"NETWORK_MASK"`
+	Clusters     *Clusters  `json:"clusters" xml:"CLUSTERS"`
 	Dns          string     `json:"dns" xml:"DNS"`
 	Gateway      string     `json:"gateway" xml:"GATEWAY"`
+	UsedIps      int        `json:"used_ips" xml:"USED_LEASES"`
+	TotalIps     int        `json:"total_ips" xml:"TOTAL_IPS"`
+	Ip_Leases    *Leases    `json:"ip_leases" xml:"LEASES"`
 	Vn_mad       string     `json:"vn_mad" xml:"VN_MAD"`
 	Addrs        []*Address `json:"addrs" xml:"AR"`
+	AddrPool     *AddrPool  `json:"addr_pool" xml:"AR_POOL"`
+}
+
+type Leases struct {
+	IP   string `json:"ip" xml:"IP"`
+	Mac  string `json:"mac" xml:"MAC"`
+	VmId string `json:"vm_id" xml:"VM"`
+}
+type Clusters struct {
+	Id []string `json:"id" xml:"ID"`
+}
+
+type AddrPool struct {
+	Addrs []*Address `json:"addrs" xml:"AR"`
 }
 
 type Address struct {
+	Id      string `json:"id" xml:"AR_ID"`
+	Mac     string `json:"mac" xml:"MAC"`
 	Type    string `json:"type" xml:"TYPE"`
 	StartIP string `json:"ip" xml:"IP"`
 	Size    string `json:"size" xml:"SIZE"`
@@ -66,13 +93,45 @@ func (v *VNETemplate) VnetInfos(vnet_id int) (interface{}, error) {
 	return res, nil
 }
 
-func (v *VNETemplate) VnetsInfos(filter_id int) (interface{}, error) {
+func (v *VNetPool) VnetPoolInfos(filter_id int) error {
 	start_id := -1 //-1 for smaller values this is the offset used for pagination.
 	end_id := -1   //-1 for get until the last ID
 	args := []interface{}{v.T.Key, filter_id, start_id, end_id}
 	res, err := v.T.Call(api.VNET_LIST, args)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return res, nil
+	err = xml.Unmarshal([]byte(res), v)
+	v.setTotalIps()
+	return err
+}
+
+func (v *VNetPool) FilletByType(t string) []*Vnet {
+	vnets := make([]*Vnet, 0)
+	for _, net := range v.Vnets {
+		if t == net.AddrPool.Addrs[0].Type {
+			vnets = append(vnets, net)
+		}
+	}
+	return vnets
+}
+
+func (v *VNetPool) FilletByName(name string) (*Vnet, error) {
+	for _, net := range v.Vnets {
+		if net.Name == name {
+			return net, nil
+		}
+	}
+	return nil, fmt.Errorf("no such ( %s ) network available ", name)
+}
+
+func (v *VNetPool) setTotalIps() {
+	for _, net := range v.Vnets {
+		var total int
+		for _, i := range net.AddrPool.Addrs {
+			intstr, _ := strconv.Atoi(i.Size)
+			total = total + intstr
+		}
+		net.TotalIps = total
+	}
 }
