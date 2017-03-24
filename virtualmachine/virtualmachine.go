@@ -2,7 +2,6 @@ package virtualmachine
 
 import (
 	"encoding/xml"
-	"fmt"
 	"github.com/megamsys/opennebula-go/api"
 	"strconv"
 	"strings"
