@@ -21,6 +21,7 @@ type VmTemplate struct {
 type Disk struct {
 	Disk_Id    int    `xml:"DISK_ID"`
 	Disk_Type  string `xml:"TYPE"`
+	Image      string `xml:"IMAGE"`
 	Dev_Prefix string `xml:"DEV_PREFIX"`
 	Size       string `xml:"SIZE"`
 	Target     string `xml:"TARGET"`
