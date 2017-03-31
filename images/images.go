@@ -78,8 +78,8 @@ func (v *Image) ChPersistent(state bool) (interface{}, error) {
 	return v.T.Call(api.ONE_IMAGE_PERSISTENT, args)
 }
 
-func (v *Image) ChType(t ImageType) (interface{}, error) {
-	args := []interface{}{v.T.Key, v.Id, string(t)}
+func (v *Image) ChType() (interface{}, error) {
+	args := []interface{}{v.T.Key, v.Id, string(v.Type)}
 	return v.T.Call(api.ONE_IMAGE_TYPECHANGE, args)
 }
 
