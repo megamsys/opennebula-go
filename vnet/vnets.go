@@ -8,7 +8,7 @@ import (
 )
 
 type VNETemplate struct {
-	Template Vnet `xml:"TEMPLATE"`
+	Template *Vnet `xml:"TEMPLATE"`
 	T        *api.Rpc
 }
 
@@ -30,16 +30,19 @@ type Vnet struct {
 	Gateway      string     `json:"gateway" xml:"GATEWAY"`
 	UsedIps      int        `json:"used_ips" xml:"USED_LEASES"`
 	TotalIps     int        `json:"total_ips" xml:"TOTAL_IPS"`
-	Ip_Leases    *Leases    `json:"ip_leases" xml:"LEASES"`
+	Ip_Leases    *Lease     `json:"ip_leases" xml:"LEASES"`
 	Vn_mad       string     `json:"vn_mad" xml:"VN_MAD"`
 	Addrs        []*Address `json:"addrs" xml:"AR"`
 	AddrPool     *AddrPool  `json:"addr_pool" xml:"AR_POOL"`
 }
 
-type Leases struct {
+type Lease struct {
 	IP   string `json:"ip" xml:"IP"`
 	Mac  string `json:"mac" xml:"MAC"`
 	VmId string `json:"vm_id" xml:"VM"`
+}
+type Leases struct {
+	Leases []Lease `json:"leases" xml:"LEASE"`
 }
 type Clusters struct {
 	Id []string `json:"id" xml:"ID"`
@@ -50,11 +53,12 @@ type AddrPool struct {
 }
 
 type Address struct {
-	Id      string `json:"id" xml:"AR_ID"`
-	Mac     string `json:"mac" xml:"MAC"`
-	Type    string `json:"type" xml:"TYPE"`
-	StartIP string `json:"ip" xml:"IP"`
-	Size    string `json:"size" xml:"SIZE"`
+	Id      string    `json:"id" xml:"AR_ID"`
+	Mac     string    `json:"mac" xml:"MAC"`
+	Type    string    `json:"type" xml:"TYPE"`
+	StartIP string    `json:"ip" xml:"IP"`
+	Size    string    `json:"size" xml:"SIZE"`
+	Leases  []*Leases `json:"leases" xml:"LEASES"`
 }
 
 func (v *VNETemplate) CreateVnet(cluster_id int) (interface{}, error) {
@@ -84,13 +88,27 @@ func (v *VNETemplate) VnetAddIps() (interface{}, error) {
 	return res, nil
 }
 
-func (v *VNETemplate) VnetInfos(vnet_id int) (interface{}, error) {
+func (v *VNETemplate) VnetInfo(vnet_id int) (*Vnet, error) {
 	args := []interface{}{v.T.Key, vnet_id}
 	res, err := v.T.Call(api.VNET_SHOW, args)
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+	v.Template = &Vnet{}
+	err = xml.Unmarshal([]byte(res), v.Template)
+	return v.Template, nil
+}
+
+func (v *VNETemplate) VnetInfos(vnet_id []int) ([]*Vnet, error) {
+	nets := make([]*Vnet, 0)
+	for _, id := range vnet_id {
+		net, err := v.VnetInfo(id)
+		if err != nil {
+			return nil, err
+		}
+		nets = append(nets, net)
+	}
+	return nets, nil
 }
 
 func (v *VNetPool) VnetPoolInfos(filter_id int) error {
@@ -134,4 +152,17 @@ func (v *VNetPool) setTotalIps() {
 		}
 		net.TotalIps = total
 	}
+}
+
+func (v *Vnet) IsUsed(ip string) bool {
+	for _, addr := range v.AddrPool.Addrs {
+		for _, leases := range addr.Leases {
+			for _, lease := range leases.Leases {
+				if lease.IP == ip {
+					return true
+				}
+			}
+		}
+	}
+	return false
 }

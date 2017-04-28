@@ -19,23 +19,23 @@ import (
  var _ = check.Suite(&S{})
  func (s *S) SetUpSuite(c *check.C) {
  	cm := make(map[string]string)
- 	cm[api.ENDPOINT] = "http://192.168.0.116:2633/RPC2"
+ 	cm[api.ENDPOINT] = "http://192.168.0.100:2666/RPC2"
  	cm[api.USERID] = "oneadmin"
- 	cm[api.PASSWORD] = "5suvJafOtper"
+ 	cm[api.PASSWORD] = "asdf"
  	s.cm = cm
  }
-/*
+
  func (s *S) TestImageShow(c *check.C) {
  	cl, _ := api.NewClient(s.cm)
 
- 	v := &Image{T: cl, Id: 94}
+ 	v := &Image{T: cl, Id: 24}
 
  	c.Assert(v, check.NotNil)
- res, err := v.ImageShow()
-  fmt.Println("Image State: ",res.State_string())
- 	c.Assert(err, check.IsNil)
+ res, err := v.Show()
+  fmt.Println(err,"Image State: ",res)
+ 	c.Assert(nil, check.NotNil)
  }
-
+/*
  func (s *S) TestImageList(c *check.C) {
  	cl, _ := api.NewClient(s.cm)
 
