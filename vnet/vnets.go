@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/megamsys/opennebula-go/api"
 	"strconv"
+	"strings"
 )
 
 type VNETemplate struct {
@@ -95,8 +96,17 @@ func (v *VNETemplate) VnetInfo(vnet_id int) (*Vnet, error) {
 		return nil, err
 	}
 	v.Template = &Vnet{}
+
 	err = xml.Unmarshal([]byte(res), v.Template)
 	return v.Template, nil
+}
+
+func (v *VNETemplate) VnetHold(vnet_id int, ip string) (interface{}, error) {
+	return v.T.Call(api.VNET_HOLD, []interface{}{v.T.Key, vnet_id, "LEASES=[IP=" + ip + "]"})
+}
+
+func (v *VNETemplate) VnetRelease(vnet_id int, ip string) (interface{}, error) {
+	return v.T.Call(api.VNET_RELEASE, []interface{}{v.T.Key, vnet_id, "LEASES=[IP=" + ip + "]"})
 }
 
 func (v *VNETemplate) VnetInfos(vnet_id []int) ([]*Vnet, error) {
@@ -158,7 +168,7 @@ func (v *Vnet) IsUsed(ip string) bool {
 	for _, addr := range v.AddrPool.Addrs {
 		for _, leases := range addr.Leases {
 			for _, lease := range leases.Leases {
-				if lease.IP == ip {
+				if lease.IP == strings.TrimSpace(ip) {
 					return true
 				}
 			}

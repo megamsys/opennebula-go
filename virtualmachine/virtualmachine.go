@@ -114,9 +114,13 @@ func (v *Vnc) GetVm() (*VM, error) {
 	return xmlVM, err
 }
 
-func (v *Vnc) AttachNic(network string) error {
+func (v *Vnc) AttachNic(network, ip string) error {
+	var forceIp string
 	id, _ := strconv.Atoi(v.VmId)
-	nic := "NIC = [ NETWORK=\"" + network + "\", NETWORK_UNAME=\"oneadmin\" ]"
+	if len(forceIp) > 0 {
+		forceIp = "IP=\"" + ip + "\""
+	}
+	nic := "NIC = [ NETWORK=\"" + network + "\", NETWORK_UNAME=\"oneadmin\" " + forceIp + "]"
 	args := []interface{}{v.T.Key, id, nic}
 	_, err := v.T.Call(api.ONE_VM_ATTACHNIC, args)
 	return err

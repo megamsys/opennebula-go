@@ -24,6 +24,7 @@ func (s *S) SetUpSuite(c *check.C) {
 	s.cm = cm
 }
 
+/*
 func (s *S) TestGetVnetInfos(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	vm := VNETemplate{T: cl}
@@ -36,6 +37,22 @@ func (s *S) TestGetVnetInfos(c *check.C) {
 	// 		}
 	// 	}
 	c.Assert(err, check.NotNil)
+}
+
+func (s *S) TestVnethold(c *check.C) {
+	cl, _ := api.NewClient(s.cm)
+	vm := VNETemplate{T: cl}
+	res, err := vm.VnetHold(0,"192.168.0.100")
+	fmt.Printf("\n\n %v  %#v     ",res,err)
+	c.Assert(nil, check.NotNil)
+}
+
+func (s *S) TestVnetRelease(c *check.C) {
+	cl, _ := api.NewClient(s.cm)
+	vm := VNETemplate{T: cl}
+	res, err := vm.VnetRelease(0,"192.168.0.100")
+	fmt.Printf("\n\n %v  %#v     ",res,err)
+	c.Assert(nil, check.NotNil)
 }
 
 /*
