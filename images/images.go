@@ -99,7 +99,6 @@ func (v *Image) Show() (*Image, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("*****************image template*************", string(res))
 	xmlImage := &Image{}
 	if err = xml.Unmarshal([]byte(res), xmlImage); err != nil {
 		return nil, err
