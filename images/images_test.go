@@ -1,41 +1,40 @@
 package images
 
-/*
 import (
 	"github.com/megamsys/opennebula-go/api"
 	"gopkg.in/check.v1"
 	"testing"
-	"fmt"
+	//	"fmt"
 )
 
- func Test(t *testing.T) {
- 	check.TestingT(t)
+func Test(t *testing.T) {
+	check.TestingT(t)
 }
 
- type S struct {
+type S struct {
 	cm map[string]string
- }
+}
 
- var _ = check.Suite(&S{})
- func (s *S) SetUpSuite(c *check.C) {
- 	cm := make(map[string]string)
- 	cm[api.ENDPOINT] = "http://192.168.0.116:2633/RPC2"
- 	cm[api.USERID] = "oneadmin"
- 	cm[api.PASSWORD] = "5suvJafOtper"
- 	s.cm = cm
- }
+var _ = check.Suite(&S{})
+
+func (s *S) SetUpSuite(c *check.C) {
+	cm := make(map[string]string)
+	cm[api.ENDPOINT] = "http://192.168.0.100:2666/RPC2"
+	cm[api.USERID] = "oneadmin"
+	cm[api.PASSWORD] = "asdf"
+	s.cm = cm
+}
+
+// func (s *S) TestImageShow(c *check.C) {
+// 	cl, _ := api.NewClient(s.cm)
+//
+// 	v := &Image{T: cl, Id: 19}
+// res, err := v.Show()
+//  fmt.Println(err,"Image State: ",res)
+// 	c.Assert(nil, check.NotNil)
+// }
+
 /*
- func (s *S) TestImageShow(c *check.C) {
- 	cl, _ := api.NewClient(s.cm)
-
- 	v := &Image{T: cl, Id: 94}
-
- 	c.Assert(v, check.NotNil)
- res, err := v.ImageShow()
-  fmt.Println("Image State: ",res.State_string())
- 	c.Assert(err, check.IsNil)
- }
-
  func (s *S) TestImageList(c *check.C) {
  	cl, _ := api.NewClient(s.cm)
 

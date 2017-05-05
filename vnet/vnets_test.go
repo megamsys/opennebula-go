@@ -18,10 +18,41 @@ var _ = check.Suite(&S{})
 
 func (s *S) SetUpSuite(c *check.C) {
 	cm := make(map[string]string)
-	cm[api.ENDPOINT] = "http://192.168.0.100:2633/RPC2"
+	cm[api.ENDPOINT] = "http://192.168.0.100:2666/RPC2"
 	cm[api.USERID] = "oneadmin"
 	cm[api.PASSWORD] = "asdf"
 	s.cm = cm
+}
+
+/*
+func (s *S) TestGetVnetInfos(c *check.C) {
+	cl, _ := api.NewClient(s.cm)
+	vm := VNETemplate{T: cl}
+	_, err := vm.VnetInfos([]int{0})
+	// for _, addr := range res[0].AddrPool.Addrs {
+	// 	for _, leases := range addr.Leases {
+	//     for i, lease := range leases.Leases {
+	//       fmt.Printf("\n\n %v  %#v     ",i,lease)
+	//      }
+	// 		}
+	// 	}
+	c.Assert(err, check.NotNil)
+}
+
+func (s *S) TestVnethold(c *check.C) {
+	cl, _ := api.NewClient(s.cm)
+	vm := VNETemplate{T: cl}
+	res, err := vm.VnetHold(0,"192.168.0.100")
+	fmt.Printf("\n\n %v  %#v     ",res,err)
+	c.Assert(nil, check.NotNil)
+}
+
+func (s *S) TestVnetRelease(c *check.C) {
+	cl, _ := api.NewClient(s.cm)
+	vm := VNETemplate{T: cl}
+	res, err := vm.VnetRelease(0,"192.168.0.100")
+	fmt.Printf("\n\nrelease %v  %#v     ",res,err)
+	c.Assert(nil, check.NotNil)
 }
 
 /*

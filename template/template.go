@@ -72,8 +72,10 @@ type OS struct {
 }
 
 type NIC struct {
+	Id            int    `xml:"-"`
 	Network       string `xml:"NETWORK"`
 	Network_uname string `xml:"NETWORK_UNAME"`
+	IP            string `xml:"IP"`
 }
 
 type Context struct {

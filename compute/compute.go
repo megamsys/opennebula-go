@@ -54,6 +54,7 @@ type VirtualMachine struct {
 	ClusterId    string
 	VMId         int
 	Vnets        map[string]string
+	ForceNetwork bool
 	T            *api.Rpc
 }
 
@@ -68,13 +69,12 @@ type Image struct {
 }
 
 // Creates a new VirtualMachine
-func (v *VirtualMachine) Create() (interface{}, error) {
+func (v *VirtualMachine) Compute() (template.UserTemplates, error) {
+	finalXML := template.UserTemplates{}
 	templateObj := template.TemplateReqs{TemplateName: v.TemplateName, T: v.T}
-	defer v.T.Client.Close()
-
 	XMLtemplate, err := templateObj.Get()
 	if err != nil {
-		return nil, err
+		return finalXML, err
 	}
 
 	XMLtemplate[0].Template.Cpu = v.Cpu
@@ -119,11 +119,14 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 		}
 	}
 
-	finalXML := template.UserTemplates{}
 	finalXML.UserTemplate = XMLtemplate
-	finalData, _ := xml.Marshal(finalXML.UserTemplate[0].Template)
+	return finalXML, nil
+}
+
+func (v *VirtualMachine) Create(tmp template.UserTemplates) (interface{}, error) {
+	finalData, _ := xml.Marshal(tmp.UserTemplate[0].Template)
 	data := string(finalData)
-	args := []interface{}{v.T.Key, finalXML.UserTemplate[0].Id, v.Name, false, data}
+	args := []interface{}{v.T.Key, tmp.UserTemplate[0].Id, v.Name, false, data}
 
 	return v.T.Call(api.TEMPLATE_INSTANTIATE, args)
 }
@@ -136,7 +139,6 @@ func (v *VirtualMachine) Create() (interface{}, error) {
 **/
 
 func (v *VirtualMachine) actions(action string) (interface{}, error) {
-	defer v.T.Client.Close()
 	args := []interface{}{v.T.Key, action, v.VMId}
 	return v.T.Call(api.ONE_VM_ACTION, args)
 }
@@ -218,13 +220,11 @@ func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
  **/
 
 func (v *Image) DiskSaveAs() (interface{}, error) {
-	defer v.T.Client.Close()
 	args := []interface{}{v.T.Key, v.VMId, v.DiskId, v.Name, "", v.SnapId}
 	return v.T.Call(api.ONE_DISK_SNAPSHOT, args)
 }
 
 func (v *Image) RemoveImage() (interface{}, error) {
-	defer v.T.Client.Close()
 	args := []interface{}{v.T.Key, v.ImageId}
 	return v.T.Call(api.ONE_IMAGE_REMOVE, args)
 }

@@ -24,10 +24,12 @@ const (
 	ONE_USER_CREATE = "one.user.allocate"
 
 	// virtual network action methods
-	VNET_CREATE = "one.vn.allocate"
-	VNET_ADDIP  = "one.vn.add_ar"
-	VNET_SHOW   = "one.vn.info"
-	VNET_LIST   = "one.vnpool.info"
+	VNET_CREATE  = "one.vn.allocate"
+	VNET_ADDIP   = "one.vn.add_ar"
+	VNET_SHOW    = "one.vn.info"
+	VNET_LIST    = "one.vnpool.info"
+	VNET_HOLD    = "one.vn.hold"
+	VNET_RELEASE = "one.vn.release"
 
 	// host action methods
 	ONE_HOST_INFO     = "one.host.info"
@@ -50,6 +52,7 @@ const (
 	ONE_IMAGE_RENAME     = "one.image.rename"
 	ONE_IMAGE_ENABLE     = "one.image.enable"
 	ONE_IMAGE_REMOVE     = "one.image.delete"
+	ONE_IMAGE_UPDATE     = "one.image.update"
 
 	// virtualmachine action methods
 	VM_INFO              = "one.vm.info"

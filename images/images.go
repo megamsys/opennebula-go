@@ -29,8 +29,12 @@ type Images struct {
 type Image struct {
 	Id          int       `xml:"ID"`
 	Uid         int       `xml:"UID"`
+	Gid         int       `xml:"GID"`
 	Name        string    `xml:"NAME"`
+	Uname       string    `xml:"UNAME"`
+	Gname       string    `xml:"GNAME"`
 	Type        ImageType `xml:"TYPE"`
+	RegTime     string    `xml:"REG"`
 	Size        int       `xml:"SIZE"`
 	State       int       `xml:"STATE"`
 	Path        string    `xml:"PATH"`
@@ -38,7 +42,8 @@ type Image struct {
 	DatastoreID int       `xml:"DATASTORE_ID"`
 	Datastore   string    `xml:"DATASTORE"`
 	FsType      string    `xml:"FSTYPE"`
-	RunningVMs  Vms       `xml:"VMS"`
+	RunningVMs  int       `xml:"RUNNING_VMS"`
+	VMs         Vms       `xml:"VMS"`
 	T           *api.Rpc  `xml:"-"`
 }
 
