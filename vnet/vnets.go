@@ -63,7 +63,6 @@ type Address struct {
 }
 
 func (v *VNETemplate) CreateVnet(cluster_id int) (interface{}, error) {
-
 	finalXML := VNETemplate{}
 	finalXML.Template = v.Template
 	finalData, _ := xml.Marshal(finalXML.Template)

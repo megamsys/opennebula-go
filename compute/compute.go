@@ -124,7 +124,6 @@ func (v *VirtualMachine) Compute() (template.UserTemplates, error) {
 }
 
 func (v *VirtualMachine) Create(tmp template.UserTemplates) (interface{}, error) {
-	defer v.T.Client.Close()
 	finalData, _ := xml.Marshal(tmp.UserTemplate[0].Template)
 	data := string(finalData)
 	args := []interface{}{v.T.Key, tmp.UserTemplate[0].Id, v.Name, false, data}
@@ -140,7 +139,6 @@ func (v *VirtualMachine) Create(tmp template.UserTemplates) (interface{}, error)
 **/
 
 func (v *VirtualMachine) actions(action string) (interface{}, error) {
-	defer v.T.Client.Close()
 	args := []interface{}{v.T.Key, action, v.VMId}
 	return v.T.Call(api.ONE_VM_ACTION, args)
 }
@@ -222,13 +220,11 @@ func (v *VirtualMachine) RecoverDelete() (interface{}, error) {
  **/
 
 func (v *Image) DiskSaveAs() (interface{}, error) {
-	defer v.T.Client.Close()
 	args := []interface{}{v.T.Key, v.VMId, v.DiskId, v.Name, "", v.SnapId}
 	return v.T.Call(api.ONE_DISK_SNAPSHOT, args)
 }
 
 func (v *Image) RemoveImage() (interface{}, error) {
-	defer v.T.Client.Close()
 	args := []interface{}{v.T.Key, v.ImageId}
 	return v.T.Call(api.ONE_IMAGE_REMOVE, args)
 }
