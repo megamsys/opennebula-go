@@ -52,6 +52,7 @@ const (
 	ONE_IMAGE_RENAME     = "one.image.rename"
 	ONE_IMAGE_ENABLE     = "one.image.enable"
 	ONE_IMAGE_REMOVE     = "one.image.delete"
+	ONE_IMAGE_UPDATE     = "one.image.update"
 
 	// virtualmachine action methods
 	VM_INFO              = "one.vm.info"

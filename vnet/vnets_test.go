@@ -51,7 +51,7 @@ func (s *S) TestVnetRelease(c *check.C) {
 	cl, _ := api.NewClient(s.cm)
 	vm := VNETemplate{T: cl}
 	res, err := vm.VnetRelease(0,"192.168.0.100")
-	fmt.Printf("\n\n %v  %#v     ",res,err)
+	fmt.Printf("\n\nrelease %v  %#v     ",res,err)
 	c.Assert(nil, check.NotNil)
 }
 

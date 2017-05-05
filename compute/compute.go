@@ -72,8 +72,6 @@ type Image struct {
 func (v *VirtualMachine) Compute() (template.UserTemplates, error) {
 	finalXML := template.UserTemplates{}
 	templateObj := template.TemplateReqs{TemplateName: v.TemplateName, T: v.T}
-	defer v.T.Client.Close()
-
 	XMLtemplate, err := templateObj.Get()
 	if err != nil {
 		return finalXML, err
@@ -126,6 +124,7 @@ func (v *VirtualMachine) Compute() (template.UserTemplates, error) {
 }
 
 func (v *VirtualMachine) Create(tmp template.UserTemplates) (interface{}, error) {
+	defer v.T.Client.Close()
 	finalData, _ := xml.Marshal(tmp.UserTemplate[0].Template)
 	data := string(finalData)
 	args := []interface{}{v.T.Key, tmp.UserTemplate[0].Id, v.Name, false, data}
