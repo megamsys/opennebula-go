@@ -37,6 +37,7 @@ type Image struct {
 	RegTime     string    `xml:"REG"`
 	Size        int       `xml:"SIZE"`
 	State       int       `xml:"STATE"`
+	Source      string    `xml:"SOURCE"`
 	Path        string    `xml:"PATH"`
 	Persistent  string    `xml:"PERSISTENT"`
 	DatastoreID int       `xml:"DATASTORE_ID"`
