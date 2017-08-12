@@ -1,17 +1,18 @@
-================
 OpenNebula API
 ===============
 
 OpenNebula golang API
 
 
-Example:-
+### Example:
 
+```
 import (
   "github.com/megamsys/opennebula-go/api"
   "github.com/megamsys/opennebula-go/compute"
   "fmt"
-  )
+)
+
 func main() {
   
   cm := make(map[string]string)
@@ -40,3 +41,4 @@ func main() {
    vmid := response.(string)
    fmt.Println("VirtualMachine created successfully")
 }
+```
