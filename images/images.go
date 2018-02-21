@@ -76,7 +76,7 @@ func (v *Image) ByName() (*Image, error) {
 
 func (v *Image) Delete() (interface{}, error) {
 	args := []interface{}{v.T.Key, v.Id}
-	return v.T.Call(api.ONE_IMAGE_SHOW, args)
+	return v.T.Call(api.ONE_IMAGE_DELETE, args)
 }
 
 func (v *Image) ChPersistent(state bool) (interface{}, error) {
