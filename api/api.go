@@ -2,7 +2,7 @@ package api
 
 import (
 	"errors"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/kolo/xmlrpc"
 	"github.com/megamsys/libgo/cmd"
 	"strconv"
