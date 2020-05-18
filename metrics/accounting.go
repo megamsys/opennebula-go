@@ -1,7 +1,7 @@
 package metrics
 
 import (
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/megamsys/opennebula-go/api"
 	vm "github.com/megamsys/opennebula-go/virtualmachine"
 	"strconv"
